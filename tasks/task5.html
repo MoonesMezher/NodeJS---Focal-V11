@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 5: ShelfStack Library (JS + TypeScript)</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+        
+        .coach {
+            background-color: white;
+            width: 80px;
+            border-radius: 0 0 50% 0;
+            color: black;
+            padding: 10px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        #title {
+            padding-top: 20px;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .language-toggle:hover {
+            background: #2980b9;
+        }
+        
+        .task-content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin: 15px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul,
+        ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .requirements {
+            background: #e8f4fc;
+            border-left: 5px solid #3498db;
+        }
+        
+        .bonus {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .output-example {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow: auto;
+            direction: ltr !important;
+            text-align: left !important;
+        }
+        
+        .timer-section {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .timer-unit {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 80px;
+        }
+        
+        .timer-value {
+            font-size: 2.5rem;
+            display: block;
+        }
+        
+        .timer-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            display: block;
+        }
+        
+        .finish-date {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        
+        .thank-you {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+            margin-top: 30px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 15px;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .footer p {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .task-content {
+                padding: 15px;
+            }
+            .language-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 15px;
+                display: block;
+                width: 100%;
+            }
+            .timer {
+                font-size: 1.5rem;
+                flex-wrap: wrap;
+            }
+            .timer-unit {
+                min-width: 70px;
+            }
+            .timer-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+        <header>
+            <h1 id="title">Task 5: ShelfStack Library (JS + TypeScript)</h1>
+            <p class="subtitle" id="subtitle">Easy two-step task: small library in JavaScript (classes + destructuring), then the same idea in TypeScript (types + interfaces).</p>
+            <button class="language-toggle" id="languageToggle">العربية / English</button>
+        </header>
+
+        <div class="task-content" id="taskContent">
+        </div>
+
+        <div class="timer-section">
+            <h3 id="timer-title">Time Remaining to Complete Task</h3>
+            <div class="timer" id="timer">
+                <div class="timer-unit">
+                    <span class="timer-value" id="days">00</span>
+                    <span class="timer-label" id="days-label">Days</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="hours">00</span>
+                    <span class="timer-label" id="hours-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="minutes">00</span>
+                    <span class="timer-label" id="minutes-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="seconds">00</span>
+                    <span class="timer-label" id="seconds-label">Seconds</span>
+                </div>
+            </div>
+            <p class="finish-date" id="finish-date">Finish by: April 11, 2026</p>
+            <p id="timer-message">Complete the task before the deadline!</p>
+        </div>
+
+        <div class="thank-you" id="thankYou">
+            "Thank you for your hard work and dedication. Your efforts are appreciated!"
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 <a href="https://focal-x.com/" target="_blank">Focal X</a> - Node.js Bootcamp V11</p>
+    </div>
+
+    <script src="../reg.js"></script>
+    <script>
+        const taskData = {
+            en: {
+                title: "Task 5: ShelfStack Library (JS + TypeScript)",
+                subtitle: "Easy two-step task: small library in JavaScript (classes + destructuring), then the same idea in TypeScript (types + interfaces).",
+                sections: [{
+                    type: "idea",
+                    title: "Story: ShelfStack Community Library",
+                    content: "You build a very small library app. Part A is plain JavaScript: a few classes and destructuring. Part B is the same books/loans idea written in TypeScript with simple interfaces. Keep your solution short; focus on clarity, not extra features."
+                }, {
+                    type: "requirements",
+                    title: "Rules (simple)",
+                    content: [{
+                        type: "list",
+                        title: "What to use",
+                        items: [
+                            "Lecture 8: classes, `extends`, `super`, one overridden method, at least one `#` private field, one `static` method, object and array destructuring.",
+                            "Lecture 9: install TypeScript, `tsc --init`, one or two `.ts` files, `interface` and `type`, typed functions. Do **not** use `any`."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Skip (not part of this task)",
+                        items: [
+                            "Multiple inheritance / mixins (Lecture 8 tab).",
+                            "TypeScript advanced lessons: generics `<T>`, tagged unions, advanced type-guard homework, \"Advanced Topics\" extras."
+                        ]
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "Part A — JavaScript file `part-a.js`",
+                    content: [{
+                        type: "list",
+                        title: "Classes (only these four)",
+                        items: [
+                            "`LibraryItem`: fields `id`, `title`, `isAvailable`; methods `describe()` and simple `borrow()` / `returnItem()` (or similar names) that flip `isAvailable`.",
+                            "`Book extends LibraryItem`: add `isbn` and `author` (strings). Override `describe()` to mention book details.",
+                            "`Member`: one private number field like `#balance` (or `#creditCents`), plus `deposit(n)` and `getBalance()`.",
+                            "`LibraryCatalog`: stores books in an array; `addItem(book)`; **static** method e.g. `nextId()` or `makeId(prefix)`; `registerLoan({ memberId, itemId })` — the parameter must use **object destructuring** in the function signature; `snapshotStats()` returns `{ total, available }` (counts of books)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Destructuring (three small proofs)",
+                        items: [
+                            "In `registerLoan`, write the parameter as `{ memberId, itemId }`.",
+                            "At the end of the file, call `snapshotStats()` and write: `const { total, available } = catalog.snapshotStats();`",
+                            "Use **array destructuring** once, e.g. `const [a, b] = [\"b1\", \"b2\"];` before adding two books (or another simple line in your demo)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "End of file",
+                        items: [
+                            "A short demo: create a catalog, add 1–2 books, call `registerLoan`, print `describe()` for one book, print `total` and `available`."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "Part A — minimal example",
+                        content: "Your code should look roughly like this (you may rename, but keep the ideas):",
+                        example: `const cat = new LibraryCatalog();
+cat.addItem(new Book({ id: "b1", title: "Clean Code", isbn: "978-0132350884", author: "Martin" }));
+cat.registerLoan({ memberId: "m1", itemId: "b1" });
+
+const { total, available } = cat.snapshotStats();
+// total is number of books; available is how many are not on loan`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "Part B — TypeScript folder `shelfstack-ts/`",
+                    content: [{
+                        type: "list",
+                        title: "Setup",
+                        items: [
+                            "Create `shelfstack-ts/` with `tsconfig.json` (`npx tsc --init`).",
+                            "Put all TypeScript in `src/` — **one file is enough** (`library.ts`) or two files if you prefer (`types.ts` + `helpers.ts`).",
+                            "Run `npx tsc` and make sure `.js` files appear in `dist/` (or your `outDir`)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Types only (keep it small)",
+                        items: [
+                            "`type BookId = string` (or skip `type` and use `string` in interfaces — both OK).",
+                            "`interface Book { id: string; title: string; isbn: string; author: string; }`",
+                            "`interface Loan { id: string; bookId: string; memberId: string; }`",
+                            "Optional: add `readonly` on one field if you want (e.g. `readonly id: string` on `Book`)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Two typed functions",
+                        items: [
+                            "`function addBook(list: Book[], book: Book): Book[]` — return a **new** array with the book added (do not use `any`).",
+                            "`function findByIsbn(list: Book[], isbn: string): Book | undefined` — return the book or `undefined`."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "Part B — folder example",
+                        content: "Simple layout:",
+                        example: `shelfstack-ts/
+  tsconfig.json
+  src/
+    library.ts   // interfaces + addBook + findByIsbn + small demo comments
+  dist/          // after tsc`
+                    }]
+                }, {
+                    type: "note",
+                    title: "Submission",
+                    content: "Telegram tasks thread: send `part-a.js` and a zip of `shelfstack-ts` (or a link if your class uses Git). First line of your message: `#TASK5 - Your Full Name`."
+                }, {
+                    type: "learning",
+                    title: "Learning recap",
+                    content: [
+                        "Lecture 8: classes, inheritance, private `#`, `static`, destructuring.",
+                        "Lecture 9: interfaces, typed functions, compile with `tsc`.",
+                        "Same mini-domain twice: behavior in JS, then types in TS."
+                    ]
+                }],
+                timer: {
+                    title: "Time Remaining to Complete Task",
+                    message: "Complete the task before the deadline!",
+                    days: "Days",
+                    hours: "Hours",
+                    minutes: "Minutes",
+                    seconds: "Seconds"
+                },
+                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
+                buttonText: "العربية / English",
+                finishDate: "Finish by: April 11, 2026"
+            },
+            ar: {
+                title: "المهمة 5: مكتبة ShelfStack (جافاسكريبت + TypeScript)",
+                subtitle: "مهمة بخطوتين وبسيطة: مكتبة صغيرة بجافاسكريبت (أصناف + تفكيك)، ثم نفس الفكرة بـ TypeScript (أنواع وواجهات).",
+                sections: [{
+                    type: "idea",
+                    title: "القصة: مكتبة ShelfStack المجتمعية",
+                    content: "تبني تطبيق مكتبة بسيط جدًا. الجزء أ بجافاسكريبت العادي: عدّة أصناف وتفكيك. الجزء ب يعيد نفس فكرة الكتب والإعارات بـ TypeScript بواجهات بسيطة. اجعل الحل قصيرًا وركز على الوضوح لا على ميزات إضافية."
+                }, {
+                    type: "requirements",
+                    title: "قواعد (مبسّطة)",
+                    content: [{
+                        type: "list",
+                        title: "ما تستخدمه",
+                        items: [
+                            "المحاضرة 8: أصناف، `extends`، `super`، تجاوز دالة واحدة، حقل خاص `#` واحد على الأقل، دالة `static` واحدة، تفكيك كائن ومصفوفة.",
+                            "المحاضرة 9: تثبيت TypeScript، `tsc --init`، ملف أو ملفان `.ts`، `interface` و`type`، دوال مُعلّمة. **لا** تستخدم `any`."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "تجاهل هذا (ليس من المهمة)",
+                        items: [
+                            "الوراثة المتعددة / mixins (تبويب المحاضرة 8).",
+                            "دروس TypeScript المتقدمة: أنواع عامة `<T>`، اتحاد موسوم، واجبات حراس أنواع متقدمة، مواضيع \"Advanced Topics\"."
+                        ]
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "الجزء أ — ملف JavaScript `part-a.js`",
+                    content: [{
+                        type: "list",
+                        title: "أصناف (هذه الأربعة فقط)",
+                        items: [
+                            "`LibraryItem`: حقول `id`، `title`، `isAvailable`؛ دوال `describe()` و`borrow()` / `returnItem()` (أو أسماء قريبة) تغيّر `isAvailable`.",
+                            "`Book extends LibraryItem`: أضف `isbn` و`author` كنصوص. تجاوز `describe()` لذكر تفاصيل الكتاب.",
+                            "`Member`: حقل رقم خاص واحد مثل `#balance` (أو `#creditCents`) مع `deposit(n)` و`getBalance()`.",
+                            "`LibraryCatalog`: يخزن الكتب في مصفوفة؛ `addItem(book)`؛ دالة **ثابتة** مثل `nextId()` أو `makeId(prefix)`؛ `registerLoan({ memberId, itemId })` — المعامل يُكتب **بتفكيك كائن**؛ `snapshotStats()` تُرجع `{ total, available }` (عدد الكتب)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "التفكيك (ثلاثة إثباتات بسيطة)",
+                        items: [
+                            "في `registerLoan` اكتب المعامل `{ memberId, itemId }`.",
+                            "في نهاية الملف استدعِ `snapshotStats()` واكتب: `const { total, available } = catalog.snapshotStats();`",
+                            "استخدم **تفكيك مصفوفة** مرة مثل `const [a, b] = [\"b1\", \"b2\"];` قبل إضافة كتابين (أو سطر بسيط في العرض)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "نهاية الملف",
+                        items: [
+                            "عرض قصير: أنشئ فهرسًا، أضف كتابًا أو اثنين، نفّذ `registerLoan`، اطبع `describe()` لكتاب واحد، اطبع `total` و`available`."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "الجزء أ — مثال بسيط",
+                        content: "يجب أن يبدو الكود تقريبًا هكذا (يمكن تغيير الأسماء مع بقاء الفكرة):",
+                        example: `const cat = new LibraryCatalog();
+cat.addItem(new Book({ id: "b1", title: "Clean Code", isbn: "978-0132350884", author: "Martin" }));
+cat.registerLoan({ memberId: "m1", itemId: "b1" });
+
+const { total, available } = cat.snapshotStats();
+// total = عدد الكتب؛ available = غير المعارة`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "الجزء ب — مجلد TypeScript `shelfstack-ts/`",
+                    content: [{
+                        type: "list",
+                        title: "الإعداد",
+                        items: [
+                            "أنشئ `shelfstack-ts/` مع `tsconfig.json` (`npx tsc --init`).",
+                            "ضع كل TypeScript في `src/` — **ملف واحد يكفي** (`library.ts`) أو ملفان إن أحببت.",
+                            "شغّل `npx tsc` وتأكد أن ملفات `.js` تظهر في `dist/` (أو `outDir`)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "أنواع فقط (بسيطة)",
+                        items: [
+                            "`type BookId = string` (أو استخدم `string` مباشرة في الواجهات — الاثنان مقبول).",
+                            "`interface Book { id: string; title: string; isbn: string; author: string; }`",
+                            "`interface Loan { id: string; bookId: string; memberId: string; }`",
+                            "اختياري: أضف `readonly` على حقل واحد (مثل `readonly id: string` على `Book`)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "دالتان فقط",
+                        items: [
+                            "`function addBook(list: Book[], book: Book): Book[]` — أعد **مصفوفة جديدة** مع إضافة الكتاب (دون `any`).",
+                            "`function findByIsbn(list: Book[], isbn: string): Book | undefined` — أعد الكتاب أو `undefined`."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "الجزء ب — مثال للمجلد",
+                        content: "هيكل بسيط:",
+                        example: `shelfstack-ts/
+  tsconfig.json
+  src/
+    library.ts   // الواجهات + addBook + findByIsbn + تعليقات قصيرة
+  dist/          // بعد tsc`
+                    }]
+                }, {
+                    type: "note",
+                    title: "التسليم",
+                    content: "ردّة تاسكات التلغرام: أرسل `part-a.js` وضغط مجلد `shelfstack-ts` (أو رابط إن طلبت الدورة Git). السطر الأول: `#TASK5 - اسمك الكامل`."
+                }, {
+                    type: "learning",
+                    title: "ملخص التعلّم",
+                    content: [
+                        "المحاضرة 8: أصناف، وراثة، `#` خاص، `static`، تفكيك.",
+                        "المحاضرة 9: واجهات، دوال مُعلّمة، تجميع بـ`tsc`.",
+                        "نفس المجال الصغير مرتين: سلوك في JS ثم أنواع في TS."
+                    ]
+                }],
+                timer: {
+                    title: "الوقت المتبقي لإكمال المهمة",
+                    message: "أكمل المهمة قبل الموعد النهائي!",
+                    days: "أيام",
+                    hours: "ساعات",
+                    minutes: "دقائق",
+                    seconds: "ثواني"
+                },
+                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
+                buttonText: "English / العربية",
+                finishDate: "الانتهاء بحلول: 11 أبريل 2026"
+            }
+        };
+
+        function renderContent(lang) {
+            const data = taskData[lang];
+            const taskContent = document.getElementById('taskContent');
+
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+
+            document.getElementById('timer-title').textContent = data.timer.title;
+            document.getElementById('timer-message').textContent = data.timer.message;
+            document.getElementById('days-label').textContent = data.timer.days;
+            document.getElementById('hours-label').textContent = data.timer.hours;
+            document.getElementById('minutes-label').textContent = data.timer.minutes;
+            document.getElementById('seconds-label').textContent = data.timer.seconds;
+            document.getElementById('finish-date').textContent = data.finishDate;
+
+            document.getElementById('thankYou').textContent = data.thankYou;
+
+            document.getElementById('languageToggle').textContent = data.buttonText;
+
+            taskContent.innerHTML = '';
+
+            data.sections.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+
+                if (section.type === 'requirements') {
+                    sectionEl.classList.add('requirements');
+                } else if (section.type === 'bonus') {
+                    sectionEl.classList.add('bonus');
+                }
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = section.title;
+                sectionEl.appendChild(titleEl);
+
+                if (section.type === 'idea' || section.type === 'note') {
+                    const contentEl = document.createElement('p');
+                    contentEl.textContent = section.content;
+                    sectionEl.appendChild(contentEl);
+                } else if (section.type === 'requirements') {
+                    section.content.forEach(item => {
+                        const itemTitle = document.createElement('h3');
+                        itemTitle.textContent = item.title;
+                        sectionEl.appendChild(itemTitle);
+
+                        if (item.type === 'list') {
+                            const listEl = document.createElement('ul');
+                            item.items.forEach(listItem => {
+                                const li = document.createElement('li');
+                                li.innerHTML = listItem;
+                                listEl.appendChild(li);
+                            });
+                            sectionEl.appendChild(listEl);
+                        } else if (item.type === 'output') {
+                            itemTitle.setAttribute('dir', 'ltr');
+                            itemTitle.style.textAlign = 'left';
+                            const contentEl = document.createElement('p');
+                            contentEl.textContent = item.content;
+                            contentEl.setAttribute('dir', 'ltr');
+                            contentEl.style.textAlign = 'left';
+                            sectionEl.appendChild(contentEl);
+
+                            const exampleEl = document.createElement('div');
+                            exampleEl.className = 'output-example';
+                            exampleEl.textContent = item.example;
+                            exampleEl.setAttribute('dir', 'ltr');
+                            exampleEl.style.textAlign = 'left';
+                            sectionEl.appendChild(exampleEl);
+                        }
+                    });
+                } else if (section.type === 'learning' || section.type === 'bonus') {
+                    const listEl = document.createElement('ul');
+                    section.content.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        listEl.appendChild(li);
+                    });
+                    sectionEl.appendChild(listEl);
+                }
+
+                taskContent.appendChild(sectionEl);
+            });
+
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'right';
+                });
+            } else {
+                document.body.removeAttribute('dir');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'left';
+                });
+            }
+        }
+
+        function startCountdown() {
+            const countDownDate = new Date("Apr 11, 2026 23:59:59").getTime();
+
+            const countdown = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    document.getElementById("days").textContent = "00";
+                    document.getElementById("hours").textContent = "00";
+                    document.getElementById("minutes").textContent = "00";
+                    document.getElementById("seconds").textContent = "00";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderContent('en');
+            startCountdown();
+
+            document.getElementById('languageToggle').addEventListener('click', function() {
+                const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
+                const newLang = currentLang === 'en' ? 'ar' : 'en';
+                renderContent(newLang);
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 8: Library Management System</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333; line-height: 1.6; padding: 20px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .container {
+            width: 100%; max-width: 1000px; background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); margin: 20px 0;
+        }
+        .coach {
+            background-color: white; width: 80px; border-radius: 0 0 50% 0;
+            color: black; padding: 10px; position: absolute; left: 0; top: 0; z-index: 100;
+        }
+        header { background: #2c3e50; color: white; padding: 20px; text-align: center; position: relative; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.9; }
+        #title { padding-top: 20px; }
+        .language-toggle {
+            position: absolute; top: 20px; right: 20px; background: #3498db; color: white;
+            border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600;
+        }
+        .language-toggle:hover { background: #2980b9; }
+        .task-content { padding: 30px; }
+        .section {
+            margin-bottom: 30px; padding: 20px; background: #f8f9fa;
+            border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .story-section { background: #f0f8ff; border-left: 5px solid #3178c6; }
+        .requirements { background: #e8f4fc; border-left: 5px solid #3498db; }
+        .note-section { background: #fff3cd; border-left: 5px solid #ffc107; }
+        h2 { color: #2c3e50; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #3498db; }
+        .story-section h2 { border-bottom-color: #3178c6; }
+        .note-section h2 { border-bottom-color: #ffc107; }
+        h3 { color: #2980b9; margin: 15px 0; }
+        p { margin-bottom: 15px; }
+        ul, ol { margin-left: 20px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; }
+        .output-example {
+            background: #d4edda; border-left: 5px solid #28a745; padding: 15px; border-radius: 5px;
+            margin: 15px 0; font-family: monospace; white-space: pre; overflow: auto;
+            direction: ltr !important; text-align: left !important;
+        }
+        .timer-section {
+            text-align: center; padding: 20px; background: #2c3e50; color: white;
+            margin-top: 30px; border-radius: 10px;
+        }
+        .timer { font-size: 2rem; font-weight: bold; margin: 10px 0; display: flex; justify-content: center; gap: 15px; }
+        .timer-unit { background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 5px; min-width: 80px; }
+        .timer-value { font-size: 2.5rem; display: block; }
+        .timer-label { font-size: 0.9rem; text-transform: uppercase; display: block; }
+        .finish-date { font-size: 1.2rem; margin-top: 10px; }
+        .thank-you {
+            text-align: center; padding: 20px; font-style: italic; color: #6c757d;
+            border-top: 1px solid #dee2e6; margin-top: 30px;
+        }
+        .footer {
+            text-align: center; padding: 20px; background: #2c3e50; color: white;
+            width: 100%; max-width: 1000px; border-radius: 15px;
+        }
+        .footer a { color: #3498db; text-decoration: none; }
+        .footer p { padding: 0 !important; margin: 0 !important; }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .task-content { padding: 15px; }
+            .language-toggle { position: relative; top: 0; right: 0; margin-bottom: 15px; display: block; width: 100%; }
+            .timer { font-size: 1.5rem; flex-wrap: wrap; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+        <header>
+            <h1 id="title">Task 8: Library Management System</h1>
+            <p class="subtitle" id="subtitle">Design the database from requirements, then implement it with Express and Mongoose — Lecture 21.</p>
+            <button class="language-toggle" id="languageToggle">العربية / English</button>
+        </header>
+
+        <div class="task-content" id="taskContent"></div>
+
+        <div class="timer-section">
+            <h3 id="timer-title">Time Remaining to Complete Task</h3>
+            <div class="timer" id="timer">
+                <div class="timer-unit"><span class="timer-value" id="days">00</span><span class="timer-label" id="days-label">Days</span></div>
+                <div class="timer-unit"><span class="timer-value" id="hours">00</span><span class="timer-label" id="hours-label">Hours</span></div>
+                <div class="timer-unit"><span class="timer-value" id="minutes">00</span><span class="timer-label" id="minutes-label">Minutes</span></div>
+                <div class="timer-unit"><span class="timer-value" id="seconds">00</span><span class="timer-label" id="seconds-label">Seconds</span></div>
+            </div>
+            <p class="finish-date" id="finish-date">Finish by: May 26, 2026</p>
+            <p id="timer-message">Complete the task before the deadline!</p>
+        </div>
+
+        <div class="thank-you" id="thankYou">"Thank you for your hard work and dedication. Your efforts are appreciated!"</div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 <a href="https://focal-x.com/" target="_blank">Focal X</a> - Node.js Bootcamp V11</p>
+    </div>
+
+    <script src="../reg.js"></script>
+    <script>
+        const taskData = {
+            en: {
+                title: "Task 8: Library Management System",
+                subtitle: "Phase 1: document your MongoDB design from business features. Phase 2: Express + Mongoose API that implements every feature below. No authentication or authorization.",
+                sections: [{
+                    type: "story",
+                    title: "📚 The story: your design is the product",
+                    paragraphs: [
+                        "The city library hired your team to replace paper ledgers. They will not send you a finished database — only a list of what the system must do.",
+                        "Your first deliverable is a clear data model: collections, fields, and how they connect (data fields, relationship fields, and fields that solve business rules — as in Lecture 21).",
+                        "Your second deliverable is a working API: the same design expressed in Mongoose schemas and Express routes so staff can manage users, materials, loans, reservations, and reviews.",
+                        "For this task you are not building login screens, JWT, or role guards. User types (member, librarian, manager) exist in the data model for business meaning only; any route may be called with the correct IDs in the request body or URL."
+                    ]
+                }, {
+                    type: "note",
+                    title: "⚠️ Out of scope (do not implement)",
+                    content: "Authentication, registration/login endpoints, password hashing flows, JWT/session middleware, or role-based authorization. You may include a password field in the design document for future work, but do not build auth logic in this task."
+                }, {
+                    type: "requirements",
+                    title: "📝 Phase 1 — System & database design (written deliverable)",
+                    content: [{
+                        type: "list",
+                        title: "What to submit as design:",
+                        items: [
+                            "A <code>DATABASE_DESIGN.md</code> file (English or Arabic) linked from your README.",
+                            "Follow the approach in <a href=\"../lecture21.html\" target=\"_blank\" rel=\"noopener\">Lecture 21 — System design (example)</a>: actors, features, collections, relationships.",
+                            "For each collection, label fields as <strong>data</strong>, <strong>relationship</strong>, or <strong>problem-solving</strong>.",
+                            "Include a simple relationship diagram or bullet map (Restaurant-style example is food delivery; yours is library)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "System 1 — Library Management: features your database must support",
+                        items: [
+                            "<strong>User management</strong> — Types: member, librarian, manager. Shared data: name, email, phone, registeredAt, password (design only; not used for auth in code). Member-only: address, dateOfBirth, membershipNumber. Librarian-only: responsibleDepartment. Manager: same shared fields (extend in design if you add manager-specific rules).",
+                            "<strong>Books & library materials</strong> — Books: title, author, publisher, publicationYear, category (fiction, science, history, …), ISBN, totalCopies, availableCopies, coverImageUrl. Other materials in one logical collection with <code>materialType</code>: magazine (issueNumber, month, year), CD, map — plus shared fields where sensible.",
+                            "<strong>Loans (checkouts)</strong> — Links member, material, and librarian who recorded the loan. Fields: loanDate, dueDate, actualReturnDate (optional), status (active | returned | overdue | cancelled). Fines: finePerDay, totalFineAmount, paymentStatus (paid | unpaid). Business rules for overdue and fine calculation must be describable in your design.",
+                            "<strong>Reservations</strong> — Member reserves material that is not currently available. Fields: material, member, reservedAt, queuePriority, notifiedWhenAvailable, autoCancelAfter (duration or date rule).",
+                            "<strong>Ratings & reviews</strong> — Members rate materials 1–5 stars and optional review text. Rule: one review per member per material (enforce in API logic)."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "Suggested collections (you may rename if consistent):",
+                        content: "Minimum set — adjust field names in your design doc:",
+                        example: `Users
+Materials  (materialType: book | magazine | cd | map)
+Loans
+Reservations
+Reviews`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "📝 Phase 2 — Implementation (Express + Mongoose + MongoDB)",
+                    content: [{
+                        type: "list",
+                        title: "Technical requirements:",
+                        items: [
+                            "Node.js project with <strong>Express</strong>, <strong>Mongoose</strong>, and <strong>MongoDB</strong> (local or Atlas).",
+                            "Organized structure: e.g. <code>src/models</code>, <code>src/routes</code>, <code>src/controllers</code> (or equivalent), <code>app.js</code>, <code>.env</code> with <code>MONGODB_URI</code> and <code>PORT</code>, <code>.gitignore</code>, <code>nodemon</code>.",
+                            "Mongoose schemas must match your <code>DATABASE_DESIGN.md</code>.",
+                            "REST-style API under <code>/api/v1/...</code> for resources you need (users, materials, loans, reservations, reviews).",
+                            "Implement business rules: e.g. decrease <code>availableCopies</code> on loan, increase on return; block duplicate reviews; compute or update overdue status and fines as described in your design.",
+                            "README: setup, env vars, how to run, link to design doc, example requests (Postman/Thunder Client)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Submission:",
+                        items: [
+                            "Public GitHub repository with design file, source code, and README.",
+                            "Design and code must stay aligned — if you change the schema, update the design doc."
+                        ]
+                    }]
+                }, {
+                    type: "learning",
+                    title: "📚 Lecture alignment",
+                    content: [
+                        "Lecture 21: system design → collections; data vs relationship vs problem-solving fields.",
+                        "Relationships: one-to-many (member → loans), references between documents, avoid huge embedded trees.",
+                        "Mongoose: schemas, refs, populate where helpful, validation, timestamps."
+                    ]
+                }],
+                timer: {
+                    title: "Time Remaining to Complete Task",
+                    message: "Complete the task before the deadline. Official submissions are accepted only in the final six hours before the window closes.",
+                    days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds"
+                },
+                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
+                buttonText: "العربية / English",
+                finishDate: "Finish by: May 26, 2026 (submissions: last 6 hours)"
+            },
+            ar: {
+                title: "المهمة 8: نظام إدارة المكتبة",
+                subtitle: "المرحلة 1: توثيق تصميم MongoDB من المتطلبات. المرحلة 2: API بـ Express و Mongoose يطبّق كل الميزات أدناه. بدون مصادقة أو صلاحيات.",
+                sections: [{
+                    type: "story",
+                    title: "📚 القصة: التصميم هو المنتج الأول",
+                    paragraphs: [
+                        "مكتبة المدينة تعاقدت مع فريقك لاستبدال السجلات الورقية. لن يرسلوا قاعدة بيانات جاهزة — فقط قائمة بما يجب أن يفعله النظام.",
+                        "التسليم الأول: نموذج بيانات واضح — مجموعات، حقول، وعلاقات (حقول بيانات، علاقات، وحلول لقواعد العمل — كما في المحاضرة 21).",
+                        "التسليم الثاني: API يعمل — نفس التصميم في مخططات Mongoose ومسارات Express لإدارة المستخدمين والمواد والإعارات والحجوزات والتقييمات.",
+                        "في هذه المهمة لا تبنون تسجيل دخول أو JWT أو حراسة أدوار. أنواع المستخدم (عضو، أمين، مدير) موجودة في البيانات لمعنى العمل فقط؛ أي مسار يمكن استدعاؤه بالمعرفات الصحيحة في الطلب."
+                    ]
+                }, {
+                    type: "note",
+                    title: "⚠️ خارج النطاق (لا تنفّذ)",
+                    content: "المصادقة، مسارات تسجيل الدخول/التسجيل، تشفير كلمات المرور، middleware للجلسات أو JWT، أو التفويض حسب الدور. يمكن ذكر حقل كلمة المرور في وثيقة التصميم للمستقبل، دون بناء منطق auth في هذه المهمة."
+                }, {
+                    type: "requirements",
+                    title: "📝 المرحلة 1 — تصميم النظام وقاعدة البيانات (مستند مكتوب)",
+                    content: [{
+                        type: "list",
+                        title: "ماذا تسلّم كتصميم:",
+                        items: [
+                            "ملف <code>DATABASE_DESIGN.md</code> (عربي أو إنجليزي) مرتبط من README.",
+                            "اتبع أسلوب <a href=\"../lecture21.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 21 — System design (example)</a>.",
+                            "لكل مجموعة صنّف الحقول: <strong>بيانات</strong>، <strong>علاقة</strong>، <strong>حل مشكلة</strong>.",
+                            "أضف مخطط علاقات مبسط أو قائمة واضحة."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "النظام الأول: إدارة المكتبة — ميزات يجب أن تدعمها قاعدة البيانات",
+                        items: [
+                            "<strong>إدارة المستخدمين</strong> — أنواع: عضو، أمين مكتبة، مدير. مشترك: الاسم، البريد، الهاتف، تاريخ التسجيل، كلمة المرور (في التصميم فقط). للعضو: العنوان، تاريخ الميلاد، رقم العضوية. لأمين المكتبة: القسم المسؤول عنه.",
+                            "<strong>الكتب والمواد</strong> — كتاب: عنوان، مؤلف، ناشر، سنة النشر، تصنيف، ISBN، عدد النسخ الكلي والمتاح، صورة الغلاف. مواد أخرى في مجموعة منطقية مع <code>materialType</code>: مجلة (رقم إصدار، شهر، سنة)، قرص مدمج، خريطة.",
+                            "<strong>الإعارات</strong> — ربط بالعضو والمادة وأمين المكتبة المسجّل. تاريخ الإعارة، الاستحقاق، الإعادة الفعلية، الحالة (نشطة، منتهية، متأخرة، ملغاة). غرامات: قيمة اليوم، المبلغ الإجمالي، حالة الدفع.",
+                            "<strong>الحجوزات</strong> — عضو يحجز مادة غير متاحة: المادة، العضو، تاريخ الحجز، أولوية الانتظار، إشعار عند التوفر، إلغاء تلقائي بعد مدة.",
+                            "<strong>التقييم والمراجعات</strong> — 1–5 نجوم ونص اختياري؛ منع أكثر من تقييم لنفس العضو لنفس المادة."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "مجموعات مقترحة:",
+                        content: "الحد الأدنى — يمكنك إعادة التسمية باتساق:",
+                        example: `Users
+Materials  (materialType: book | magazine | cd | map)
+Loans
+Reservations
+Reviews`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "📝 المرحلة 2 — التنفيذ (Express + Mongoose + MongoDB)",
+                    content: [{
+                        type: "list",
+                        title: "متطلبات تقنية:",
+                        items: [
+                            "مشروع Node.js مع <strong>Express</strong> و <strong>Mongoose</strong> و <strong>MongoDB</strong>.",
+                            "هيكل منظم: مثل <code>src/models</code> و <code>src/routes</code> و <code>src/controllers</code>، <code>app.js</code>، <code>.env</code> فيه <code>MONGODB_URI</code> و <code>PORT</code>، <code>.gitignore</code>، <code>nodemon</code>.",
+                            "مخططات Mongoose تطابق <code>DATABASE_DESIGN.md</code>.",
+                            "API تحت <code>/api/v1/...</code> للموارد المطلوبة.",
+                            "قواعد العمل: تقليل <code>availableCopies</code> عند الإعارة وزيادتها عند الإعادة؛ منع التقييم المكرر؛ حساب التأخير والغرامات حسب تصميمك.",
+                            "README: الإعداد، المتغيرات، التشغيل، رابط التصميم، أمثلة طلبات."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "التسليم:",
+                        items: [
+                            "مستودع GitHub عام يحوي التصميم والشيفرة و README.",
+                            "يجب أن يبقى التصميم والكود متوافقين."
+                        ]
+                    }]
+                }, {
+                    type: "learning",
+                    title: "📚 الربط بالمحاضرة",
+                    content: [
+                        "المحاضرة 21: من متطلبات النظام إلى مجموعات MongoDB.",
+                        "العلاقات: واحد إلى كثير، مراجع بين الوثائق.",
+                        "Mongoose: مخططات، refs، populate، تحقق، timestamps."
+                    ]
+                }],
+                timer: {
+                    title: "الوقت المتبقي لإكمال المهمة",
+                    message: "أكمل المهمة قبل الموعد النهائي. يُقبل التسليم الرسمي فقط في الساعات الست الأخيرة قبل إغلاق النافذة.",
+                    days: "أيام", hours: "ساعات", minutes: "دقائق", seconds: "ثواني"
+                },
+                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
+                buttonText: "English / العربية",
+                finishDate: "الانتهاء بحلول: 26 مايو 2026 (التسليم: آخر 6 ساعات)"
+            }
+        };
+
+        function renderContent(lang) {
+            const data = taskData[lang];
+            const taskContent = document.getElementById('taskContent');
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+            document.getElementById('timer-title').textContent = data.timer.title;
+            document.getElementById('timer-message').textContent = data.timer.message;
+            document.getElementById('days-label').textContent = data.timer.days;
+            document.getElementById('hours-label').textContent = data.timer.hours;
+            document.getElementById('minutes-label').textContent = data.timer.minutes;
+            document.getElementById('seconds-label').textContent = data.timer.seconds;
+            document.getElementById('finish-date').textContent = data.finishDate;
+            document.getElementById('thankYou').textContent = data.thankYou;
+            document.getElementById('languageToggle').textContent = data.buttonText;
+            taskContent.innerHTML = '';
+
+            data.sections.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+                if (section.type === 'requirements') sectionEl.classList.add('requirements');
+                else if (section.type === 'story') sectionEl.classList.add('story-section');
+                else if (section.type === 'note') sectionEl.classList.add('note-section');
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = section.title;
+                sectionEl.appendChild(titleEl);
+
+                if (section.type === 'story') {
+                    (section.paragraphs || []).forEach(text => {
+                        const p = document.createElement('p');
+                        p.textContent = text;
+                        p.style.marginBottom = '14px';
+                        sectionEl.appendChild(p);
+                    });
+                } else if (section.type === 'idea' || section.type === 'note') {
+                    const contentEl = document.createElement('p');
+                    contentEl.textContent = section.content;
+                    sectionEl.appendChild(contentEl);
+                } else if (section.type === 'requirements') {
+                    section.content.forEach(item => {
+                        const itemTitle = document.createElement('h3');
+                        itemTitle.textContent = item.title;
+                        sectionEl.appendChild(itemTitle);
+                        if (item.type === 'list') {
+                            const listEl = document.createElement('ul');
+                            item.items.forEach(listItem => {
+                                const li = document.createElement('li');
+                                li.innerHTML = listItem;
+                                listEl.appendChild(li);
+                            });
+                            sectionEl.appendChild(listEl);
+                        } else if (item.type === 'output') {
+                            const contentEl = document.createElement('p');
+                            contentEl.textContent = item.content;
+                            sectionEl.appendChild(contentEl);
+                            const exampleEl = document.createElement('div');
+                            exampleEl.className = 'output-example';
+                            exampleEl.textContent = item.example;
+                            sectionEl.appendChild(exampleEl);
+                        }
+                    });
+                } else if (section.type === 'learning' || section.type === 'bonus') {
+                    const listEl = document.createElement('ul');
+                    section.content.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        listEl.appendChild(li);
+                    });
+                    sectionEl.appendChild(listEl);
+                }
+                taskContent.appendChild(sectionEl);
+            });
+
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelectorAll('.section').forEach(s => { s.style.textAlign = 'right'; });
+            } else {
+                document.body.removeAttribute('dir');
+                document.querySelectorAll('.section').forEach(s => { s.style.textAlign = 'left'; });
+            }
+        }
+
+        function startCountdown() {
+            const countDownDate = new Date("May 26, 2026 23:59:59").getTime();
+            const countdown = setInterval(() => {
+                const distance = countDownDate - Date.now();
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    ['days','hours','minutes','seconds'].forEach(id => document.getElementById(id).textContent = '00');
+                    return;
+                }
+                const days = Math.floor(distance / 86400000);
+                const hours = Math.floor((distance % 86400000) / 3600000);
+                const minutes = Math.floor((distance % 3600000) / 60000);
+                const seconds = Math.floor((distance % 60000) / 1000);
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderContent('en');
+            startCountdown();
+            document.getElementById('languageToggle').addEventListener('click', () => {
+                const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
+                renderContent(currentLang === 'en' ? 'ar' : 'en');
+            });
+        });
+    </script>
+</body>
+
+</html>

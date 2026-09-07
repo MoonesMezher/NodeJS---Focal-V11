@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 10: Uploads, Docker &amp; Socket.IO Chat</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333; line-height: 1.6; padding: 20px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .container {
+            width: 100%; max-width: 1000px; background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); margin: 20px 0;
+        }
+        .coach {
+            background-color: white; width: 80px; border-radius: 0 0 50% 0;
+            color: black; padding: 10px; position: absolute; left: 0; top: 0; z-index: 100;
+        }
+        header { background: #2c3e50; color: white; padding: 20px; text-align: center; position: relative; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.9; }
+        #title { padding-top: 20px; }
+        .language-toggle {
+            position: absolute; top: 20px; right: 20px; background: #3498db; color: white;
+            border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600;
+        }
+        .language-toggle:hover { background: #2980b9; }
+        .task-content { padding: 30px; }
+        .section {
+            margin-bottom: 30px; padding: 20px; background: #f8f9fa;
+            border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .requirements { background: #e8f4fc; border-left: 5px solid #3498db; }
+        .note-section { background: #fff3cd; border-left: 5px solid #ffc107; }
+        h2 { color: #2c3e50; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #3498db; }
+        .note-section h2 { border-bottom-color: #ffc107; }
+        h3 { color: #2980b9; margin: 15px 0; }
+        p { margin-bottom: 15px; }
+        ul, ol { margin-left: 20px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; }
+        .output-example {
+            background: #d4edda; border-left: 5px solid #28a745; padding: 15px; border-radius: 5px;
+            margin: 15px 0; font-family: monospace; white-space: pre; overflow: auto;
+            direction: ltr !important; text-align: left !important;
+        }
+        .timer-section {
+            text-align: center; padding: 20px; background: #2c3e50; color: white; margin-top: 30px; border-radius: 10px;
+        }
+        .timer { font-size: 2rem; font-weight: bold; margin: 10px 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .timer-unit { background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 5px; min-width: 80px; }
+        .timer-value { font-size: 2.5rem; display: block; }
+        .timer-label { font-size: 0.9rem; text-transform: uppercase; display: block; }
+        .finish-date { font-size: 1.2rem; margin-top: 10px; }
+        .thank-you { text-align: center; padding: 20px; font-style: italic; color: #6c757d; border-top: 1px solid #dee2e6; margin-top: 30px; }
+        .footer { text-align: center; padding: 20px; background: #2c3e50; color: white; width: 100%; max-width: 1000px; border-radius: 15px; }
+        .footer a { color: #3498db; text-decoration: none; }
+        .footer p { padding: 0 !important; margin: 0 !important; }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .task-content { padding: 15px; }
+            .language-toggle { position: relative; top: 0; right: 0; margin-bottom: 15px; display: block; width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+        <header>
+            <h1 id="title">Task 10: Uploads, Docker &amp; Socket.IO</h1>
+            <p class="subtitle" id="subtitle">Simple practice: two upload APIs, Docker for Node + MongoDB, and a minimal chat with Socket.IO.</p>
+            <button class="language-toggle" id="languageToggle">العربية / English</button>
+        </header>
+
+        <div class="task-content" id="taskContent"></div>
+
+        <div class="timer-section">
+            <h3 id="timer-title">Time Remaining to Complete Task</h3>
+            <div class="timer" id="timer">
+                <div class="timer-unit"><span class="timer-value" id="days">00</span><span class="timer-label" id="days-label">Days</span></div>
+                <div class="timer-unit"><span class="timer-value" id="hours">00</span><span class="timer-label" id="hours-label">Hours</span></div>
+                <div class="timer-unit"><span class="timer-value" id="minutes">00</span><span class="timer-label" id="minutes-label">Minutes</span></div>
+                <div class="timer-unit"><span class="timer-value" id="seconds">00</span><span class="timer-label" id="seconds-label">Seconds</span></div>
+            </div>
+            <p class="finish-date" id="finish-date">Finish by: July 4, 2026</p>
+            <p id="timer-message">Complete the task before the deadline!</p>
+        </div>
+
+        <div class="thank-you" id="thankYou">"Thank you for your hard work and dedication. Your efforts are appreciated!"</div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 <a href="https://focal-x.com/" target="_blank">Focal X</a> - Node.js Bootcamp V11</p>
+    </div>
+
+    <script src="../reg.js"></script>
+    <script>
+        const taskData = {
+            en: {
+                title: "Task 10: Uploads, Docker & Socket.IO Chat",
+                subtitle: "One small Express app: file upload (local + Cloudinary), Docker setup, and Socket.IO chat events. Keep it simple — no full product.",
+                sections: [{
+                    type: "note",
+                    title: "📚 Lecture hints",
+                    content: "Files: <a href=\"../lecture28.html\" target=\"_blank\" rel=\"noopener\">Lecture 28</a> · Docker: <a href=\"../lecture30.html\" target=\"_blank\" rel=\"noopener\">Lecture 30</a> · Socket.IO: <a href=\"../lecture33.html\" target=\"_blank\" rel=\"noopener\">Lecture 33</a>."
+                }, {
+                    type: "requirements",
+                    title: "📝 Requirements (simple scope)",
+                    content: [{
+                        type: "list",
+                        title: "1 — File upload APIs (HTTP):",
+                        items: [
+                            "<code>POST /api/v1/upload/local</code> — use <strong>Multer</strong> to save one file to a local <code>uploads/</code> folder; return filename + URL/path in JSON.",
+                            "<code>POST /api/v1/upload/cloud</code> — upload the same way to <strong>Cloudinary</strong> (multer-storage-cloudinary or Cloudinary SDK); return the cloud URL in JSON.",
+                            "Basic validation: image types only (e.g. jpeg, png, webp), max size (e.g. 5MB).",
+                            "Serve local uploads with <code>express.static</code> if you want a clickable URL."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "2 — Docker (Node.js + MongoDB):",
+                        items: [
+                            "<strong>Dockerfile</strong> for your Node/Express app (e.g. <code>node:18-alpine</code>, <code>COPY</code>, <code>npm install</code>, <code>CMD</code>).",
+                            "<strong>docker-compose.yml</strong> with at least two services: <code>api</code> (your app) and <code>mongo</code> (official <code>mongo</code> image).",
+                            "Named <strong>volume</strong> for Mongo data so it persists.",
+                            "App connects with <code>MONGODB_URI=mongodb://mongo:27017/yourdb</code> inside Compose.",
+                            "Add <code>.dockerignore</code> (node_modules, .env, uploads if huge).",
+                            "Document: <code>docker compose up --build</code> in README."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "3 — Socket.IO chat (same server):",
+                        items: [
+                            "Attach Socket.IO to your HTTP server (<code>http.createServer(app)</code> + <code>new Server(server)</code>).",
+                            "Handle built-in lifecycle: <strong>connection</strong> and <strong>disconnect</strong> (log socket id; on disconnect notify others if you like).",
+                            "Implement <strong>3 custom chat events</strong> (names are yours; example set below):",
+                            "<code>chat:join</code> — client sends <code>{ username }</code>; server acknowledges and broadcasts that user joined.",
+                            "<code>chat:message</code> — client sends <code>{ username, text }</code>; server broadcasts to all (or room) as <code>chat:message</code>.",
+                            "<code>chat:typing</code> — client sends <code>{ username }</code>; server broadcasts typing indicator to others.",
+                            "Test with Socket.IO client in browser console, Postman WebSocket, or a tiny HTML test page."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "Socket event map (example):",
+                        content: "You may rename events if documented in README — keep 3 custom + connection + disconnect.",
+                        example: `Server listens:
+  connection          (built-in)
+  disconnect          (built-in)
+  chat:join           → client joins with username
+  chat:message        → send/receive messages
+  chat:typing         → typing indicator
+
+Client emits: chat:join, chat:message, chat:typing
+Server broadcasts: chat:message, chat:typing, user-joined (optional)`
+                    }, {
+                        type: "list",
+                        title: "Submission:",
+                        items: [
+                            "Public GitHub repo + README: env vars (Cloudinary keys, MONGODB_URI), how to run with Docker, how to test uploads and Socket events.",
+                            "Optional: short screen recording or Postman/Socket screenshots."
+                        ]
+                    }]
+                }, {
+                    type: "learning",
+                    title: "✅ Quick checklist",
+                    content: [
+                        "Local upload saves file and returns JSON.",
+                        "Cloud upload returns Cloudinary URL.",
+                        "docker compose up starts API + Mongo.",
+                        "Socket: connection, disconnect, and 3 chat events work between two clients."
+                    ]
+                }],
+                timer: {
+                    title: "Time Remaining to Complete Task",
+                    message: "Complete the task before the deadline. Submissions accepted until the end of Saturday 4 July 2026.",
+                    days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds"
+                },
+                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
+                buttonText: "العربية / English",
+                finishDate: "Finish by: Saturday 4 July 2026"
+            },
+            ar: {
+                title: "المهمة 10: الرفع و Docker و Socket.IO",
+                subtitle: "تطبيق Express صغير: رفع ملف محلي و Cloudinary، إعداد Docker، ودردشة Socket.IO بسيطة.",
+                sections: [{
+                    type: "note",
+                    title: "📚 تلميحات المحاضرات",
+                    content: "الملفات: <a href=\"../lecture28.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 28</a> · Docker: <a href=\"../lecture30.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 30</a> · Socket.IO: <a href=\"../lecture33.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 33</a>."
+                }, {
+                    type: "requirements",
+                    title: "📝 المتطلبات (نطاق بسيط)",
+                    content: [{
+                        type: "list",
+                        title: "1 — APIs رفع الملفات:",
+                        items: [
+                            "<code>POST /api/v1/upload/local</code> — <strong>Multer</strong> يحفظ ملفاً في <code>uploads/</code> محلياً؛ JSON يعيد الاسم والمسار/الرابط.",
+                            "<code>POST /api/v1/upload/cloud</code> — رفع إلى <strong>Cloudinary</strong>؛ JSON يعيد رابط السحابة.",
+                            "تحقق أساسي: صور فقط، حد أقصى للحجم (مثلاً 5MB)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "2 — Docker (Node.js + MongoDB):",
+                        items: [
+                            "<strong>Dockerfile</strong> لتطبيق Node/Express.",
+                            "<strong>docker-compose.yml</strong> بخدمتين: <code>api</code> و <code>mongo</code>.",
+                            "<strong>volume</strong> اسمي لبيانات Mongo.",
+                            "الاتصال: <code>MONGODB_URI=mongodb://mongo:27017/yourdb</code>.",
+                            "<code>.dockerignore</code> وشرح <code>docker compose up --build</code> في README."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "3 — دردشة Socket.IO:",
+                        items: [
+                            "ربط Socket.IO بخادم HTTP.",
+                            "<strong>connection</strong> و <strong>disconnect</strong> (مسجّل + إشعار اختياري).",
+                            "<strong>3 أحداث مخصصة</strong> للدردشة، مثلاً:",
+                            "<code>chat:join</code> — <code>{ username }</code>.",
+                            "<code>chat:message</code> — <code>{ username, text }</code> بث للجميع.",
+                            "<code>chat:typing</code> — مؤشر كتابة.",
+                            "اختبار بعميلين (متصفح أو أداة WebSocket)."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "خريطة الأحداث (مثال):",
+                        content: "يمكنك إعادة التسمية مع توثيق في README.",
+                        example: `connection / disconnect (مدمجان)
+chat:join / chat:message / chat:typing`
+                    }, {
+                        type: "list",
+                        title: "التسليم:",
+                        items: [
+                            "مستودع GitHub عام + README (مفاتيح Cloudinary، Docker، اختبار الرفع و Socket).",
+                        ]
+                    }]
+                }, {
+                    type: "learning",
+                    title: "✅ قائمة تحقق",
+                    content: [
+                        "الرفع المحلي والسحابي يعملان.",
+                        "docker compose يشغّل API و Mongo.",
+                        "Socket: connection و disconnect و 3 أحداث دردشة بين عميلين."
+                    ]
+                }],
+                timer: {
+                    title: "الوقت المتبقي لإكمال المهمة",
+                    message: "أكمل المهمة قبل الموعد النهائي — حتى نهاية يوم السبت 4 يوليو 2026.",
+                    days: "أيام", hours: "ساعات", minutes: "دقائق", seconds: "ثواني"
+                },
+                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
+                buttonText: "English / العربية",
+                finishDate: "الانتهاء بحلول: السبت 4 يوليو 2026"
+            }
+        };
+
+        function renderContent(lang) {
+            const data = taskData[lang];
+            const taskContent = document.getElementById('taskContent');
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+            document.getElementById('timer-title').textContent = data.timer.title;
+            document.getElementById('timer-message').textContent = data.timer.message;
+            document.getElementById('days-label').textContent = data.timer.days;
+            document.getElementById('hours-label').textContent = data.timer.hours;
+            document.getElementById('minutes-label').textContent = data.timer.minutes;
+            document.getElementById('seconds-label').textContent = data.timer.seconds;
+            document.getElementById('finish-date').textContent = data.finishDate;
+            document.getElementById('thankYou').textContent = data.thankYou;
+            document.getElementById('languageToggle').textContent = data.buttonText;
+            taskContent.innerHTML = '';
+
+            data.sections.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+                if (section.type === 'requirements') sectionEl.classList.add('requirements');
+                else if (section.type === 'note') sectionEl.classList.add('note-section');
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = section.title;
+                sectionEl.appendChild(titleEl);
+
+                if (section.type === 'idea' || section.type === 'note') {
+                    const contentEl = document.createElement('p');
+                    contentEl.innerHTML = section.content;
+                    sectionEl.appendChild(contentEl);
+                } else if (section.type === 'requirements') {
+                    section.content.forEach(item => {
+                        const itemTitle = document.createElement('h3');
+                        itemTitle.textContent = item.title;
+                        sectionEl.appendChild(itemTitle);
+                        if (item.type === 'list') {
+                            const listEl = document.createElement('ul');
+                            item.items.forEach(listItem => {
+                                const li = document.createElement('li');
+                                li.innerHTML = listItem;
+                                listEl.appendChild(li);
+                            });
+                            sectionEl.appendChild(listEl);
+                        } else if (item.type === 'output') {
+                            const contentEl = document.createElement('p');
+                            contentEl.textContent = item.content;
+                            sectionEl.appendChild(contentEl);
+                            const exampleEl = document.createElement('div');
+                            exampleEl.className = 'output-example';
+                            exampleEl.textContent = item.example;
+                            sectionEl.appendChild(exampleEl);
+                        }
+                    });
+                } else if (section.type === 'learning') {
+                    const listEl = document.createElement('ul');
+                    section.content.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        listEl.appendChild(li);
+                    });
+                    sectionEl.appendChild(listEl);
+                }
+                taskContent.appendChild(sectionEl);
+            });
+
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelectorAll('.section').forEach(s => { s.style.textAlign = 'right'; });
+            } else {
+                document.body.removeAttribute('dir');
+                document.querySelectorAll('.section').forEach(s => { s.style.textAlign = 'left'; });
+            }
+        }
+
+        function startCountdown() {
+            const countDownDate = new Date("Jul 4, 2026 23:59:59").getTime();
+            const countdown = setInterval(() => {
+                const distance = countDownDate - Date.now();
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    ['days', 'hours', 'minutes', 'seconds'].forEach(id => document.getElementById(id).textContent = '00');
+                    return;
+                }
+                document.getElementById('days').textContent = String(Math.floor(distance / 86400000)).padStart(2, '0');
+                document.getElementById('hours').textContent = String(Math.floor((distance % 86400000) / 3600000)).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(Math.floor((distance % 3600000) / 60000)).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(Math.floor((distance % 60000) / 1000)).padStart(2, '0');
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderContent('en');
+            startCountdown();
+            document.getElementById('languageToggle').addEventListener('click', () => {
+                renderContent(document.body.getAttribute('dir') === 'rtl' ? 'en' : 'ar');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 7: Express — Twin CRUD APIs (Lectures 13 &amp; 14)</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+
+        .coach {
+            background-color: white;
+            width: 80px;
+            border-radius: 0 0 50% 0;
+            color: black;
+            padding: 10px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        #title {
+            padding-top: 20px;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .language-toggle:hover {
+            background: #2980b9;
+        }
+
+        .task-content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .story-section {
+            background: #fff8f0;
+            border-left: 5px solid #e67e22;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .story-section h2 {
+            border-bottom-color: #e67e22;
+        }
+
+        h3 {
+            color: #2980b9;
+            margin: 15px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .output-example {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow: auto;
+            direction: ltr !important;
+            text-align: left !important;
+        }
+
+        .requirements {
+            background: #e8f4fc;
+            border-left: 5px solid #3498db;
+        }
+
+        .timer-section {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .timer-unit {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 80px;
+        }
+
+        .timer-value {
+            font-size: 2.5rem;
+            display: block;
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .finish-date {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .thank-you {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+            margin-top: 30px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 15px;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer p {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .task-content {
+                padding: 15px;
+            }
+
+            .language-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 15px;
+                display: block;
+                width: 100%;
+            }
+
+            .timer {
+                font-size: 1.5rem;
+                flex-wrap: wrap;
+            }
+
+            .timer-unit {
+                min-width: 70px;
+            }
+
+            .timer-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+        <header>
+            <h1 id="title">Task 7: HarborStack — Twin CRUD APIs</h1>
+            <p class="subtitle" id="subtitle">Express.js server with two in-memory resources, request logging middleware, and tooling from Lectures 13 &amp; 14.</p>
+            <button class="language-toggle" id="languageToggle">العربية / English</button>
+        </header>
+
+        <div class="task-content" id="taskContent"></div>
+
+        <div class="timer-section">
+            <h3 id="timer-title">Time Remaining to Complete Task</h3>
+            <div class="timer" id="timer">
+                <div class="timer-unit">
+                    <span class="timer-value" id="days">00</span>
+                    <span class="timer-label" id="days-label">Days</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="hours">00</span>
+                    <span class="timer-label" id="hours-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="minutes">00</span>
+                    <span class="timer-label" id="minutes-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="seconds">00</span>
+                    <span class="timer-label" id="seconds-label">Seconds</span>
+                </div>
+            </div>
+            <p class="finish-date" id="finish-date">Finish by: April 25, 2026</p>
+            <p id="timer-message">Complete the task before the deadline!</p>
+        </div>
+
+        <div class="thank-you" id="thankYou">
+            "Thank you for your hard work and dedication. Your efforts are appreciated!"
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 <a href="https://focal-x.com/" target="_blank">Focal X</a> - Node.js Bootcamp V11</p>
+    </div>
+
+    <script src="../reg.js"></script>
+    <script>
+        const taskData = {
+            en: {
+                title: "Task 7: HarborStack — Twin CRUD APIs (Express)",
+                subtitle: "Flat project: app.js, data.js (two arrays), .env, .env.example, .gitignore — twin CRUDs, request logger, nodemon — Lectures 13 & 14.",
+                sections: [{
+                    type: "story",
+                    title: "⚓ The story: your first night on the API desk",
+                    paragraphs: [
+                        "You have just joined HarborStack Marine Ops, a small company that coordinates harbor crews and dock shifts. The old spreadsheet “system” crashes whenever two teams edit the same sheet.",
+                        "Operations asks you for something they can trust before Monday: a tiny backend prototype that exposes real HTTP routes — not slides, not mockups — so their partner app can start integrating.",
+                        "You are not wiring a database yet. You are proving you can shape traffic: clear routes, predictable JSON, and logs that show exactly who hit what and when. That is your job tonight.",
+                        "By dawn they expect two living lists in code — crews and shifts — both seeded in one data.js file, each list with full CRUD. If you can do that calmly, with the same tools you practiced in Lecture 13 (Express, routing, req/res) and Lecture 14 (nodemon, .env, .gitignore, middleware), you have earned the next assignment."
+                    ]
+                }, {
+                    type: "idea",
+                    title: "💻 What you build (technical brief)",
+                    content: "One Express application. A single data.js file that exports two in-memory arrays (crews and shifts — starter rows are provided below). Two REST-style resource groups with full CRUD. Logger middleware, PORT from .env, .env.example for others, nodemon, and .gitignore. No extra folders required: keep the flat layout exactly as specified."
+                }, {
+                    type: "requirements",
+                    title: "📝 Requirements",
+                    content: [{
+                        type: "list",
+                        title: "Course alignment (read first):",
+                        items: [
+                            "Ground the solution in <a href=\"../lecture13.html\" target=\"_blank\" rel=\"noopener\">Lecture 13 — Express (setup, routing, HTTP methods, request &amp; response)</a> and <a href=\"../lecture14.html\" target=\"_blank\" rel=\"noopener\">Lecture 14 — nodemon, .env / dotenv, .gitignore, middleware &amp; structure</a>."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Tooling & project hygiene:",
+                        items: [
+                            "Use <code>dotenv</code>; load it at startup so <code>process.env.PORT</code> controls the listen port.",
+                            "Provide a <code>.env</code> file containing at least <code>PORT=3000</code> (or another port you document).",
+                            "Provide a <code>.env.example</code> file with the same keys but <strong>no secrets</strong> (at least <code>PORT=3000</code>) — this file is safe to commit; <code>.env</code> stays local.",
+                            "Install <code>nodemon</code> as a <strong>devDependency</strong> and add scripts to <code>package.json</code>: <code>\"start\": \"node app.js\"</code> and <code>\"dev\": \"nodemon app.js\"</code>.",
+                            "Add a <code>.gitignore</code> that excludes <code>node_modules/</code> and <code>.env</code> (and any other sensible Node artifacts).",
+                            "Use <code>express.json()</code> so JSON bodies work for POST/PUT."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Single data.js (two arrays):",
+                        items: [
+                            "All dummy data lives in <strong>one file</strong>: <code>data.js</code> at the project root (same folder as <code>app.js</code>).",
+                            "Export <strong>two arrays of objects</strong> — use the names <code>crews</code> and <code>shifts</code> — and <strong>start from the starter data below</strong> (same ids and shape; you may extend fields later).",
+                            "CRUD must mutate these same in-memory arrays (require the module once and reuse the exported references; no database)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Two CRUD APIs (suggested paths):",
+                        items: [
+                            "<strong>Resource A</strong> — paths must use the version prefix, e.g. <code>/api/v1/crews</code>: <code>GET</code> list, <code>GET /:id</code> one, <code>POST</code> create, <code>PUT /:id</code> update, <code>DELETE /:id</code> remove (no <code>PATCH</code>).",
+                            "<strong>Resource B</strong> — e.g. <code>/api/v1/shifts</code>: the same five operations (GET all, GET one, POST, PUT, DELETE).",
+                            "Return JSON with appropriate HTTP status codes (including 404 when an id does not exist).",
+                            "Generate new ids deterministically (increment, UUID string, etc.) and document the rule in README."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "Request logger middleware:",
+                        items: [
+                            "Implement <strong>custom</strong> application-level middleware (your own function, not only morgan) that logs <strong>request details</strong> for every incoming request.",
+                            "Each log line must include at least: <strong>timestamp</strong>, <strong>HTTP method</strong>, <strong>URL path</strong> (use <code>req.originalUrl</code> or <code>req.path</code>), and <strong>client IP</strong> (e.g. <code>req.ip</code> or a safe fallback).",
+                            "Register it with <code>app.use(...)</code> before your routes so every route is covered."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "Required project layout (root only):",
+                        content: "No subfolders for this task. You still need package.json for npm (express, dotenv, nodemon). Everything else lives next to app.js.",
+                        example: `harborstack-api/
+├── app.js
+├── data.js
+├── .env
+├── .env.example
+├── .gitignore
+└── package.json`
+                    }, {
+                        type: "output",
+                        title: "Starter data.js (use this as your seed — copy into your repo):",
+                        content: "Export two arrays. CRUD in app.js (or small inline handlers) reads and mutates these arrays.",
+                        example: `// data.js — HarborStack seed data (do not split into other files for this task)
+
+const crews = [
+  { id: 1, name: "Amina Rahal", role: "Dock Supervisor", active: true },
+  { id: 2, name: "Jonas Vik", role: "Crane Operator", active: true },
+  { id: 3, name: "Mei Chen", role: "Safety Officer", active: false }
+];
+
+const shifts = [
+  { id: 1, crewId: 2, berth: "B-12", startsAt: "2026-06-05T06:00:00.000Z", endsAt: "2026-06-05T14:00:00.000Z" },
+  { id: 2, crewId: 1, berth: "A-04", startsAt: "2026-06-05T14:00:00.000Z", endsAt: "2026-06-05T22:00:00.000Z" },
+  { id: 3, crewId: 3, berth: "C-01", startsAt: "2026-06-06T06:00:00.000Z", endsAt: "2026-06-06T14:00:00.000Z" }
+];
+
+module.exports = { crews, shifts };`
+                    }, {
+                        type: "list",
+                        title: "Where routes and logger live:",
+                        items: [
+                            "Put all Express routes and your custom <strong>request logger</strong> middleware in <code>app.js</code> (no separate routes/ or middlewares/ folders for this task).",
+                            "At the top of app.js: <code>require('dotenv').config()</code>, then <code>require('./data.js')</code> to get <code>crews</code> and <code>shifts</code>."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "README (optional but useful):",
+                        items: [
+                            "One short note: <code>npm install</code>, copy <code>.env.example</code> to <code>.env</code>, <code>npm run dev</code>, port, and two example URLs (e.g. <code>GET /api/v1/crews</code> and <code>GET /api/v1/shifts</code>)."
+                        ]
+                    }]
+                }, {
+                    type: "learning",
+                    title: "📚 Lecture reminders",
+                    content: [
+                        "Lecture 13: express(), app.get/post/put/delete, req.params / req.body, res.json(), listen(PORT).",
+                        "Lecture 14: dotenv.config(), nodemon, .gitignore, app.use(middleware), middleware signature (req, res, next).",
+                        "All CRUD routes live under <code>/api/v1/</code> (e.g. <code>/api/v1/crews</code>); use GET, POST, PUT, DELETE only — no PATCH."
+                    ]
+                }],
+                timer: {
+                    title: "Time Remaining to Complete Task",
+                    message: "Complete the task before the deadline. Official submissions are accepted only in the final six hours before the window closes.",
+                    days: "Days",
+                    hours: "Hours",
+                    minutes: "Minutes",
+                    seconds: "Seconds"
+                },
+                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
+                buttonText: "العربية / English",
+                finishDate: "Finish by: April 25, 2026 (submissions: last 6 hours)"
+            },
+            ar: {
+                title: "المهمة 7: HarborStack — واجهتان CRUD مع Express",
+                subtitle: "مشروع مسطح: app.js و data.js (مصفوفتان) و .env و .env.example و .gitignore — CRUD مزدوج، مسجّل طلبات، nodemon — المحاضرتان 13 و 14.",
+                sections: [{
+                    type: "story",
+                    title: "⚓ القصة: أول ليلة لك على مكتب الـ API",
+                    paragraphs: [
+                        "انضممت للتو إلى شركة HarborStack Marine Ops الصغيرة، التي تنسّق طواقم الميناء وورديات الرصيف. يتعطل «النظام» القديم المبني على جداول كلما حرّر فريقان نفس الورقة.",
+                        "قسم العمليات يطلب منك نموذجاً خلفياً يمكن الاعتماد عليه قبل يوم الاثنين: مسارات HTTP حقيقية — ليس شرائح ولا صوراً — حتى يبدأ تطبيق الشريك بالربط.",
+                        "لن تربط قاعدة بيانات بعد. المطلوب أن تثبت أنك تضبط حركة الطلبات: مسارات واضحة، JSON متوقع، وسجلات تبيّن من نادى ماذا ومتى. هذه مهمتك الليلة.",
+                        "بحلول الصباح يتوقعون قائمتين حيّتين في الكود — طواقم وورديات — كلاهما في ملف data.js واحد، ولكل قائمة CRUD كامل. إن أنجزت ذلك بهدوء بنفس أدوات المحاضرة 13 (Express، التوجيه، req/res) والمحاضرة 14 (nodemon، .env، .gitignore، middleware)، تستحق المهمة التالية."
+                    ]
+                }, {
+                    type: "idea",
+                    title: "💻 ما الذي تبنيه (ملخص تقني)",
+                    content: "تطبيق Express واحد. ملف data.js واحد يصدّر مصفوفتين في الذاكرة (crews و shifts — البيانات الأولية أدناه). مجموعتا مسارات REST كاملتا CRUD. middleware للتسجيل، PORT من .env، وملف .env.example، وnodemon و.gitignore. بدون مجلدات إضافية: التخطيط المسطح كما هو محدد."
+                }, {
+                    type: "requirements",
+                    title: "📝 المتطلبات",
+                    content: [{
+                        type: "list",
+                        title: "الربط بالمحاضرات (اقرأ أولاً):",
+                        items: [
+                            "الربط بالمحتوى في <a href=\"../lecture13.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 13 — Express (الإعداد، التوجيه، الطرق، الطلب والاستجابة)</a> و<a href=\"../lecture14.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 14 — nodemon و .env / dotenv و .gitignore والـ middleware والهيكل</a>."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "الأدوات وتنظيم المشروع:",
+                        items: [
+                            "استخدم <code>dotenv</code>؛ حمّله عند الإقلاع ليعمل <code>process.env.PORT</code> على منفذ الاستماع.",
+                            "ملف <code>.env</code> يحتوي على الأقل <code>PORT=3000</code> (أو منفذ آخر توثّقه).",
+                            "ملف <code>.env.example</code> بنفس المفاتيح دون أسرار (على الأقل <code>PORT=3000</code>) — آمن للرفع على Git؛ <code>.env</code> يبقى محلياً.",
+                            "ثبّت <code>nodemon</code> كـ <strong>devDependency</strong> وأضف في <code>package.json</code>: <code>\"start\": \"node app.js\"</code> و <code>\"dev\": \"nodemon app.js\"</code>.",
+                            "أضف <code>.gitignore</code> يستبعد <code>node_modules/</code> و <code>.env</code> (وغيرها المناسب لـ Node).",
+                            "استخدم <code>express.json()</code> لدعم أجسام JSON في POST/PUT."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "ملف data.js واحد (مصفوفتان):",
+                        items: [
+                            "كل البيانات الوهمية في <strong>ملف واحد</strong>: <code>data.js</code> في جذر المشروع (بجانب <code>app.js</code>).",
+                            "صدّر <strong>مصفوفتين من الكائنات</strong> باسمي <code>crews</code> و <code>shifts</code> و<strong>ابدأ من البيانات الأولية أدناه</strong> (نفس المعرفات والشكل؛ يمكنك لاحقاً إضافة حقول).",
+                            "يجب أن تعمل CRUD على نفس المصفوفات في الذاكرة (<code>require('./data.js')</code> مرة واحدة وإعادة استخدام المراجع؛ لا قاعدة بيانات)."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "واجهتان CRUD (مسارات مقترحة):",
+                        items: [
+                            "<strong>المورد أ</strong> — يجب أن تبدأ المسارات ببادئة الإصدار، مثلاً <code>/api/v1/crews</code>: <code>GET</code> القائمة، <code>GET /:id</code> واحد، <code>POST</code> إنشاء، <code>PUT /:id</code> تحديث، <code>DELETE /:id</code> حذف (بدون <code>PATCH</code>).",
+                            "<strong>المورد ب</strong> — مثلاً <code>/api/v1/shifts</code>: نفس العمليات الخمس (GET للكل، GET لواحد، POST، PUT، DELETE).",
+                            "أرجع JSON مع رموز حالة HTTP مناسبة (بما فيها 404 عند عدم وجود المعرف).",
+                            "ولّد معرفات جديدة بطريقة واضحة (زيادة، UUID نصي، إلخ) واذكر القاعدة في README."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "middleware مسجّل للطلبات:",
+                        items: [
+                            "نفّذ middleware مخصص على مستوى التطبيق (دالتك، ليس الاعتماد على morgan فقط) يسجّل <strong>تفاصيل الطلب</strong> لكل وصول.",
+                            "كل سطر سجل يجب أن يشمل على الأقل: <strong>الطابع الزمني</strong>، <strong>طريقة HTTP</strong>، <strong>مسار الرابط</strong> (مثل <code>req.originalUrl</code> أو <code>req.path</code>)، و<strong>IP العميل</strong> (مثل <code>req.ip</code> أو بديل آمن).",
+                            "سجّله بـ <code>app.use(...)</code> قبل المسارات لتغطية كل المسارات."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "هيكل المشروع المطلوب (جذر فقط):",
+                        content: "لا مجلدات فرعية لهذه المهمة. ما زال package.json مطلوباً لـ npm (express و dotenv و nodemon). الباقي بجانب app.js.",
+                        example: `harborstack-api/
+├── app.js
+├── data.js
+├── .env
+├── .env.example
+├── .gitignore
+└── package.json`
+                    }, {
+                        type: "output",
+                        title: "data.js الأولي (انسخه إلى مشروعك):",
+                        content: "صدّر مصفوفتين. عمليات CRUD في app.js تقرأ وتعدّل هذه المصفوفات.",
+                        example: `// data.js — HarborStack seed data (do not split into other files for this task)
+
+const crews = [
+  { id: 1, name: "Amina Rahal", role: "Dock Supervisor", active: true },
+  { id: 2, name: "Jonas Vik", role: "Crane Operator", active: true },
+  { id: 3, name: "Mei Chen", role: "Safety Officer", active: false }
+];
+
+const shifts = [
+  { id: 1, crewId: 2, berth: "B-12", startsAt: "2026-06-05T06:00:00.000Z", endsAt: "2026-06-05T14:00:00.000Z" },
+  { id: 2, crewId: 1, berth: "A-04", startsAt: "2026-06-05T14:00:00.000Z", endsAt: "2026-06-05T22:00:00.000Z" },
+  { id: 3, crewId: 3, berth: "C-01", startsAt: "2026-06-06T06:00:00.000Z", endsAt: "2026-06-06T14:00:00.000Z" }
+];
+
+module.exports = { crews, shifts };`
+                    }, {
+                        type: "list",
+                        title: "أين المسارات وmiddleware:",
+                        items: [
+                            "ضع كل مسارات Express وmiddleware التسجيل المخصص داخل <code>app.js</code> (بدون مجلدات routes/ أو middlewares/ لهذه المهمة).",
+                            "في أعلى app.js: <code>require('dotenv').config()</code> ثم <code>require('./data.js')</code> للحصول على <code>crews</code> و <code>shifts</code>."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "README (اختياري لكن مفيد):",
+                        items: [
+                            "سطر قصير: <code>npm install</code>، انسخ <code>.env.example</code> إلى <code>.env</code>، <code>npm run dev</code>، المنفذ، ومثالان لـ URL (مثل <code>GET /api/v1/crews</code> و <code>GET /api/v1/shifts</code>)."
+                        ]
+                    }]
+                }, {
+                    type: "learning",
+                    title: "📚 تذكير من المحاضرات",
+                    content: [
+                        "المحاضرة 13: express()، app.get/post/put/delete، req.params و req.body، res.json()، listen(PORT).",
+                        "المحاضرة 14: dotenv.config()، nodemon، .gitignore، app.use(middleware)، توقيع الـ middleware (req, res, next).",
+                        "كل مسارات CRUD تحت <code>/api/v1/</code> (مثل <code>/api/v1/crews</code>)؛ استخدم GET و POST و PUT و DELETE فقط — بدون PATCH."
+                    ]
+                }],
+                timer: {
+                    title: "الوقت المتبقي لإكمال المهمة",
+                    message: "أكمل المهمة قبل الموعد النهائي. يُقبل التسليم الرسمي فقط في الساعات الست الأخيرة قبل إغلاق النافذة.",
+                    days: "أيام",
+                    hours: "ساعات",
+                    minutes: "دقائق",
+                    seconds: "ثواني"
+                },
+                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
+                buttonText: "English / العربية",
+                finishDate: "الانتهاء بحلول: 25 أبريل 2026 (التسليم: آخر 6 ساعات)"
+            }
+        };
+
+        function renderContent(lang) {
+            const data = taskData[lang];
+            const taskContent = document.getElementById('taskContent');
+
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+
+            document.getElementById('timer-title').textContent = data.timer.title;
+            document.getElementById('timer-message').textContent = data.timer.message;
+            document.getElementById('days-label').textContent = data.timer.days;
+            document.getElementById('hours-label').textContent = data.timer.hours;
+            document.getElementById('minutes-label').textContent = data.timer.minutes;
+            document.getElementById('seconds-label').textContent = data.timer.seconds;
+            document.getElementById('finish-date').textContent = data.finishDate;
+
+            document.getElementById('thankYou').textContent = data.thankYou;
+            document.getElementById('languageToggle').textContent = data.buttonText;
+
+            taskContent.innerHTML = '';
+
+            data.sections.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+
+                if (section.type === 'requirements') {
+                    sectionEl.classList.add('requirements');
+                } else if (section.type === 'story') {
+                    sectionEl.classList.add('story-section');
+                }
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = section.title;
+                sectionEl.appendChild(titleEl);
+
+                if (section.type === 'story') {
+                    (section.paragraphs || []).forEach(text => {
+                        const p = document.createElement('p');
+                        p.textContent = text;
+                        p.style.marginBottom = '14px';
+                        sectionEl.appendChild(p);
+                    });
+                } else if (section.type === 'idea' || section.type === 'note') {
+                    const contentEl = document.createElement('p');
+                    contentEl.textContent = section.content;
+                    sectionEl.appendChild(contentEl);
+                } else if (section.type === 'requirements') {
+                    section.content.forEach(item => {
+                        const itemTitle = document.createElement('h3');
+                        itemTitle.textContent = item.title;
+                        sectionEl.appendChild(itemTitle);
+
+                        if (item.type === 'list') {
+                            const listEl = document.createElement('ul');
+                            item.items.forEach(listItem => {
+                                const li = document.createElement('li');
+                                li.innerHTML = listItem;
+                                listEl.appendChild(li);
+                            });
+                            sectionEl.appendChild(listEl);
+                        } else if (item.type === 'output') {
+                            const contentEl = document.createElement('p');
+                            contentEl.textContent = item.content;
+                            sectionEl.appendChild(contentEl);
+
+                            const exampleEl = document.createElement('div');
+                            exampleEl.className = 'output-example';
+                            exampleEl.textContent = item.example;
+                            sectionEl.appendChild(exampleEl);
+                        }
+                    });
+                } else if (section.type === 'learning' || section.type === 'bonus') {
+                    const listEl = document.createElement('ul');
+                    section.content.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        listEl.appendChild(li);
+                    });
+                    sectionEl.appendChild(listEl);
+                }
+
+                taskContent.appendChild(sectionEl);
+            });
+
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'right';
+                });
+            } else {
+                document.body.removeAttribute('dir');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'left';
+                });
+            }
+        }
+
+        function startCountdown() {
+            const countDownDate = new Date("Apr 25, 2026 23:59:59").getTime();
+
+            const countdown = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    document.getElementById("days").textContent = "00";
+                    document.getElementById("hours").textContent = "00";
+                    document.getElementById("minutes").textContent = "00";
+                    document.getElementById("seconds").textContent = "00";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderContent('en');
+            startCountdown();
+            document.getElementById('languageToggle').addEventListener('click', function() {
+                const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
+                const newLang = currentLang === 'en' ? 'ar' : 'en';
+                renderContent(newLang);
+            });
+        });
+    </script>
+</body>
+
+</html>

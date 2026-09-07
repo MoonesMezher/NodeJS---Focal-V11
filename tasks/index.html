@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focal X - Node.js Bootcamp Tasks</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/tasks.css">
+</head>
+
+<body>
+    <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+    <div class="container">
+        <header>
+            <h1>Focal X V11 - Node.js Bootcamp</h1>
+            <p class="subtitle">Task Portal - Browse All Tasks</p>
+        </header>
+
+        <div class="lectures-container">
+            <h2>Available Tasks</h2>
+
+            <input type="text" class="search-box" placeholder="Search tasks..." id="searchInput">
+
+            <table class="lectures-table">
+                <thead>
+                    <tr>
+                        <th>Task #</th>
+                        <th>Title</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tasks-table-body">
+                    <!-- Tasks will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 <a rel="noopener" href="https://focal-x.com/" target="_blank">Focal X</a> All Rights Reserved</p>
+    </footer>
+
+    <script src="../reg.js"></script>
+    <script>
+        // Tasks data array - Easy to update and maintain
+        const tasks = [{
+                number: "01",
+                title: "API study of the site",
+                startDate: "8/9/2026",
+                endDate: "12/9/2026",
+                link: "task1.html",
+                status: "completed"
+            }];
+
+        // Function to get deadline status
+        function getDeadlineStatus(endDateStr) {
+            const endDate = new Date(endDateStr.split('/').reverse().join('-'));
+            const today = new Date();
+            const timeDiff = endDate.getTime() - today.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            if (daysDiff < 0) {
+                return 'passed';
+            } else if (daysDiff <= 3) {
+                return 'near';
+            } else {
+                return 'ok';
+            }
+        }
+
+        // Function to get status badge class
+        function getStatusClass(status) {
+            switch (status) {
+                case 'completed':
+                    return 'status-completed';
+                case 'upcoming':
+                    return 'status-upcoming';
+                case 'in-progress':
+                    return 'status-in-progress';
+                default:
+                    return 'status-upcoming';
+            }
+        }
+
+        // Function to get deadline class
+        function getDeadlineClass(status) {
+            switch (status) {
+                case 'passed':
+                    return 'deadline-passed';
+                case 'near':
+                    return 'deadline-near';
+                case 'ok':
+                    return 'deadline-ok';
+                default:
+                    return '';
+            }
+        }
+
+        // Function to generate task rows
+        function generateTaskRows(tasksArray) {
+            const tableBody = document.getElementById('tasks-table-body');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            for (let task of tasksArray) {
+                const row = document.createElement('tr');
+
+                // Get deadline status
+                const deadlineStatus = getDeadlineStatus(task.endDate);
+
+                // Add deadline status class to row
+                row.className = getDeadlineClass(deadlineStatus);
+
+                // Set click event for the entire row
+                row.onclick = () => {
+                    if (task.link) {
+                        window.location.href = task.link;
+                    }
+                };
+
+                // Create table cells
+                const numberCell = document.createElement('td');
+                numberCell.textContent = task.number;
+
+                const titleCell = document.createElement('td');
+                const titleLink = document.createElement('a');
+                titleLink.href = task.link;
+                titleLink.className = 'lecture-link';
+                titleLink.textContent = task.title;
+                titleCell.appendChild(titleLink);
+
+                const startCell = document.createElement('td');
+                startCell.textContent = task.startDate;
+
+                const endCell = document.createElement('td');
+                endCell.textContent = task.endDate;
+
+                const statusCell = document.createElement('td');
+                const statusBadge = document.createElement('span');
+                statusBadge.className = `status-badge ${getStatusClass(task.status)}`;
+                statusBadge.textContent = task.status.charAt(0).toUpperCase() + task.status.slice(1);
+                statusCell.appendChild(statusBadge);
+
+                // Append cells to row
+                row.appendChild(numberCell);
+                row.appendChild(titleCell);
+                row.appendChild(startCell);
+                row.appendChild(endCell);
+                row.appendChild(statusCell);
+
+                // Append row to table body
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Initial generation of task rows
+        generateTaskRows(tasks);
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const filteredTasks = tasks.filter(task => {
+                return task.title.toLowerCase().includes(searchText) ||
+                    task.number.toLowerCase().includes(searchText);
+            });
+
+            generateTaskRows(filteredTasks);
+        });
+
+        // Bonus: Function to add a new task
+        function addNewTask(newTask) {
+            tasks.push(newTask);
+            generateTaskRows(tasks);
+        }
+
+        // Bonus: Function to update a task by number
+        function updateTask(taskNumber, updatedData) {
+            const index = tasks.findIndex(task => task.number === taskNumber);
+            if (index !== -1) {
+                tasks[index] = {...tasks[index],
+                    ...updatedData
+                };
+                generateTaskRows(tasks);
+            }
+        }
+
+        // Bonus: Function to remove a task by number
+        function removeTask(taskNumber) {
+            const index = tasks.findIndex(task => task.number === taskNumber);
+            if (index !== -1) {
+                tasks.splice(index, 1);
+                generateTaskRows(tasks);
+            }
+        }
+
+        // Bonus: Function to filter tasks by status
+        function filterTasksByStatus(status) {
+            if (status === 'all') {
+                generateTaskRows(tasks);
+            } else {
+                const filtered = tasks.filter(task => task.status === status);
+                generateTaskRows(filtered);
+            }
+        }
+
+        // Bonus: Function to sort tasks by date
+        function sortTasksByDate(order = 'asc') {
+            const sortedTasks = [...tasks].sort((a, b) => {
+                const dateA = new Date(a.startDate.split('/').reverse().join('-'));
+                const dateB = new Date(b.startDate.split('/').reverse().join('-'));
+                return order === 'asc' ? dateA - dateB : dateB - dateA;
+            });
+            generateTaskRows(sortedTasks);
+        }
+    </script>
+</body>
+
+</html>

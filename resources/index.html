@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focal X - Node.js Bootcamp Resources</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/resources.css">
+</head>
+
+<body>
+    <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+    <div class="container">
+        <header>
+            <h1>Focal X V11 - Node.js Bootcamp</h1>
+            <p class="subtitle">Resources Portal - Browse All Resources</p>
+        </header>
+
+        <div class="lectures-container">
+            <h2>Available Resources</h2>
+
+            <table class="lectures-table">
+                <thead>
+                    <tr>
+                        <th>Resources</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 <a rel="noopener" href="https://focal-x.com/" target="_blank">Focal X</a> All Rights Reserved</p>
+    </footer>
+
+    <script src="../reg.js"></script>
+    <script>
+        // Resources data array - Easy to update and maintain
+        const resources = [{
+            title: "What is Backend?",
+            imageSrc: "./backend.png",
+            altText: "Resource 1"
+        }, {
+            title: "Backend Layers",
+            imageSrc: "./backend stack.png",
+            altText: "Resource 2"
+        }, {
+            title: "Promises vs Async/Await",
+            imageSrc: "./promises.png",
+            altText: "Resource 3"
+        }, {
+            title: "Event Loop 1",
+            imageSrc: "./event loop.jpeg",
+            altText: "Resource 4"
+        }, {
+            title: "Event Loop 2",
+            imageSrc: "./event loop 2.jpeg",
+            altText: "Resource 5"
+        }, {
+            title: "API",
+            imageSrc: "./api.png",
+            altText: "Resource 6"
+        }, {
+            title: "REST API 1",
+            imageSrc: "./rest.png",
+            altText: "Resource 7"
+        }, {
+            title: "REST API 2",
+            imageSrc: "./rest api.png",
+            altText: "Resource 8"
+        }, {
+            title: "Project Versions (Before Git)",
+            imageSrc: "./git3.png",
+            altText: "Resource 9"
+        }, {
+            title: "Git Environment Areas 1",
+            imageSrc: "./git1.png",
+            altText: "Resource 10"
+        }, {
+            title: "Git Environment Areas 2",
+            imageSrc: "./git2.jpg",
+            altText: "Resource 11"
+        }, {
+            title: "Git Environment Areas 3",
+            imageSrc: "./git4.png",
+            altText: "Resource 12"
+        }, {
+            title: "Branches Cons",
+            imageSrc: "./git5.png",
+            altText: "Resource 13"
+        }, {
+            title: "Request -> Response",
+            imageSrc: "./http1.png",
+            altText: "Resource 14"
+        }, {
+            title: "HTTP Basics",
+            imageSrc: "./http2.png",
+            altText: "Resource 15"
+        }, {
+            title: "Express Routes",
+            imageSrc: "./routes.png",
+            altText: "Resource 16"
+        }, {
+            title: "Express Router",
+            imageSrc: "./express router.png",
+            altText: "Resource 17"
+        }, {
+            title: "Middlewares 1",
+            imageSrc: "./middlewares 2.png",
+            altText: "Resource 18"
+        }, {
+            title: "Middlewares 2",
+            imageSrc: "./middlewares.png",
+            altText: "Resource 19"
+        }, {
+            title: "CORS",
+            imageSrc: "./cors.png",
+            altText: "Resource 20"
+        }, {
+            title: "Nodemailer Test",
+            imageSrc: "./nodemailer test.png",
+            altText: "Resource 21"
+        }, {
+            title: "Socket Io Emits",
+            imageSrc: "./socket.png",
+            altText: "Resource 22"
+        }, {
+            title: "Why Maps & Sets in Socket.io?",
+            imageSrc: "./maps and sets in js.png",
+            altText: "Resource 23"
+        },
+        {
+            title: "API Structure (Mind Map)",
+            imageSrc: "./api-mind-map.png",
+            altText: "Resource 24"
+        },
+        {
+            title: "MVC",
+            imageSrc: "./MVC.png",
+            altText: "Resource 25"
+        }];
+
+        // Function to generate resource rows
+        function generateResourceRows(resourcesArray) {
+            const tableBody = document.getElementById('resources-table-body');
+
+            // If table body doesn't exist, create it
+            if (!tableBody) {
+                console.error('Table body element not found!');
+                return;
+            }
+
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            for (let resource of resourcesArray) {
+                const row = document.createElement('tr');
+
+                const cell = document.createElement('td');
+                cell.className = 'img';
+
+                const title = document.createElement('h3');
+                title.textContent = resource.title;
+
+                const image = document.createElement('img');
+                image.src = resource.imageSrc;
+                image.alt = resource.altText;
+                image.loading = 'lazy';
+
+                // Add click event to open image in modal or new tab
+                image.style.cursor = 'pointer';
+                image.addEventListener('click', () => {
+                    openImageModal(resource.imageSrc, resource.title);
+                });
+
+                cell.appendChild(title);
+                cell.appendChild(image);
+                row.appendChild(cell);
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Function to open image in modal
+        function openImageModal(imageSrc, title) {
+            // Check if modal already exists
+            let modal = document.getElementById('image-modal');
+
+            if (!modal) {
+                // Create modal
+                modal = document.createElement('div');
+                modal.id = 'image-modal';
+                modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+        `;
+
+                const modalContent = document.createElement('div');
+                modalContent.style.cssText = `
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        `;
+
+                const modalImage = document.createElement('img');
+                modalImage.style.cssText = `
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 5px;
+        `;
+
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = '✕';
+                closeBtn.style.cssText = `
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            padding: 5px 10px;
+        `;
+
+                const imageTitle = document.createElement('div');
+                imageTitle.style.cssText = `
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 18px;
+        `;
+
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.body.removeChild(modal);
+                });
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+
+                modalContent.appendChild(closeBtn);
+                modalContent.appendChild(modalImage);
+                modalContent.appendChild(imageTitle);
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+
+                // Set modal content
+                modalImage.src = imageSrc;
+                modalImage.alt = title;
+                imageTitle.textContent = title;
+            } else {
+                // Update existing modal
+                modal.querySelector('img').src = imageSrc;
+                modal.querySelector('img').alt = title;
+                modal.querySelector('div:last-child').textContent = title;
+                modal.style.display = 'flex';
+            }
+        }
+
+        // Function to filter resources by search term
+        function filterResources(searchTerm) {
+            const filteredResources = resources.filter(resource =>
+                resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                resource.altText.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            generateResourceRows(filteredResources);
+        }
+
+        // Function to add a new resource
+        function addNewResource(newResource) {
+            resources.push(newResource);
+            generateResourceRows(resources);
+        }
+
+        // Function to update a resource by title
+        function updateResource(title, updatedData) {
+            const index = resources.findIndex(resource => resource.title === title);
+            if (index !== -1) {
+                resources[index] = {...resources[index],
+                    ...updatedData
+                };
+                generateResourceRows(resources);
+            }
+        }
+
+        // Function to remove a resource by title
+        function removeResource(title) {
+            const index = resources.findIndex(resource => resource.title === title);
+            if (index !== -1) {
+                resources.splice(index, 1);
+                generateResourceRows(resources);
+            }
+        }
+
+        // Function to add search functionality
+        function addSearchFunctionality() {
+            // Create search box
+            const searchBox = document.createElement('input');
+            searchBox.type = 'text';
+            searchBox.className = 'search-box';
+            searchBox.placeholder = 'Search resources...';
+            searchBox.style.cssText = `
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    `;
+
+            searchBox.addEventListener('keyup', function() {
+                filterResources(this.value);
+            });
+
+            // Insert search box after the h2
+            const h2 = document.querySelector('h2');
+            if (h2) {
+                h2.parentNode.insertBefore(searchBox, h2.nextSibling);
+            }
+        }
+
+        // Function to add category filtering
+        function addCategoryFilter() {
+            // Extract categories from resources
+            const categories = ['All', 'Event Loop', 'API', 'REST', 'Git', 'HTTP', 'Nodemailer', 'Socket.io'];
+
+            const filterContainer = document.createElement('div');
+            filterContainer.className = 'filter-container';
+            filterContainer.style.cssText = `
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        justify-content: center;
+    `;
+
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.textContent = category;
+                button.className = 'filter-btn';
+                button.style.cssText = `
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        `;
+
+                button.addEventListener('mouseenter', () => {
+                    button.style.backgroundColor = '#2980b9';
+                });
+
+                button.addEventListener('mouseleave', () => {
+                    button.style.backgroundColor = '#3498db';
+                });
+
+                button.addEventListener('click', () => {
+                    if (category === 'All') {
+                        generateResourceRows(resources);
+                    } else {
+                        const filtered = resources.filter(resource =>
+                            resource.title.toLowerCase().includes(category.toLowerCase())
+                        );
+                        generateResourceRows(filtered);
+                    }
+                });
+
+                filterContainer.appendChild(button);
+            });
+
+            // Insert filter container after the search box
+            const searchBox = document.querySelector('.search-box');
+            if (searchBox) {
+                searchBox.parentNode.insertBefore(filterContainer, searchBox.nextSibling);
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make sure table body exists
+            const tableBody = document.querySelector('tbody');
+            if (tableBody && !tableBody.id) {
+                tableBody.id = 'resources-table-body';
+            }
+
+            // Generate initial resources
+            generateResourceRows(resources);
+
+            // Add search functionality
+            addSearchFunctionality();
+
+            // Add category filtering (optional)
+            // addCategoryFilter();
+
+            // Update header to V11 if not already
+            const header = document.querySelector('h1');
+            if (header && header.textContent.includes('V9')) {
+                header.textContent = header.textContent.replace('V9', 'V11');
+            }
+        });
+    </script>
+</body>
+
+</html>

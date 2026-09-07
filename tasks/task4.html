@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 4: TrendPulse — Async & Objects Layer</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+        
+        .coach {
+            background-color: white;
+            width: 80px;
+            border-radius: 0 0 50% 0;
+            color: black;
+            padding: 10px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        #title {
+            padding-top: 20px;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .language-toggle:hover {
+            background: #2980b9;
+        }
+        
+        .task-content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin: 15px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul,
+        ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .requirements {
+            background: #e8f4fc;
+            border-left: 5px solid #3498db;
+        }
+        
+        .bonus {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .output-example {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow: auto;
+            direction: ltr !important;
+            text-align: left !important;
+        }
+        
+        .timer-section {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .timer-unit {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 80px;
+        }
+        
+        .timer-value {
+            font-size: 2.5rem;
+            display: block;
+        }
+        
+        .timer-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            display: block;
+        }
+        
+        .finish-date {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        
+        .thank-you {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+            margin-top: 30px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 15px;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .footer p {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .task-content {
+                padding: 15px;
+            }
+            .language-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 15px;
+                display: block;
+                width: 100%;
+            }
+            .timer {
+                font-size: 1.5rem;
+                flex-wrap: wrap;
+            }
+            .timer-unit {
+                min-width: 70px;
+            }
+            .timer-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+        <header>
+            <h1 id="title">Task 4: TrendPulse — Async & Objects Layer</h1>
+            <p class="subtitle" id="subtitle">Build on Task 3: rich post objects, async/await, regex, timers, and Date (Lectures 5–6). One file, one story.</p>
+            <button class="language-toggle" id="languageToggle">العربية / English</button>
+        </header>
+
+        <div class="task-content" id="taskContent">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+
+        <div class="timer-section">
+            <h3 id="timer-title">Time Remaining to Complete Task</h3>
+            <div class="timer" id="timer">
+                <div class="timer-unit">
+                    <span class="timer-value" id="days">00</span>
+                    <span class="timer-label" id="days-label">Days</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="hours">00</span>
+                    <span class="timer-label" id="hours-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="minutes">00</span>
+                    <span class="timer-label" id="minutes-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="seconds">00</span>
+                    <span class="timer-label" id="seconds-label">Seconds</span>
+                </div>
+            </div>
+            <p class="finish-date" id="finish-date">Finish by: April 4, 2026</p>
+            <p id="timer-message">Complete the task before the deadline!</p>
+        </div>
+
+        <div class="thank-you" id="thankYou">
+            "Thank you for your hard work and dedication. Your efforts are appreciated!"
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 <a href="https://focal-x.com/" target="_blank">Focal X</a> - Node.js Bootcamp V11</p>
+    </div>
+
+    <script src="../reg.js"></script>
+    <script>
+        const taskData = {
+            en: {
+                title: "Task 4: TrendPulse — Async & Objects Layer",
+                subtitle: "Build on Task 3: rich post objects, async/await, regex, timers, and Date (Lectures 5–6). One file, one story.",
+                sections: [{
+                    type: "idea",
+                    title: "Story: TrendPulse Phase 2",
+                    content: "After Task 3 you already know the feed as data in memory. In Phase 2 each post is a rich object (nested author, engagement, ISO timestamp). You will simulate loading posts asynchronously with Promises, validate and extract text with regex, use safe operators (`?.`, `??`), and format dates with timers. Deliver one clear JavaScript file that implements every numbered step below in order. Do not use `Map` or `Set`."
+                }, {
+                    type: "requirements",
+                    title: "Core Rules",
+                    content: [{
+                        type: "list",
+                        title: "Constraints (must follow):",
+                        items: [
+                            "Use `let` and `const` (no `var`).",
+                            "Same domain as Task 3: TrendPulse posts, authors, and engagement — but model posts as nested objects.",
+                            "Lecture 5: objects (`Object.keys` / `values` / `entries`, spread, merge), optional chaining `?.`, nullish coalescing `??`, `try/catch/finally`, `setTimeout` / `setInterval` / `clearInterval`, and `Date` + string formatting.",
+                            "Lecture 6: Promises, `.then` / `.catch` / `.finally`, `async` / `await`, event-loop print order (sync vs microtasks vs `setTimeout`), and `RegExp` with `.test` / `.match`.",
+                            "Do not use `Map` or `Set`. Use plain objects `{}` or arrays for counts and lists.",
+                            "No external libraries."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "Starter data (you may extend)",
+                        content: "Use this in-memory `database` object. Your simulated `fetchPostById` must read from it (copy or clone the post). Keep IDs `p1`, `p2` unless you add more keys.",
+                        example: `const database = {
+  p1: {
+    id: "p1",
+    author: { name: "Mira", email: "mira@trendpulse.dev", verified: true },
+    content: "Meet @sara at the hub #js #async",
+    engagement: { likes: 12, shares: 2, comments: 4 },
+    createdAt: "2026-04-01T09:00:00.000Z"
+  },
+  p2: {
+    id: "p2",
+    author: { name: "Rami", email: "invalid-email", verified: false },
+    content: "Checkout #node tutorials",
+    engagement: { likes: 3 },
+    createdAt: "2026-04-02T11:30:00.000Z"
+  }
+};`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "What to build (do steps 1–7 in order)",
+                    content: [{
+                        type: "output",
+                        title: "1) Rich post model",
+                        content: "Function name: `describePostForUi`. Merge a post with `{ meta: { channel: \"web\" } }` using spread. Use destructuring to read `author.name`. Return `{ title, authorName, keysCount }` where `title` is the post `id`, `authorName` is the author name, and `keysCount` is how many own keys exist on the merged object. Use `Object.keys` or `Object.entries` (no Map).",
+                        example: `function describePostForUi(post) {
+  // destructure author.name, spread merge { meta: { channel: "web" } }, return { title, authorName, keysCount }
+}
+
+const post = {
+  id: "p1",
+  author: { name: "Mira", email: "mira@trendpulse.dev", verified: true },
+  content: "hi"
+};
+
+// Predicted shape
+// { title: "p1", authorName: "Mira", keysCount: <number of enumerable keys on merged object> }`
+                    }, {
+                        type: "output",
+                        title: "2) Safe nested reads",
+                        content: "Function name: `getEngagementTotals`. Input: a post that may have `engagement` with any subset of `likes`, `shares`, `comments`. Output: one object `{ likes, shares, comments }` as numbers. Use `??` for defaults (0) and `?.` so missing `engagement` does not throw.",
+                        example: `function getEngagementTotals(post) {
+  // return { likes, shares, comments } with defaults likes/shares/comments as numbers (0 if missing)
+}
+
+const x = { engagement: { likes: 5, shares: 1 } };
+const y = { engagement: { likes: 2 } };
+
+// getEngagementTotals(x) => { likes: 5, shares: 1, comments: 0 }
+// getEngagementTotals(y) => { likes: 2, shares: 0, comments: 0 }`
+                    }, {
+                        type: "output",
+                        title: "3) Simulated async fetch",
+                        content: "Function name: `fetchPostById`. Return `new Promise` that finishes after a short `setTimeout`. If `id` exists on `database`, `resolve` with a copy of that post; otherwise `reject` with `\"NOT_FOUND\"`. Write `async function demoFetch()` that uses `await fetchPostById`, `try/catch` for errors, and `finally` to always run a line such as `console.log(\"done\")`.",
+                        example: `function fetchPostById(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // resolve post or reject "NOT_FOUND"
+    }, 30);
+  });
+}
+
+async function demoFetch() {
+  try {
+    const post = await fetchPostById("p1");
+    // use post
+  } catch (e) {
+    // handle
+  } finally {
+    // always log "done"
+  }
+}
+
+// Predicted: await fetchPostById("p999") rejects → catch runs; finally still runs`
+                    }, {
+                        type: "output",
+                        title: "4) Regex: email, hashtags, mentions",
+                        content: "Function name: `analyzePostText(post)` or split into small helpers. Check `post.author.email` with a regex like `/^[\\w.-]+@[\\w.-]+\\.\\w{2,}$/`. From `post.content`, collect hashtags (`#word`) and `@mentions` using `.match` with global regexes. Return a plain object, e.g. `{ emailValid: boolean, tags: string[], mentions: string[] }`.",
+                        example: `const emailOk = /^[\\w.-]+@[\\w.-]+\\.\\w{2,}$/;
+const hashTag = /#[\\w\u0600-\u06FF]+/g;
+const mention = /@[\\w]+/g;
+
+function analyzePostText(post) {
+  // emailValid from post.author.email; tags & mentions from post.content
+}
+
+// Predicted: for sample database posts, p1 email valid; p2 invalid; tags/mentions parsed from content`
+                    }, {
+                        type: "output",
+                        title: "5) Event loop: predict order",
+                        content: "No code to hand in for this step only: write the expected console order for the snippet below (sync code first, then microtasks, then `setTimeout`).",
+                        example: `console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
+
+// Predicted print order
+// 1, 4, 3, 2`
+                    }, {
+                        type: "output",
+                        title: "6) Date format + live refresh timer",
+                        content: "Function name: `formatIsoDateOnly(isoString)` — return one string `YYYY-MM-DD` built from a `Date` (use `getFullYear`, `getMonth` + 1, `getDate`, and `padStart` on two-digit parts). Function name: `startRefreshDemo(onTick)` — use `setInterval` to call `onTick` with `1`, then `2`, then `3`, then `clearInterval` so it stops after three ticks.",
+                        example: `function formatIsoDateOnly(iso) {
+  const d = new Date(iso);
+  // YYYY-MM-DD in UTC or local — pick one and document
+}
+
+function startRefreshDemo(onTick) {
+  let n = 0;
+  const id = setInterval(() => {
+    n++;
+    onTick(n);
+    if (n >= 3) clearInterval(id);
+  }, 200);
+}
+
+// Example: formatIsoDateOnly("2026-04-04T10:00:00.000Z") => "2026-04-04"`
+                    }, {
+                        type: "output",
+                        title: "7) Final orchestrator",
+                        content: "Function name: `runTrendPulsePhase2`. It must be `async`. For a fixed array of ids such as `[\"p1\",\"p2\"]`, `await fetchPostById` for each id one by one (a simple `for` loop is fine). For each loaded post, use your regex helper to see if the author email is valid, use `formatIsoDateOnly` on `createdAt`, and build a summary object like `{ loaded: number, validEmails: number, invalidAuthorId: string | null, datesFormatted: string[] }` where `invalidAuthorId` is the first post id whose email fails validation, or `null` if all pass.",
+                        example: `async function runTrendPulsePhase2() {
+  const ids = ["p1", "p2"];
+  // loop: await fetchPostById(id), count valid emails, collect formatted dates, track first invalid id
+}
+
+// Predicted output shape (example)
+// { loaded: 2, validEmails: 1, invalidAuthorId: "p2", datesFormatted: ["2026-04-01", "2026-04-02"] }`
+                    }]
+                }, {
+                    type: "note",
+                    title: "Submission",
+                    content: "Upload one file named `task4.js` in the course Telegram tasks thread. Start your message with: `#TASK4 - Your Full Name`. Your file should run the steps in order and include short comments only where they help read your logic."
+                }, {
+                    type: "learning",
+                    title: "Target learning outcomes",
+                    content: [
+                        "Lecture 5: object operations, safe operators (`?.`, `??`), error handling, timers, Date formatting.",
+                        "Lecture 6: Promises, async/await, event loop order, RegExp for validation and extraction.",
+                        "Integration: TrendPulse Phase 2 after Task 3 — objects plus async code, without Map/Set."
+                    ]
+                }],
+                timer: {
+                    title: "Time Remaining to Complete Task",
+                    message: "Complete the task before the deadline!",
+                    days: "Days",
+                    hours: "Hours",
+                    minutes: "Minutes",
+                    seconds: "Seconds"
+                },
+                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
+                buttonText: "العربية / English",
+                finishDate: "Finish by: April 5, 2026"
+            },
+            ar: {
+                title: "المهمة 4: TrendPulse — طبقة الكائنات والتزامن",
+                subtitle: "تكملة للمهمة 3: منشورات ككائنات غنية، async/await، تعبيرات منتظمة، مؤقتات وDate (المحاضرتان 5 و6). ملف واحد وقصة واحدة.",
+                sections: [{
+                    type: "idea",
+                    title: "القصة: TrendPulse المرحلة 2",
+                    content: "بعد المهمة 3 تعرف التغذية كبيانات في الذاكرة. في المرحلة 2 كل منشور كائن غني (مؤلف متداخل، تفاعل، طابع زمني ISO). ستُحاكي تحميل المنشورات بشكل غير متزامن عبر Promises، وتتحقق من النص وتستخرجه بـ regex، وتستخدم `?.` و`??`، وتنسّق التواريخ مع المؤقتات. سلّم ملف JavaScript واحد واضح ينفّذ الخطوات المرقّمة أدناه بالترتيب. لا تستخدم `Map` ولا `Set`."
+                }, {
+                    type: "requirements",
+                    title: "قواعد أساسية",
+                    content: [{
+                        type: "list",
+                        title: "قيود (يجب اتباعها):",
+                        items: [
+                            "استخدم `let` و`const` (دون `var`).",
+                            "نفس مجال المهمة 3: TrendPulse (منشورات، مؤلفون، تفاعل) لكن نمذجة المنشور ككائنات متداخلة.",
+                            "المحاضرة 5: الكائنات (`Object.keys` / `values` / `entries`، النشر والدمج)، `?.` و`??`، `try/catch/finally`، `setTimeout` / `setInterval` / `clearInterval`، و`Date` وتنسيق النصوص.",
+                            "المحاضرة 6: Promises و`.then` / `.catch` / `.finally` و`async` / `await`، وترتيب الطباعة في الحدث التسلسلي (متزامن ثم microtasks ثم `setTimeout`)، و`RegExp` مع `.test` و`.match`.",
+                            "لا تستخدم `Map` ولا `Set`. استخدم كائنات `{}` أو مصفوفات للقوائم والعد.",
+                            "دون مكتبات خارجية."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "بيانات بداية (يمكنك التوسع)",
+                        content: "استخدم كائن `database` التالي في الذاكرة. دالة `fetchPostById` المحاكاة تقرأ منه (انسخ المنشور). احتفظ بالمعرّفات `p1` و`p2` ما لم تضف مفاتيح أخرى.",
+                        example: `const database = {
+  p1: {
+    id: "p1",
+    author: { name: "Mira", email: "mira@trendpulse.dev", verified: true },
+    content: "Meet @sara at the hub #js #async",
+    engagement: { likes: 12, shares: 2, comments: 4 },
+    createdAt: "2026-04-01T09:00:00.000Z"
+  },
+  p2: {
+    id: "p2",
+    author: { name: "Rami", email: "invalid-email", verified: false },
+    content: "Checkout #node tutorials",
+    engagement: { likes: 3 },
+    createdAt: "2026-04-02T11:30:00.000Z"
+  }
+};`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "ما الذي تبنيه (نفّذ الخطوات 1–7 بالترتيب)",
+                    content: [{
+                        type: "output",
+                        title: "1) نموذج منشور غني",
+                        content: "اسم الدالة: `describePostForUi`. ادمج المنشور مع `{ meta: { channel: \"web\" } }` بالنشر. فكّك `author.name`. أعد `{ title, authorName, keysCount }` حيث `title` هو `id` المنشور، و`authorName` اسم المؤلف، و`keysCount` عدد المفاتيح الخاصة على الكائن بعد الدمج. استخدم `Object.keys` أو `Object.entries` (دون Map).",
+                        example: `function describePostForUi(post) {
+  // فكيك author.name، دمج بالنشر { meta: { channel: "web" } }، أعد { title, authorName, keysCount }
+}
+
+const post = {
+  id: "p1",
+  author: { name: "Mira", email: "mira@trendpulse.dev", verified: true },
+  content: "hi"
+};
+
+// الشكل المتوقع
+// { title: "p1", authorName: "Mira", keysCount: <عدد المفاتيح القابلة للعد على الكائن المدمج> }`
+                    }, {
+                        type: "output",
+                        title: "2) قراءات متداخلة آمنة",
+                        content: "اسم الدالة: `getEngagementTotals`. المدخل: منشور قد يحتوي `engagement` مع أي مجموعة من `likes` و`shares` و`comments`. المخرج: كائن `{ likes, shares, comments }` كأرقام. استخدم `??` للتعويض (0) و`?.` حتى لا يحدث خطأ إن غاب `engagement`.",
+                        example: `function getEngagementTotals(post) {
+  // أعد { likes, shares, comments } كأرقام، 0 إن غابت
+}
+
+const x = { engagement: { likes: 5, shares: 1 } };
+const y = { engagement: { likes: 2 } };
+
+// getEngagementTotals(x) => { likes: 5, shares: 1, comments: 0 }
+// getEngagementTotals(y) => { likes: 2, shares: 0, comments: 0 }`
+                    }, {
+                        type: "output",
+                        title: "3) جلب غير متزامن محاكى",
+                        content: "اسم الدالة: `fetchPostById`. أعد `new Promise` ينتهي بعد `setTimeout` قصير. إن وُجد `id` في `database` فـ`resolve` بنسخة من المنشور؛ وإلا `reject` بالنص `\"NOT_FOUND\"`. اكتب `async function demoFetch()` تستخدم `await fetchPostById` و`try/catch` للأخطاء و`finally` لتنفيذ سطر مثل `console.log(\"done\")` دائمًا.",
+                        example: `function fetchPostById(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // resolve للمنشور أو reject "NOT_FOUND"
+    }, 30);
+  });
+}
+
+async function demoFetch() {
+  try {
+    const post = await fetchPostById("p1");
+  } catch (e) {
+  } finally {
+    // سجّل "done" دائمًا
+  }
+}
+
+// المتوقع: await fetchPostById("p999") يرفض → يعمل catch؛ ولا يزال finally يعمل`
+                    }, {
+                        type: "output",
+                        title: "4) تعبير منتظم: بريد وهاشتاغ وإشارات",
+                        content: "اسم الدالة: `analyzePostText(post)` أو قسّمها لدوال صغيرة. تحقق من `post.author.email` بتعبير مثل `/^[\\w.-]+@[\\w.-]+\\.\\w{2,}$/`. من `post.content` اجمع الهاشتاغات (`#كلمة`) و`@mentions` بـ`.match` وتعبيرات عامة. أعد كائنًا عاديًا مثل `{ emailValid: boolean, tags: string[], mentions: string[] }`.",
+                        example: `const emailOk = /^[\\w.-]+@[\\w.-]+\\.\\w{2,}$/;
+const hashTag = /#[\\w\u0600-\u06FF]+/g;
+const mention = /@[\\w]+/g;
+
+function analyzePostText(post) {
+  // emailValid من post.author.email؛ tags وmentions من post.content
+}
+
+// المتوقع: في بيانات العينة p1 بريد صالح؛ p2 غير صالح؛ استخراج الهاشتاغ والإشارات من المحتوى`
+                    }, {
+                        type: "output",
+                        title: "5) الحدث التسلسلي: ترتيب الطباعة",
+                        content: "لا كود للتسليم في هذه الخطوة فقط: اكتب ترتيب الطباعة المتوقع للمقطع أدناه (الكود المتزامن أولًا، ثم microtasks، ثم `setTimeout`).",
+                        example: `console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
+
+// ترتيب الطباعة المتوقع
+// 1, 4, 3, 2`
+                    }, {
+                        type: "output",
+                        title: "6) تنسيق Date + مؤقت تحديث",
+                        content: "اسم الدالة: `formatIsoDateOnly(isoString)` — أعد سلسلة واحدة `YYYY-MM-DD` من `Date` (استخدم `getFullYear` و`getMonth`+1 و`getDate` و`padStart` لرقمين). اسم الدالة: `startRefreshDemo(onTick)` — استخدم `setInterval` لاستدعاء `onTick` بـ`1` ثم `2` ثم `3` ثم `clearInterval` ليتوقف بعد ثلاث نبضات.",
+                        example: `function formatIsoDateOnly(iso) {
+  const d = new Date(iso);
+}
+
+function startRefreshDemo(onTick) {
+  let n = 0;
+  const id = setInterval(() => {
+    n++;
+    onTick(n);
+    if (n >= 3) clearInterval(id);
+  }, 200);
+}
+
+// مثال: formatIsoDateOnly("2026-04-04T10:00:00.000Z") => "2026-04-04"`
+                    }, {
+                        type: "output",
+                        title: "7) منسّق نهائي",
+                        content: "اسم الدالة: `runTrendPulsePhase2`. يجب أن تكون `async`. لمصفوفة معرفات ثابتة مثل `[\"p1\",\"p2\"]` نفّذ `await fetchPostById(id)` لكل معرف واحدًا تلو الآخر (حلقة `for` بسيطة). لكل منشور محمّل استخدم مساعد regex للتحقق من البريد، و`formatIsoDateOnly` على `createdAt`، وابنِ كائن ملخص مثل `{ loaded: number, validEmails: number, invalidAuthorId: string | null, datesFormatted: string[] }` حيث `invalidAuthorId` أول معرف فشل تحقق البريد أو `null` إن نجح الجميع.",
+                        example: `async function runTrendPulsePhase2() {
+  const ids = ["p1", "p2"];
+  // حلقة: await fetchPostById(id)، عدّ البريد الصالح، اجمع التواريخ، تتبع أول معرف غير صالح
+}
+
+// شكل مخرجات متوقع (مثال)
+// { loaded: 2, validEmails: 1, invalidAuthorId: "p2", datesFormatted: ["2026-04-01", "2026-04-02"] }`
+                    }]
+                }, {
+                    type: "note",
+                    title: "التسليم",
+                    content: "ارفع ملفًا واحدًا باسم `task4.js` في ردّة تاسكات المقرر على التلغرام. ابدأ رسالتك بـ: `#TASK4 - اسمك الكامل`. يجب أن يشغّل الملف الخطوات بالترتيب؛ اكتب تعليقات قصيرة فقط حيث تساعد على فهم المنطق."
+                }, {
+                    type: "learning",
+                    title: "نواتج التعلّم المستهدفة",
+                    content: [
+                        "المحاضرة 5: عمليات الكائنات، العوامل الآمنة (`?.`، `??`)، معالجة الأخطاء، المؤقتات، تنسيق التاريخ.",
+                        "المحاضرة 6: Promises وasync/await، ترتيب الحدث التسلسلي، RegExp للتحقق والاستخراج.",
+                        "التكامل: TrendPulse المرحلة 2 بعد المهمة 3 — كائنات مع كود غير متزامن، دون Map/Set."
+                    ]
+                }],
+                timer: {
+                    title: "الوقت المتبقي لإكمال المهمة",
+                    message: "أكمل المهمة قبل الموعد النهائي!",
+                    days: "أيام",
+                    hours: "ساعات",
+                    minutes: "دقائق",
+                    seconds: "ثواني"
+                },
+                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
+                buttonText: "English / العربية",
+                finishDate: "الانتهاء بحلول: 5 أبريل 2026"
+            }
+        };
+
+        function renderContent(lang) {
+            const data = taskData[lang];
+            const taskContent = document.getElementById('taskContent');
+
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+
+            document.getElementById('timer-title').textContent = data.timer.title;
+            document.getElementById('timer-message').textContent = data.timer.message;
+            document.getElementById('days-label').textContent = data.timer.days;
+            document.getElementById('hours-label').textContent = data.timer.hours;
+            document.getElementById('minutes-label').textContent = data.timer.minutes;
+            document.getElementById('seconds-label').textContent = data.timer.seconds;
+            document.getElementById('finish-date').textContent = data.finishDate;
+
+            document.getElementById('thankYou').textContent = data.thankYou;
+
+            document.getElementById('languageToggle').textContent = data.buttonText;
+
+            taskContent.innerHTML = '';
+
+            data.sections.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+
+                if (section.type === 'requirements') {
+                    sectionEl.classList.add('requirements');
+                } else if (section.type === 'bonus') {
+                    sectionEl.classList.add('bonus');
+                }
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = section.title;
+                sectionEl.appendChild(titleEl);
+
+                if (section.type === 'idea' || section.type === 'note') {
+                    const contentEl = document.createElement('p');
+                    contentEl.textContent = section.content;
+                    sectionEl.appendChild(contentEl);
+                } else if (section.type === 'requirements') {
+                    section.content.forEach(item => {
+                        const itemTitle = document.createElement('h3');
+                        itemTitle.textContent = item.title;
+                        sectionEl.appendChild(itemTitle);
+
+                        if (item.type === 'list') {
+                            const listEl = document.createElement('ul');
+                            item.items.forEach(listItem => {
+                                const li = document.createElement('li');
+                                li.innerHTML = listItem;
+                                listEl.appendChild(li);
+                            });
+                            sectionEl.appendChild(listEl);
+                        } else if (item.type === 'output') {
+                            itemTitle.setAttribute('dir', 'ltr');
+                            itemTitle.style.textAlign = 'left';
+                            const contentEl = document.createElement('p');
+                            contentEl.textContent = item.content;
+                            contentEl.setAttribute('dir', 'ltr');
+                            contentEl.style.textAlign = 'left';
+                            sectionEl.appendChild(contentEl);
+
+                            const exampleEl = document.createElement('div');
+                            exampleEl.className = 'output-example';
+                            exampleEl.textContent = item.example;
+                            exampleEl.setAttribute('dir', 'ltr');
+                            exampleEl.style.textAlign = 'left';
+                            sectionEl.appendChild(exampleEl);
+                        }
+                    });
+                } else if (section.type === 'learning' || section.type === 'bonus') {
+                    const listEl = document.createElement('ul');
+                    section.content.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        listEl.appendChild(li);
+                    });
+                    sectionEl.appendChild(listEl);
+                }
+
+                taskContent.appendChild(sectionEl);
+            });
+
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'right';
+                });
+            } else {
+                document.body.removeAttribute('dir');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'left';
+                });
+            }
+        }
+
+        function startCountdown() {
+            const countDownDate = new Date("Apr 5, 2026 23:59:59").getTime();
+
+            const countdown = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    document.getElementById("days").textContent = "00";
+                    document.getElementById("hours").textContent = "00";
+                    document.getElementById("minutes").textContent = "00";
+                    document.getElementById("seconds").textContent = "00";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderContent('en');
+            startCountdown();
+
+            document.getElementById('languageToggle').addEventListener('click', function() {
+                const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
+                const newLang = currentLang === 'en' ? 'ar' : 'en';
+                renderContent(newLang);
+            });
+        });
+    </script>
+</body>
+
+</html>

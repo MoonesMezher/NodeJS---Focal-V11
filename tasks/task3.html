@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 3: TrendPulse Social Feed Analyzer</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+        
+        .coach {
+            background-color: white;
+            width: 80px;
+            border-radius: 0 0 50% 0;
+            color: black;
+            padding: 10px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        #title {
+            padding-top: 20px;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .language-toggle:hover {
+            background: #2980b9;
+        }
+        
+        .task-content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin: 15px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul,
+        ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .requirements {
+            background: #e8f4fc;
+            border-left: 5px solid #3498db;
+        }
+        
+        .bonus {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .output-example {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow: auto;
+            direction: ltr !important;
+            text-align: left !important;
+        }
+        
+        .timer-section {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .timer-unit {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 80px;
+        }
+        
+        .timer-value {
+            font-size: 2.5rem;
+            display: block;
+        }
+        
+        .timer-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            display: block;
+        }
+        
+        .finish-date {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        
+        .thank-you {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+            margin-top: 30px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 15px;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .footer p {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .task-content {
+                padding: 15px;
+            }
+            .language-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 15px;
+                display: block;
+                width: 100%;
+            }
+            .timer {
+                font-size: 1.5rem;
+                flex-wrap: wrap;
+            }
+            .timer-unit {
+                min-width: 70px;
+            }
+            .timer-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+        <header>
+            <h1 id="title">Task 3: TrendPulse Social Feed Analyzer</h1>
+            <p class="subtitle" id="subtitle">Hard story challenge to recap Lectures 2, 3, and 4 (especially arrays, Date, and timers)</p>
+            <button class="language-toggle" id="languageToggle">العربية / English</button>
+        </header>
+
+        <div class="task-content" id="taskContent">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+
+        <div class="timer-section">
+            <h3 id="timer-title">Time Remaining to Complete Task</h3>
+            <div class="timer" id="timer">
+                <div class="timer-unit">
+                    <span class="timer-value" id="days">00</span>
+                    <span class="timer-label" id="days-label">Days</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="hours">00</span>
+                    <span class="timer-label" id="hours-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="minutes">00</span>
+                    <span class="timer-label" id="minutes-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="seconds">00</span>
+                    <span class="timer-label" id="seconds-label">Seconds</span>
+                </div>
+            </div>
+            <p class="finish-date" id="finish-date">Finish by: March 28, 2026</p>
+            <p id="timer-message">Complete the task before the deadline!</p>
+        </div>
+
+        <div class="thank-you" id="thankYou">
+            "Thank you for your hard work and dedication. Your efforts are appreciated!"
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 <a href="https://focal-x.com/" target="_blank">Focal X</a> - Node.js Bootcamp V11</p>
+    </div>
+
+    <script src="../reg.js"></script>
+    <script>
+        // Content data structure
+        const taskData = {
+            en: {
+                title: "Task 3: TrendPulse Social Feed Analyzer",
+                subtitle: "Hard story challenge to recap Lectures 2, 3, and 4 (especially arrays)",
+                sections: [{
+                    type: "idea",
+                    title: "Story Context: TrendPulse Startup",
+                    content: "You are a backend intern at TrendPulse, a social media startup. Your team receives raw post data from many creators every minute. Management wants one JavaScript script that cleans data, validates posts, calculates engagement scores, ranks the feed, extracts trends, and prints a final moderation report. Your mission is to build this in one coherent flow."
+                }, {
+                    type: "requirements",
+                    title: "Core Rules",
+                    content: [{
+                        type: "list",
+                        title: "Constraints (must follow):",
+                        items: [
+                            "Use `let` and `const` (no `var`).",
+                            "You must use arrays heavily (Lecture 4 focus).",
+                            "You must demonstrate both mutating and non-mutating array operations, then explain the difference in comments.",
+                            "You must use strings, coercion, conditions, loops, and functions from Lectures 2 and 3.",
+                            "You must design function-based workflow around one shared posts array.",
+                            "No external libraries."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "Starter Data (you may extend it)",
+                        content: "Use this sample dataset (or a richer one) as your raw feed input.",
+                        example: `const rawPosts = [
+  { id: "p1", author: "  Mira  ", content: "JS Arrays are amazing! #javascript #coding", likes: "120", shares: 18, comments: 40, createdAt: "2026-03-27T09:30:00Z" },
+  { id: "p2", author: "rami", content: "  check this out #Coding  ", likes: 75, shares: "11", comments: "13", createdAt: "2026-03-28T06:10:00Z" },
+  { id: "p3", author: "SARA", content: "", likes: "22", shares: 2, comments: 1, createdAt: "invalid-date" },
+  { id: "p4", author: "leo", content: "Node + Date + Timers #nodejs #javascript", likes: "210", shares: "35", comments: 70, createdAt: "2026-03-28T08:50:00Z" },
+  { id: "p5", author: "Mira", content: "  #coding tips for loops and conditions  ", likes: "95", shares: 20, comments: "25", createdAt: "2026-03-28T07:40:00Z" }
+];`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "Linked Hard Subtasks (complete in order)",
+                    content: [{
+                        type: "output",
+                        title: "1) Data normalization pipeline",
+                        content: "Normalize text fields, coerce engagement fields to numbers, and return clean post objects.",
+                        example: `function normalizePost(post) {
+  // your code
+}
+
+// Input
+const post = { author: "  Mira  ", content: "  Hello #JS  ", likes: "120", shares: "8", comments: "15" };
+
+// Predicted output
+// { author: "mira", content: "hello #js", likes: 120, shares: 8, comments: 15 }`
+                    }, {
+                        type: "output",
+                        title: "2) Validation gate",
+                        content: "Reject invalid posts using conditions and keep a reason for each rejection.",
+                        example: `function isPostValid(post) {
+  // your code
+}
+
+// Input
+const post = { id: "p3", content: "", likes: 22, shares: 2, comments: 1 };
+
+// Predicted output
+// false (reason: empty content)`
+                    }, {
+                        type: "output",
+                        title: "3) Engagement score model",
+                        content: "Calculate engagement score with a weighted formula and safe handling of missing values.",
+                        example: `function calculateEngagementScore(post) {
+  // your code
+}
+
+// Input
+const post = { likes: 100, shares: 20, comments: 10 };
+
+// Predicted output
+// 180`
+                    }, {
+                        type: "output",
+                        title: "4) Mutate vs non-mutate array track (Lecture 4 emphasis)",
+                        content: "Create two flows: one mutates original array and one keeps original intact.",
+                        example: `function mutateFeed(posts) {
+  // mutating methods
+}
+
+function cloneAndTransformFeed(posts) {
+  // non-mutating methods
+}
+
+// Input
+const posts = [{ id: "p1", score: 20 }, { id: "p2", score: 50 }];
+
+// Predicted output
+// mutateFeed changes original order
+// cloneAndTransformFeed keeps original order unchanged`
+                    }, {
+                        type: "output",
+                        title: "5) Feed ranking and tie-breakers",
+                        content: "Sort by score descending, then id ascending as deterministic tie-breaker.",
+                        example: `function rankPosts(posts) {
+  // your code
+}
+
+// Input
+const posts = [
+  { id: "p2", score: 100 },
+  { id: "p1", score: 100 }
+];
+
+// Predicted output order
+// ["p1", "p2"]`
+                    }, {
+                        type: "output",
+                        title: "6) Hashtag trend extraction",
+                        content: "Extract hashtags, count frequencies, and return top N trends.",
+                        example: `function extractTopHashtags(posts, limit) {
+  // your code
+}
+
+// Input
+const posts = [{ content: "#js #node" }, { content: "#js #arrays" }];
+
+// Predicted output
+// [{ tag: "#js", count: 2 }, { tag: "#node", count: 1 }, { tag: "#arrays", count: 1 }]`
+                    }, {
+                        type: "output",
+                        title: "7) Required function architecture",
+                        content: "Implement and call: addPost, updatePost, deletePost, getPostById, searchPosts, getTopPosts, getStats.",
+                        example: `function addPost(posts, newPost) {
+  // your code
+}
+function updatePost(posts, postId, updates) {
+  // your code
+}
+function deletePost(posts, postId) {
+  // your code
+}
+function getPostById(posts, postId) {
+  // your code
+}
+function searchPosts(posts, keyword) {
+  // your code
+}
+function getTopPosts(posts, limit) {
+  // your code
+}
+function getStats(posts) {
+  // your code
+}
+
+// Input
+let posts = [{ id: "p1", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 }];
+const newPost = { id: "p2", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 };
+const updates = { likes: 15 };
+
+// Predicted output
+// addPost(posts, newPost) => posts.length: 1 -> 2
+// updatePost(posts, "p2", updates) => likes for p2 becomes 15
+// getPostById(posts, "p2") => returns post object with id "p2"
+// searchPosts(posts, "hello") => returns matching posts
+// getTopPosts(posts, 1) => returns one highest-scored post
+// getStats(posts) => returns summary object (count, avgScore, topId)
+// deletePost(posts, "p1") => posts no longer contains id "p1"`
+                    }, {
+                        type: "output",
+                        title: "8) Final moderation summary",
+                        content: "Print a clear final report with accepted/rejected counts, top posts, top hashtag, and average score.",
+                        example: `function buildSummaryReport(validPosts, rejectedPosts) {
+  // your code
+}
+
+// Input
+// validPosts.length = 4, rejectedPosts.length = 1
+
+// Predicted output
+// Accepted: 4 | Rejected: 1 | TopTag: #js | AvgScore: <number>`
+                    }]
+                }, {
+                    type: "note",
+                    title: "Submission",
+                    content: "Submit one JavaScript file (`task3.js`) in the tasks topic on Telegram. Message format: `#TASK3 - Your Name`. Include short inline comments explaining key logic decisions and the mutate vs non-mutate comparison."
+                }, {
+                    type: "learning",
+                    title: "Targeted Learning Recap",
+                    content: [
+                        "Lecture 2: data types, coercion, numbers, Math methods.",
+                        "Lecture 3: string handling, truthy/falsy checks, conditions, loops, function decomposition.",
+                        "Lecture 4: deep array processing and mutate vs non-mutate behavior.",
+                        "Real-world thinking: transforming messy raw data into reliable ranked outputs."
+                    ]
+                }],
+                timer: {
+                    title: "Time Remaining to Complete Task",
+                    message: "Complete the task before the deadline!",
+                    days: "Days",
+                    hours: "Hours",
+                    minutes: "Minutes",
+                    seconds: "Seconds"
+                },
+                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
+                buttonText: "العربية / English",
+                finishDate: "Finish by: March 28, 2026"
+            },
+            ar: {
+                title: "المهمة 3: محلل TrendPulse لتغذية السوشيال ميديا",
+                subtitle: "تحدٍّ قصصي صعب لمراجعة المحاضرات 2 و3 و4",
+                sections: [{
+                    type: "idea",
+                    title: "سياق القصة: شركة TrendPulse",
+                    content: "أنت متدرب Backend في شركة TrendPulse الناشئة. الفريق يستقبل بيانات منشورات خام من صناع محتوى كل دقيقة. الإدارة تريد سكربت JavaScript واحد ينظّف البيانات، يتحقق من صحتها، يحسب نقاط التفاعل، يرتّب التغذية، يستخرج الترندات، ويطبع تقرير إشراف نهائي. مهمتك تنفيذ هذا التدفق كاملًا."
+                }, {
+                    type: "requirements",
+                    title: "القواعد الأساسية",
+                    content: [{
+                        type: "list",
+                        title: "القيود (يجب الالتزام بها):",
+                        items: [
+                            "استخدم `let` و `const` فقط (بدون `var`).",
+                            "يجب الاعتماد بشكل واضح على المصفوفات (تركيز المحاضرة 4).",
+                            "يجب إظهار عمليات mutating و non-mutating على المصفوفات ثم شرح الفرق بالتعليقات.",
+                            "يجب استخدام النصوص، التحويل (coercion)، الشروط، الحلقات، وأساسيات الدوال من المحاضرتين 2 و3.",
+                            "يجب بناء تدفق يعتمد على دوال تعمل فوق مصفوفة منشورات واحدة.",
+                            "ممنوع استخدام أي مكتبات خارجية."
+                        ]
+                    }, {
+                        type: "output",
+                        title: "بيانات البداية (يمكنك توسيعها)",
+                        content: "استخدم مجموعة البيانات التالية (أو نسخة أغنى منها) كمدخل خام للتغذية:",
+                        example: `const rawPosts = [
+  { id: "p1", author: "  Mira  ", content: "JS Arrays are amazing! #javascript #coding", likes: "120", shares: 18, comments: 40, createdAt: "2026-03-27T09:30:00Z" },
+  { id: "p2", author: "rami", content: "  check this out #Coding  ", likes: 75, shares: "11", comments: "13", createdAt: "2026-03-28T06:10:00Z" },
+  { id: "p3", author: "SARA", content: "", likes: "22", shares: 2, comments: 1, createdAt: "invalid-date" },
+  { id: "p4", author: "leo", content: "Node + Date + Timers #nodejs #javascript", likes: "210", shares: "35", comments: 70, createdAt: "2026-03-28T08:50:00Z" },
+  { id: "p5", author: "Mira", content: "  #coding tips for loops and conditions  ", likes: "95", shares: 20, comments: "25", createdAt: "2026-03-28T07:40:00Z" }
+];`
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "المهام الصعبة المرتبطة (نفّذها بالترتيب)",
+                    content: [{
+                        type: "output",
+                        title: "1) مسار توحيد البيانات (Normalization)",
+                        content: "وحّد النصوص وحوّل قيم التفاعل إلى أرقام ثم أعد منشورًا نظيفًا.",
+                        example: `function normalizePost(post) {
+  // your code
+}
+
+// Input
+const post = { author: "  Mira  ", content: "  Hello #JS  ", likes: "120", shares: "8", comments: "15" };
+
+// Predicted output
+// { author: "mira", content: "hello #js", likes: 120, shares: 8, comments: 15 }`
+                    }, {
+                        type: "output",
+                        title: "2) بوابة التحقق (Validation Gate)",
+                        content: "تحقق من صحة المنشور وارجع false عند وجود خطأ مع سبب واضح.",
+                        example: `function isPostValid(post) {
+  // your code
+}
+
+// Input
+const post = { id: "p3", content: "", likes: 22, shares: 2, comments: 1 };
+
+// Predicted output
+// false (reason: empty content)`
+                    }, {
+                        type: "output",
+                        title: "3) نموذج نقاط التفاعل",
+                        content: "احسب نقاط التفاعل بمعادلة موزونة وتعامل مع القيم الناقصة.",
+                        example: `function calculateEngagementScore(post) {
+  // your code
+}
+
+// Input
+const post = { likes: 100, shares: 20, comments: 10 };
+
+// Predicted output
+// 180`
+                    }, {
+                        type: "output",
+                        title: "4) مسار المصفوفات: mutate vs non-mutate (تركيز المحاضرة 4)",
+                        content: "أنشئ مسارين: واحد يغيّر المصفوفة الأصلية وواحد يحافظ عليها بدون تغيير.",
+                        example: `function mutateFeed(posts) {
+  // mutating methods
+}
+
+function cloneAndTransformFeed(posts) {
+  // non-mutating methods
+}
+
+// Input
+const posts = [{ id: "p1", score: 20 }, { id: "p2", score: 50 }];
+
+// Predicted output
+// mutateFeed changes original order
+// cloneAndTransformFeed keeps original order unchanged`
+                    }, {
+                        type: "output",
+                        title: "5) ترتيب التغذية وكسر التعادل",
+                        content: "رتّب حسب النقاط تنازليًا، ثم حسب المعرّف تصاعديًا كقاعدة حسم ثابتة.",
+                        example: `function rankPosts(posts) {
+  // your code
+}
+
+// Input
+const posts = [
+  { id: "p2", score: 100 },
+  { id: "p1", score: 100 }
+];
+
+// Predicted output order
+// ["p1", "p2"]`
+                    }, {
+                        type: "output",
+                        title: "6) استخراج ترند الهاشتاغات",
+                        content: "استخرج الهاشتاغات واحسب تكرارها ثم أعد أعلى N ترندات.",
+                        example: `function extractTopHashtags(posts, limit) {
+  // your code
+}
+
+// Input
+const posts = [{ content: "#js #node" }, { content: "#js #arrays" }];
+
+// Predicted output
+// [{ tag: "#js", count: 2 }, { tag: "#node", count: 1 }, { tag: "#arrays", count: 1 }]`
+                    }, {
+                        type: "output",
+                        title: "7) هيكل الدوال المطلوب",
+                        content: "نفّذ واستعمل الدوال المطلوبة وكلها تعمل على نفس مصفوفة posts.",
+                        example: `function addPost(posts, newPost) {
+  // your code
+}
+function updatePost(posts, postId, updates) {
+  // your code
+}
+function deletePost(posts, postId) {
+  // your code
+}
+function getPostById(posts, postId) {
+  // your code
+}
+function searchPosts(posts, keyword) {
+  // your code
+}
+function getTopPosts(posts, limit) {
+  // your code
+}
+function getStats(posts) {
+  // your code
+}
+
+// Input
+let posts = [{ id: "p1", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 }];
+const newPost = { id: "p2", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 };
+const updates = { likes: 15 };
+
+// Predicted output
+// addPost(posts, newPost) => posts.length: 1 -> 2
+// updatePost(posts, "p2", updates) => likes of p2 becomes 15
+// getPostById(posts, "p2") => returns post object with id "p2"
+// searchPosts(posts, "hello") => returns matching posts
+// getTopPosts(posts, 1) => returns one highest-scored post
+// getStats(posts) => returns summary object (count, avgScore, topId)
+// deletePost(posts, "p1") => posts no longer contains id "p1"`
+                    }, {
+                        type: "output",
+                        title: "8) ملخص الإشراف النهائي",
+                        content: "ابنِ تقريرًا نهائيًا واضحًا يتضمن الإحصاءات الرئيسية ومخرجات الترتيب.",
+                        example: `function buildSummaryReport(validPosts, rejectedPosts) {
+  // your code
+}
+
+// Input
+// validPosts.length = 4, rejectedPosts.length = 1
+
+// Predicted output
+// Accepted: 4 | Rejected: 1 | TopTag: #js | AvgScore: <number>`
+                    }]
+                }, {
+                    type: "note",
+                    title: "التسليم",
+                    content: "سلّم ملف JavaScript واحد (`task3.js`) في توبك التاسكات على التلغرام. صيغة الرسالة: `#TASK3 - اسمك`. أضف تعليقات قصيرة تشرح قراراتك المهمة وخاصة فرق mutate و non-mutate."
+                }, {
+                    type: "learning",
+                    title: "ملخص نقاط التعلّم المستهدفة",
+                    content: [
+                        "المحاضرة 2: أنواع البيانات، التحويل (coercion)، الأرقام ودوال Math.",
+                        "المحاضرة 3: معالجة النصوص، truthy/falsy، الشروط، الحلقات، وتقسيم المنطق عبر الدوال.",
+                        "المحاضرة 4: معالجة المصفوفات بعمق وفرق mutate/non-mutate.",
+                        "تفكير واقعي: تحويل بيانات خام فوضوية إلى نتائج مرتبة وموثوقة."
+                    ]
+                }],
+                timer: {
+                    title: "الوقت المتبقي لإكمال المهمة",
+                    message: "أكمل المهمة قبل الموعد النهائي!",
+                    days: "أيام",
+                    hours: "ساعات",
+                    minutes: "دقائق",
+                    seconds: "ثواني"
+                },
+                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
+                buttonText: "English / العربية",
+                finishDate: "الانتهاء بحلول: 28 مارس 2026"
+            }
+        };
+        // Render content based on language
+        function renderContent(lang) {
+            const data = taskData[lang];
+            const taskContent = document.getElementById('taskContent');
+
+            // Update page title and subtitle
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+
+            // Update timer section
+            document.getElementById('timer-title').textContent = data.timer.title;
+            document.getElementById('timer-message').textContent = data.timer.message;
+            document.getElementById('days-label').textContent = data.timer.days;
+            document.getElementById('hours-label').textContent = data.timer.hours;
+            document.getElementById('minutes-label').textContent = data.timer.minutes;
+            document.getElementById('seconds-label').textContent = data.timer.seconds;
+            document.getElementById('finish-date').textContent = data.finishDate;
+
+            // Update thank you message
+            document.getElementById('thankYou').textContent = data.thankYou;
+
+            // Update button text
+            document.getElementById('languageToggle').textContent = data.buttonText;
+
+            // Clear existing content
+            taskContent.innerHTML = '';
+
+            // Render each section
+            data.sections.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+
+                if (section.type === 'requirements') {
+                    sectionEl.classList.add('requirements');
+                } else if (section.type === 'bonus') {
+                    sectionEl.classList.add('bonus');
+                }
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = section.title;
+                sectionEl.appendChild(titleEl);
+
+                if (section.type === 'idea' || section.type === 'note') {
+                    const contentEl = document.createElement('p');
+                    contentEl.textContent = section.content;
+                    sectionEl.appendChild(contentEl);
+                } else if (section.type === 'requirements') {
+                    section.content.forEach(item => {
+                        const itemTitle = document.createElement('h3');
+                        itemTitle.textContent = item.title;
+                        sectionEl.appendChild(itemTitle);
+
+                        if (item.type === 'list') {
+                            const listEl = document.createElement('ul');
+                            item.items.forEach(listItem => {
+                                const li = document.createElement('li');
+                                li.innerHTML = listItem;
+                                listEl.appendChild(li);
+                            });
+                            sectionEl.appendChild(listEl);
+                        } else if (item.type === 'output') {
+                            const contentEl = document.createElement('p');
+                            contentEl.textContent = item.content;
+                            sectionEl.appendChild(contentEl);
+
+                            const exampleEl = document.createElement('div');
+                            exampleEl.className = 'output-example';
+                            exampleEl.textContent = item.example;
+                            sectionEl.appendChild(exampleEl);
+                        }
+                    });
+                } else if (section.type === 'learning' || section.type === 'bonus') {
+                    const listEl = document.createElement('ul');
+                    section.content.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        listEl.appendChild(li);
+                    });
+                    sectionEl.appendChild(listEl);
+                }
+
+                taskContent.appendChild(sectionEl);
+            });
+
+            // Set text direction based on language
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'right';
+                });
+            } else {
+                document.body.removeAttribute('dir');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'left';
+                });
+            }
+        }
+
+        // Timer functionality
+        function startCountdown() {
+            // Set the date we're counting down to (March 28, 2026)
+            const countDownDate = new Date("Mar 28, 2026 23:59:59").getTime();
+
+            // Update the countdown every 1 second
+            const countdown = setInterval(() => {
+                // Get today's date and time
+                const now = new Date().getTime();
+
+                // Find the distance between now and the countdown date
+                const distance = countDownDate - now;
+
+                // If the countdown is over, write some text
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    document.getElementById("days").textContent = "00";
+                    document.getElementById("hours").textContent = "00";
+                    document.getElementById("minutes").textContent = "00";
+                    document.getElementById("seconds").textContent = "00";
+                    return;
+                }
+
+                // Time calculations for days, hours, minutes and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the results
+                document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render English content by default
+            renderContent('en');
+
+            // Start the countdown timer
+            startCountdown();
+
+            // Language toggle functionality
+            document.getElementById('languageToggle').addEventListener('click', function() {
+                const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
+                const newLang = currentLang === 'en' ? 'ar' : 'en';
+                renderContent(newLang);
+            });
+        });
+    </script>
+</body>
+
+</html>

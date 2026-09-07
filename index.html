@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./logo.jpg" type="image/x-icon">
+    <title>Focal X - Node.js Bootcamp Lecture Portal</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="stylesheet" href="./assets/index.css">
+</head>
+
+<body>
+    <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+    <div class="container">
+        <header>
+            <h1>Focal X V11 - Node.js Bootcamp</h1>
+            <p class="subtitle">Lecture Portal - Browse All Lectures</p>
+            <div>
+                <a href="tasks/index.html" target="_blank" rel="noopener noreferrer">Tasks</a>
+                <a href="resources/index.html" target="_blank" rel="noopener noreferrer">Resources</a>
+            </div>
+        </header>
+
+        <div class="lectures-container">
+            <h2>Available Lectures</h2>
+
+            <input type="text" class="search-box" placeholder="Search lectures..." id="searchInput">
+
+            <table class="lectures-table">
+                <thead>
+                    <tr>
+                        <th>Lecture #</th>
+                        <th>Title</th>
+                        <th>Topics</th>
+                        <th>Status</th>
+                        <th>Session</th>
+                    </tr>
+                </thead>
+                <tbody id="lectures-table-body">
+                    <!-- Lectures will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 <a rel="noopener" href="https://focal-x.com/" target="_blank">Focal X</a> All Rights Reserved</p>
+    </footer>
+
+    <div class="modal-overlay" id="ideasModal" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            <p class="modal-number" id="modalNumber"></p>
+            <h3 id="modalTitle"></h3>
+            <p class="modal-hint">Key ideas</p>
+            <ul class="ideas-list" id="modalIdeas"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Same curriculum as V11 — key ideas only (no lecture pages)
+        const lectures = [{
+                number: "00",
+                title: "Intro",
+                topics: "Course Topics",
+                status: "completed",
+                ideas: [
+                    "Backend Concepts & API Theory",
+                    "JavaScript Fundamentals",
+                    "Advanced JavaScript",
+                    "TypeScript",
+                    "Git & GitHub",
+                    "Node.js",
+                    "Express.js",
+                    "Databases & MongoDB / Mongoose",
+                    "System Design",
+                    "Authentication & Authorization",
+                    "File Management",
+                    "Deployment & Docker",
+                    "Email, Events & Real-Time (Socket.IO)"
+                ]
+            }, {
+                number: "01",
+                title: "Backend Concepts & API Theory",
+                topics: "What is Backend Development?, Client-Server Architecture, HTTP Protocol, APIs, REST, JSON, Middlewares",
+                status: "completed",
+                ideas: [
+                    "What is Backend?",
+                    "Client-Server Architecture",
+                    "HTTP Protocol",
+                    "What are APIs?",
+                    "APIs & HTTP Methods",
+                    "JSON Format",
+                    "Middlewares",
+                    "API Lifecycle"
+                ]
+            }, {
+                number: "02",
+                title: "JavaScript Fundamentals 1",
+                topics: "Variables, Data Types, Scopes",
+                status: "completed",
+                ideas: [
+                    "Intro to JS",
+                    "Setup Guide",
+                    "VS Code Extensions",
+                    "Variables",
+                    "Logging",
+                    "Scopes",
+                    "Data Types",
+                    "Arithmetic",
+                    "Coercion",
+                    "Syntactic Sugar",
+                    "Numbers",
+                    "Math Library",
+                    "Comments"
+                ]
+            }, {
+                number: "03",
+                title: "JavaScript Fundamentals 2",
+                topics: "Functions, Loops",
+                status: "completed",
+                ideas: [
+                    "Strings",
+                    "CamelCase",
+                    "Truthy / Falsy",
+                    "Chaining in JS",
+                    "Conditions in JS",
+                    "Loops",
+                    "Functions"
+                ]
+            }, {
+                number: "04",
+                title: "Advanced JavaScript 1",
+                topics: "Functions, Arrays, Mutate & Non-Mutate",
+                status: "completed",
+                ideas: [
+                    "Functions",
+                    "Arrays",
+                    "Mutate vs Not Mutate"
+                ]
+            }, {
+                number: "05",
+                title: "Advanced JavaScript 2",
+                topics: "Objects, Timers, Date, Error Handling",
+                status: "completed",
+                ideas: [
+                    "Objects",
+                    "Timers",
+                    "Date Object",
+                    "Map & Set",
+                    "Error Handling",
+                    "Operators"
+                ]
+            }, {
+                number: "06",
+                title: "Advanced JavaScript 3",
+                topics: "Promises, Async/Await, Event Loop, Regex",
+                status: "completed",
+                ideas: [
+                    "Promises",
+                    "Asynchronous (Async/Await)",
+                    "Event Loop",
+                    "Regex"
+                ]
+            }, {
+                number: "07*",
+                title: "Solve Task 3",
+                topics: "TrendPulse Social Feed Analyzer",
+                status: "completed",
+                ideas: [
+                    "Solve Task 3 — TrendPulse Social Feed Analyzer"
+                ]
+            }, {
+                number: "08",
+                title: "Advanced JavaScript 4",
+                topics: "ES6, Destructuring, OOP",
+                status: "completed",
+                ideas: [
+                    "ES6",
+                    "Destructuring",
+                    "OOP",
+                    "Multiple Inheritance",
+                    "Exercise"
+                ]
+            }, {
+                number: "09",
+                title: "TypeScript",
+                topics: "Intro, Types, Interfaces, Type Aliases, Type Guards, Generics",
+                status: "completed",
+                ideas: [
+                    "Info",
+                    "Installation",
+                    "Types",
+                    "Config",
+                    "Arrays & Objects",
+                    "Functions",
+                    "Any",
+                    "Tuples",
+                    "Interfaces",
+                    "Type Aliases",
+                    "Union Types",
+                    "Type Guards",
+                    "Tagged Interfaces",
+                    "Generics",
+                    "Advanced Topics"
+                ]
+            }, {
+                number: "10",
+                title: "Git & Github",
+                topics: "Git & Github, Command Line & Terminal, Setup, Git Workflow, Branching",
+                status: "completed",
+                ideas: [
+                    "Git Basics",
+                    "GitHub",
+                    "Terminal Basics",
+                    "CLI Commands",
+                    "Git Fundamentals",
+                    "Git vs GitHub",
+                    "Core Concepts",
+                    "Setup & Config",
+                    "Basic Commands",
+                    "Branching"
+                ]
+            }, {
+                number: "11",
+                title: "NodeJS",
+                topics: "Readme & Markdown, Gitignore, Modules, File System, APIs",
+                status: "completed",
+                ideas: [
+                    "README & Markdown",
+                    "Gitignore",
+                    "Git Workflow",
+                    "Advanced Git",
+                    "Node.js Introduction",
+                    "Node.js Globals",
+                    "Node.js Modules",
+                    "OS & Path Modules",
+                    "FS Module",
+                    "HTTP Module"
+                ]
+            }, {
+                number: "12*",
+                title: "Solve Task 5",
+                topics: "ShelfStack Library",
+                status: "completed",
+                ideas: [
+                    "Solve Task 5 — ShelfStack Library"
+                ]
+            }, {
+                number: "13",
+                title: "ExpressJS 1",
+                topics: "Intro to ExpressJS",
+                status: "completed",
+                ideas: [
+                    "Introduction to Express.js",
+                    "Express Server Setup",
+                    "Routing & HTTP Methods",
+                    "Request & Response Objects"
+                ]
+            }, {
+                number: "14",
+                title: "ExpressJS 2",
+                topics: "CRUDS, Middlewares",
+                status: "completed",
+                ideas: [
+                    "Development Tools & Environment",
+                    "Request & Response Objects",
+                    "Middleware Concepts"
+                ]
+            }, {
+                number: "15",
+                title: "ExpressJS 3",
+                topics: "Folder Structure, Postman, PLop",
+                status: "completed",
+                ideas: [
+                    "Project Structure & Organization",
+                    "Postman",
+                    "Plop.js",
+                    "Views & MVC Architecture"
+                ]
+            }, {
+                number: "16",
+                title: "Databases",
+                topics: "Databases, MongoDB, Mongoose",
+                status: "completed",
+                ideas: [
+                    "SQL vs NoSQL",
+                    "MongoDB",
+                    "MongoDB Setup & Mongoose",
+                    "MongoDB Compass",
+                    "Mongoose Basics",
+                    "Mongoose Schemas",
+                    "Mongoose CRUD"
+                ]
+            }, {
+                number: "17*",
+                title: "Solve Task 7",
+                topics: "HarborStack",
+                status: "completed",
+                ideas: [
+                    "Solve Task 7 — HarborStack"
+                ]
+            }, {
+                number: "18",
+                title: "Mongoose 1",
+                topics: "CRUD, Error & NotFound Middlewares",
+                status: "completed",
+                ideas: [
+                    "Mongoose Basics",
+                    "Mongoose Schemas",
+                    "Mongoose CRUD",
+                    "Error Middlewares"
+                ]
+            }, {
+                number: "19",
+                title: "Mongoose 2",
+                topics: "Pagination, Schema (Virtuals, Methods, Statics)",
+                status: "completed",
+                ideas: [
+                    "Chaining & Pagination",
+                    "Mongoose Schemas (Virtuals, Methods, Statics)"
+                ]
+            }, {
+                number: "20",
+                title: "Mongoose 3",
+                topics: "Mongoose (Relationships, Advanced Features)",
+                status: "completed",
+                ideas: [
+                    "Relationships",
+                    "Advanced Mongoose"
+                ]
+            }, {
+                number: "21",
+                title: "System Design",
+                topics: "Database Design",
+                status: "completed",
+                ideas: [
+                    "System Design (Example)",
+                    "Database Design"
+                ]
+            }, {
+                number: "22",
+                title: "Implement the system design",
+                topics: "Code",
+                status: "completed",
+                ideas: [
+                    "Express Project — Implement the System Design"
+                ]
+            }, {
+                number: "23",
+                title: "Auth 1",
+                topics: "Authentication & Authorization, JWT",
+                status: "completed",
+                ideas: [
+                    "Auth Fundamentals",
+                    "JWT Deep Dive",
+                    "Password Security"
+                ]
+            }, {
+                number: "24",
+                title: "Auth 2",
+                topics: "Auth & Role Middlewares, Cookies, Rate Limiter",
+                status: "completed",
+                ideas: [
+                    "Auth Middleware",
+                    "Cookie Security",
+                    "Auth Endpoints",
+                    "Security Practices"
+                ]
+            }, {
+                number: "25",
+                title: "Auth 3",
+                topics: "XSS, Express Validation",
+                status: "completed",
+                ideas: [
+                    "Security & Hashing",
+                    "Data Validation",
+                    "Advanced Express"
+                ]
+            }, {
+                number: "26*",
+                title: "Solve Task 8 (Part 1)",
+                topics: "Solve Task 8 (Part 1)",
+                status: "completed",
+                ideas: [
+                    "Solve Task 8 (Part 1)"
+                ]
+            }, {
+                number: "27",
+                title: "Auth 4",
+                topics: "Seeds, Refresh Token",
+                status: "completed",
+                ideas: [
+                    "Security & Hashing",
+                    "Seeds",
+                    "Refresh Token"
+                ]
+            }, {
+                number: "28",
+                title: "File Management",
+                topics: "Multer & Cloudinary",
+                status: "completed",
+                ideas: [
+                    "File Handling",
+                    "Multer",
+                    "Cloudinary"
+                ]
+            }, {
+                number: "29",
+                title: "Deployment",
+                topics: "Serverless Deployment with Render",
+                status: "completed",
+                ideas: [
+                    "Dev vs Production",
+                    "Render Deployment",
+                    "MongoDB Atlas",
+                    "Production Checklist"
+                ]
+            }, {
+                number: "30",
+                title: "Intro to Docker",
+                topics: "Docker, Docker Compose, Dockerfile",
+                status: "completed",
+                ideas: [
+                    "The Problem",
+                    "Containers vs VMs",
+                    "Core Components",
+                    "Volumes & Compose",
+                    "Workflow & Commands",
+                    "Benefits & DevOps"
+                ]
+            }, {
+                number: "31",
+                title: "Solve Task 8 (Part 2)",
+                topics: "Solve Task 8 (Part 2)",
+                status: "completed",
+                ideas: [
+                    "Solve Task 8 (Part 2)"
+                ]
+            }, {
+                number: "32",
+                title: "Full stack application demo, Email & Events",
+                topics: "Full stack application demo, Email & Events",
+                status: "completed",
+                ideas: [
+                    "Full Stack Application Demo",
+                    "Email",
+                    "Events in Node.js"
+                ]
+            }, {
+                number: "33",
+                title: "Real-Time Communication in Node.js",
+                topics: "WebSockets & Socket.IO",
+                status: "completed",
+                ideas: [
+                    "Events in Node.js",
+                    "WebSockets & Socket.IO",
+                    "Implementation"
+                ]
+            }, {
+                number: "34",
+                title: "Socket.io",
+                topics: "Full Example",
+                status: "completed",
+                ideas: [
+                    "Socket.IO Full Example"
+                ]
+            }, {
+                number: "35",
+                title: "The End",
+                topics: "Next Steps",
+                status: "completed",
+                ideas: [
+                    "Next Steps"
+                ]
+            }
+        ];
+
+        const interactiveSessions = {
+            "01": "featured%20lectures/L1/backend-concepts.html"
+        };
+
+        const statusLabels = {
+            completed: "Completed",
+            upcoming: "Upcoming",
+            "not-started": "Not Started"
+        };
+
+        lectures.forEach(lecture => {
+            const lectureNumber = Number.parseInt(lecture.number, 10);
+            lecture.status = lectureNumber <= 1
+                ? "completed"
+                : lectureNumber === 2
+                    ? "upcoming"
+                    : "not-started";
+        });
+
+        function getVisibleLectures() {
+            return lectures.filter(lecture =>
+                lecture.status === "completed" || lecture.status === "upcoming"
+            );
+        }
+
+        const modal = document.getElementById('ideasModal');
+        const modalNumber = document.getElementById('modalNumber');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalIdeas = document.getElementById('modalIdeas');
+        const modalClose = document.getElementById('modalClose');
+
+        function openIdeasModal(lecture) {
+            modalNumber.textContent = `Lecture ${lecture.number}`;
+            modalTitle.textContent = lecture.title;
+            modalIdeas.innerHTML = '';
+
+            const ideas = lecture.ideas && lecture.ideas.length
+                ? lecture.ideas
+                : lecture.topics.split(',').map(t => t.trim()).filter(Boolean);
+
+            ideas.forEach(idea => {
+                const li = document.createElement('li');
+                li.textContent = idea;
+                modalIdeas.appendChild(li);
+            });
+
+            modal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeIdeasModal() {
+            modal.hidden = true;
+            document.body.classList.remove('modal-open');
+        }
+
+        function generateLectureRows(lecturesArray) {
+            const tableBody = document.getElementById('lectures-table-body');
+            tableBody.innerHTML = '';
+
+            for (let lecture of lecturesArray) {
+                const row = document.createElement('tr');
+                row.onclick = () => openIdeasModal(lecture);
+
+                const numberCell = document.createElement('td');
+                numberCell.textContent = lecture.number;
+
+                const titleCell = document.createElement('td');
+                const titleSpan = document.createElement('span');
+                titleSpan.className = 'lecture-link';
+                titleSpan.textContent = lecture.title;
+                titleCell.appendChild(titleSpan);
+
+                const topicsCell = document.createElement('td');
+                topicsCell.textContent = lecture.topics;
+
+                const statusCell = document.createElement('td');
+                const statusBadge = document.createElement('span');
+                statusBadge.className = `status-badge status-${lecture.status}`;
+                statusBadge.textContent = statusLabels[lecture.status];
+                statusCell.appendChild(statusBadge);
+
+                const sessionCell = document.createElement('td');
+                sessionCell.className = 'session-cell';
+                const sessionPath = interactiveSessions[lecture.number];
+
+                if (sessionPath) {
+                    const sessionLink = document.createElement('a');
+                    sessionLink.className = 'interactive-session-button';
+                    sessionLink.href = sessionPath;
+                    sessionLink.textContent = 'Interactive Session';
+                    sessionLink.setAttribute('aria-label', `Open interactive session for Lecture ${lecture.number}: ${lecture.title}`);
+                    sessionLink.addEventListener('click', event => event.stopPropagation());
+                    sessionCell.appendChild(sessionLink);
+                } else {
+                    const unavailable = document.createElement('span');
+                    unavailable.className = 'session-unavailable';
+                    unavailable.textContent = '—';
+                    unavailable.setAttribute('aria-label', 'No interactive session available');
+                    sessionCell.appendChild(unavailable);
+                }
+
+                row.appendChild(numberCell);
+                row.appendChild(titleCell);
+                row.appendChild(topicsCell);
+                row.appendChild(statusCell);
+                row.appendChild(sessionCell);
+                tableBody.appendChild(row);
+            }
+        }
+
+        generateLectureRows(getVisibleLectures());
+
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const filteredLectures = getVisibleLectures().filter(lecture => {
+                return lecture.title.toLowerCase().includes(searchText) ||
+                    lecture.topics.toLowerCase().includes(searchText) ||
+                    lecture.number.toLowerCase().includes(searchText) ||
+                    (lecture.ideas || []).some(idea => idea.toLowerCase().includes(searchText));
+            });
+            generateLectureRows(filteredLectures);
+        });
+
+        modalClose.addEventListener('click', closeIdeasModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeIdeasModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.hidden) closeIdeasModal();
+        });
+    </script>
+</body>
+
+</html>

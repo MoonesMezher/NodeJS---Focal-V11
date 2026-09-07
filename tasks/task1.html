@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1: API Study of the Site</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../logo.jpg">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="#b21f1f">
+    <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/task.css">
+</head>
+
+<body>
+    <div class="container">
+        <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
+        <header>
+            <h1 id="title">Task 1: API Study of the Site</h1>
+            <p class="subtitle" id="subtitle">Analyze 5 APIs from a given website and document request, response, purpose, and data language</p>
+            <button class="language-toggle" id="languageToggle">العربية / English</button>
+        </header>
+
+        <div class="task-content" id="taskContent">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+
+        <div class="timer-section">
+            <h3 id="timer-title">Time Remaining to Complete Task</h3>
+            <div class="timer" id="timer">
+                <div class="timer-unit">
+                    <span class="timer-value" id="days">00</span>
+                    <span class="timer-label" id="days-label">Days</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="hours">00</span>
+                    <span class="timer-label" id="hours-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="minutes">00</span>
+                    <span class="timer-label" id="minutes-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value" id="seconds">00</span>
+                    <span class="timer-label" id="seconds-label">Seconds</span>
+                </div>
+            </div>
+            <p class="finish-date" id="finish-date">Finish by: September 12, 2026</p>
+            <p id="timer-message">Complete the task before the deadline!</p>
+        </div>
+
+        <div class="thank-you" id="thankYou">
+            "Thank you for your hard work and dedication. Your efforts are appreciated!"
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 <a href="https://focal-x.com/" target="_blank">Focal X</a> - Node.js Bootcamp V11</p>
+    </div>
+
+    <script src="../reg.js"></script>
+    <script>
+        // Content data structure
+        const taskData = {
+            en: {
+                title: "Task 1: API Study of the Site",
+                subtitle: "Analyze 5 APIs from a given website and document request, response, purpose, and data language",
+                sections: [{
+                    type: "idea",
+                    title: "💻 The Task: \"API Study of the Site\"",
+                    content: "Analyze 5 APIs on the following website and document each one as described below. Website: https://www.green-acres.ae/"
+                }, {
+                    type: "requirements",
+                    title: "📝 Requirements",
+                    content: [{
+                        type: "list",
+                        title: "For each of the 5 APIs, document:",
+                        items: [
+                            "Request components: HTTP method, URL/endpoint, headers, body or query parameters (as applicable)",
+                            "Response components: status code, response headers, body structure or sample (e.g. JSON/XML)",
+                            "Reason/purpose of the API: what the API is used for",
+                            "Language/format of data: e.g. JSON, XML, and language of content if relevant",
+                            "Other: e.g. authentication, rate limits, error codes, or any notable behaviour"
+                        ]
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "🔧 How to check the APIs (Guide)",
+                    content: [{
+                        type: "list",
+                        title: "Steps:",
+                        items: [
+                            "Open the website (https://www.green-acres.ae/) in your browser.",
+                            "Right-click the page and choose Inspect (or press F12), then open the Network tab.",
+                            "Visit the website, scroll to the bottom of the page, and reload the page — this will capture the API requests.",
+                            "In the Network list, filter or browse for API calls (e.g. XHR/Fetch) and click them to inspect request and response."
+                        ]
+                    }]
+                }, {
+                    type: "note",
+                    title: "📤 Deliverable",
+                    content: "Submit your work either as a file (e.g. PDF or Word) or as a post on LinkedIn or Facebook with your analysis summarized. You can deliver the task only in the last six hours before the deadline — not before."
+                }, {
+                    type: "learning",
+                    title: "🔎 Targeted Learning Points",
+                    content: [
+                        "Understanding HTTP methods and request/response structure",
+                        "Recognising data formats (JSON, XML) and content language",
+                        "Analysing real-world APIs and their purpose",
+                        "Documenting technical details clearly"
+                    ]
+                }],
+                timer: {
+                    title: "Time Remaining to Complete Task",
+                    message: "Complete the task before the deadline! Submissions are accepted only in the last six hours before the deadline.",
+                    days: "Days",
+                    hours: "Hours",
+                    minutes: "Minutes",
+                    seconds: "Seconds"
+                },
+                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
+                buttonText: "العربية / English",
+                finishDate: "Finish by: September 12, 2026"
+            },
+            ar: {
+                title: "التاسـك 1: دراسة واجهات API للموقع",
+                subtitle: "تحليل 5 واجهات API من موقع معيّن وتوثيق الطلب والاستجابة والغرض ولغة البيانات",
+                sections: [{
+                    type: "idea",
+                    title: "💻 التـاسـك: \"دراسة واجهات API للموقع\"",
+                    content: "حلّل 5 واجهات API على الموقع التالي ووثّق كل واحدة كما هو موضّح أدناه. الموقع: https://www.green-acres.ae/"
+                }, {
+                    type: "requirements",
+                    title: "📝 المتطلبات",
+                    content: [{
+                        type: "list",
+                        title: "لكل واحدة من الـ 5 واجهات API، وثّق:",
+                        items: [
+                            "مكوّنات الطلب: طريقة HTTP، الرابط/النقطة النهائية، الهيدرز، الجسم أو معاملات الاستعلام (حسب الحالة)",
+                            "مكوّنات الاستجابة: رمز الحالة، هيدرز الاستجابة، بنية أو عيّنة الجسم (مثلاً JSON/XML)",
+                            "سبب/غرض الـ API: ما الذي تُستخدم من أجله الواجهة",
+                            "لغة/صيغة البيانات: مثل JSON أو XML ولغة المحتوى إن وُجدت",
+                            "أخرى: مثل المصادقة، حدود المعدّل، رموز الأخطاء، أو أي سلوك ملحوظ"
+                        ]
+                    }]
+                }, {
+                    type: "requirements",
+                    title: "🔧 كيف تتحقق من واجهات API (دليل)",
+                    content: [{
+                        type: "list",
+                        title: "الخطوات:",
+                        items: [
+                            "افتح الموقع (https://www.green-acres.ae/) في المتصفح.",
+                            "انقر بزر الماوس الأيمن على الصفحة واختر Inspect (أو اضغط F12)، ثم افتح تبويب Network.",
+                            "تفقّد الموقع، مرّر إلى أسفل الصفحة، ثم أعد تحميل الصفحة — هذا سيسجّل طلبات الـ API.",
+                            "في قائمة Network، فلتر أو تصفّح طلبات الـ API (مثل XHR/Fetch) وانقر عليها لمعاينة الطلب والاستجابة."
+                        ]
+                    }]
+                }, {
+                    type: "note",
+                    title: "📤 التسليم",
+                    content: "سلّم عملك إما كملف (مثل PDF أو Word) أو كمنشور على LinkedIn أو Facebook مع ملخّص تحليلك. يمكنك تسليم المهمة فقط في آخر ست ساعات قبل الموعد النهائي — وليس قبل ذلك."
+                }, {
+                    type: "learning",
+                    title: "🔎 النقاط المستهدفة في التعليم",
+                    content: [
+                        "فهم طرق HTTP وبنية الطلب والاستجابة",
+                        "التعرّف على صيغ البيانات (JSON، XML) ولغة المحتوى",
+                        "تحليل واجهات API الحقيقية وغرضها",
+                        "توثيق التفاصيل التقنية بوضوح"
+                    ]
+                }],
+                timer: {
+                    title: "الوقت المتبقي لإكمال المهمة",
+                    message: "أكمل المهمة قبل الموعد النهائي! التسليم مقبول فقط في آخر ست ساعات قبل الموعد النهائي.",
+                    days: "أيام",
+                    hours: "ساعات",
+                    minutes: "دقائق",
+                    seconds: "ثواني"
+                },
+                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
+                buttonText: "English / العربية",
+                finishDate: "تاريخ الانتهاء: 12 سبتمبر 2026"
+            }
+        };
+
+        // Render content based on language
+        function renderContent(lang) {
+            const data = taskData[lang];
+            const taskContent = document.getElementById('taskContent');
+
+            // Update page title and subtitle
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+
+            // Update timer section
+            document.getElementById('timer-title').textContent = data.timer.title;
+            document.getElementById('timer-message').textContent = data.timer.message;
+            document.getElementById('days-label').textContent = data.timer.days;
+            document.getElementById('hours-label').textContent = data.timer.hours;
+            document.getElementById('minutes-label').textContent = data.timer.minutes;
+            document.getElementById('seconds-label').textContent = data.timer.seconds;
+            document.getElementById('finish-date').textContent = data.finishDate;
+
+            // Update thank you message
+            document.getElementById('thankYou').textContent = data.thankYou;
+
+            // Update button text
+            document.getElementById('languageToggle').textContent = data.buttonText;
+
+            // Clear existing content
+            taskContent.innerHTML = '';
+
+            // Render each section
+            data.sections.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section';
+
+                if (section.type === 'requirements') {
+                    sectionEl.classList.add('requirements');
+                } else if (section.type === 'bonus') {
+                    sectionEl.classList.add('bonus');
+                }
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = section.title;
+                sectionEl.appendChild(titleEl);
+
+                if (section.type === 'idea' || section.type === 'note') {
+                    const contentEl = document.createElement('p');
+                    contentEl.textContent = section.content;
+                    sectionEl.appendChild(contentEl);
+                } else if (section.type === 'requirements') {
+                    section.content.forEach(item => {
+                        const itemTitle = document.createElement('h3');
+                        itemTitle.textContent = item.title;
+                        sectionEl.appendChild(itemTitle);
+
+                        if (item.type === 'list') {
+                            const listEl = document.createElement('ul');
+                            item.items.forEach(listItem => {
+                                const li = document.createElement('li');
+                                li.innerHTML = listItem;
+                                listEl.appendChild(li);
+                            });
+                            sectionEl.appendChild(listEl);
+                        } else if (item.type === 'output') {
+                            itemTitle.setAttribute('dir', 'ltr');
+                            itemTitle.style.textAlign = 'left';
+                            const contentEl = document.createElement('p');
+                            contentEl.textContent = item.content;
+                            contentEl.setAttribute('dir', 'ltr');
+                            contentEl.style.textAlign = 'left';
+                            sectionEl.appendChild(contentEl);
+
+                            const exampleEl = document.createElement('div');
+                            exampleEl.className = 'output-example';
+                            exampleEl.textContent = item.example;
+                            exampleEl.setAttribute('dir', 'ltr');
+                            exampleEl.style.textAlign = 'left';
+                            sectionEl.appendChild(exampleEl);
+                        }
+                    });
+                } else if (section.type === 'learning' || section.type === 'bonus') {
+                    const listEl = document.createElement('ul');
+                    section.content.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        listEl.appendChild(li);
+                    });
+                    sectionEl.appendChild(listEl);
+                }
+
+                taskContent.appendChild(sectionEl);
+            });
+
+            // Set text direction based on language
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'right';
+                });
+            } else {
+                document.body.removeAttribute('dir');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.textAlign = 'left';
+                });
+            }
+        }
+
+        // Timer functionality
+        function startCountdown() {
+            // Local end of day on September 12, 2026
+            const countDownDate = new Date("2026-09-12T23:59:59").getTime();
+
+            function updateCountdown() {
+                // Get today's date and time
+                const now = new Date().getTime();
+
+                // Find the distance between now and the countdown date
+                const distance = countDownDate - now;
+
+                // If the countdown is over, write some text
+                if (distance < 0) {
+                    document.getElementById("days").textContent = "00";
+                    document.getElementById("hours").textContent = "00";
+                    document.getElementById("minutes").textContent = "00";
+                    document.getElementById("seconds").textContent = "00";
+                    return false;
+                }
+
+                // Time calculations for days, hours, minutes and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the results
+                document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+                return true;
+            }
+
+            // Render immediately, then update the countdown every second
+            if (updateCountdown()) {
+                const countdown = setInterval(() => {
+                    if (!updateCountdown()) {
+                        clearInterval(countdown);
+                    }
+                }, 1000);
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render English content by default
+            renderContent('en');
+
+            // Start the countdown timer
+            startCountdown();
+
+            // Language toggle functionality
+            document.getElementById('languageToggle').addEventListener('click', function() {
+                const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
+                const newLang = currentLang === 'en' ? 'ar' : 'en';
+                renderContent(newLang);
+            });
+        });
+    </script>
+</body>
+
+</html>
