@@ -101,44 +101,43 @@
             }, {
                 number: "02",
                 title: "JavaScript Fundamentals 1",
-                topics: "Variables, Data Types, Scopes",
+                topics: "Variables, Data Types, Scopes, CamelCase",
                 status: "completed",
                 ideas: [
                     "Intro to JS",
                     "Setup Guide",
                     "VS Code Extensions",
                     "Variables",
+                    "CamelCase",
                     "Logging",
                     "Scopes",
                     "Data Types",
-                    "Arithmetic",
                     "Coercion",
                     "Syntactic Sugar",
-                    "Numbers",
-                    "Math Library",
                     "Comments"
                 ]
             }, {
                 number: "03",
                 title: "JavaScript Fundamentals 2",
-                topics: "Functions, Loops",
+                topics: "Arithmetic, Math, Strings, Conditions, Loops",
                 status: "completed",
                 ideas: [
+                    "Arithmetic",
+                    "Numbers",
+                    "Math Library",
                     "Strings",
-                    "CamelCase",
                     "Truthy / Falsy",
-                    "Chaining in JS",
                     "Conditions in JS",
-                    "Loops",
-                    "Functions"
+                    "Loops"
                 ]
             }, {
                 number: "04",
                 title: "Advanced JavaScript 1",
-                topics: "Functions, Arrays, Mutate & Non-Mutate",
-                status: "completed",
+                topics: "Functions, Chaining in JS, Arrays, Mutate & Non-Mutate",
+                status: "upcoming",
                 ideas: [
                     "Functions",
+                    "Chaining in JS",
                     "Arrays",
                     "Mutate vs Not Mutate"
                 ]
@@ -492,9 +491,9 @@
 
         lectures.forEach(lecture => {
             const lectureNumber = Number.parseInt(lecture.number, 10);
-            lecture.status = lectureNumber <= 1
+            lecture.status = lectureNumber <= 3
                 ? "completed"
-                : lectureNumber === 2
+                : lectureNumber === 4
                     ? "upcoming"
                     : "not-started";
         });
