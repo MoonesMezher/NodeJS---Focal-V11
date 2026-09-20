@@ -134,7 +134,7 @@
                 number: "04",
                 title: "Advanced JavaScript 1",
                 topics: "Functions, Chaining in JS, Arrays, Mutate & Non-Mutate",
-                status: "upcoming",
+                status: "completed",
                 ideas: [
                     "Functions",
                     "Chaining in JS",
@@ -144,9 +144,10 @@
             }, {
                 number: "05",
                 title: "Advanced JavaScript 2",
-                topics: "Objects, Timers, Date, Error Handling",
-                status: "completed",
+                topics: "Arrays, Objects, Timers, Date, Error Handling",
+                status: "upcoming",
                 ideas: [
+                    "Arrays",
                     "Objects",
                     "Timers",
                     "Date Object",
@@ -486,21 +487,24 @@
         const statusLabels = {
             completed: "Completed",
             upcoming: "Upcoming",
+            "in-progress": "In Progress",
             "not-started": "Not Started"
         };
 
         lectures.forEach(lecture => {
             const lectureNumber = Number.parseInt(lecture.number, 10);
-            lecture.status = lectureNumber <= 3
+            lecture.status = lectureNumber <= 4
                 ? "completed"
-                : lectureNumber === 4
+                : lectureNumber === 5
                     ? "upcoming"
                     : "not-started";
         });
 
         function getVisibleLectures() {
             return lectures.filter(lecture =>
-                lecture.status === "completed" || lecture.status === "upcoming"
+                lecture.status === "completed" ||
+                lecture.status === "upcoming" ||
+                lecture.status === "in-progress"
             );
         }
 
