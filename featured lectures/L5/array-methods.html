@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../logo.jpg" type="image/x-icon">
+    <title>Focal X V11 – Array Methods</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Outfit:wght@500;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+        :root {
+            --navy: #1a2a6c;
+            --red: #b21f1f;
+            --gold: #fdbb2d;
+            --ink: #1e293b;
+            --muted: #64748b;
+            --panel: rgba(255, 255, 255, 0.96);
+            --ok: #15803d;
+            --bad: #b91c1c;
+            --soft: #f1f5f9;
+            --line: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'IBM Plex Sans', sans-serif;
+            color: var(--ink);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 200% 200%;
+            animation: bgShift 18s ease infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        button:focus-visible,
+        .choice:focus-visible,
+        .method-pill:focus-visible,
+        .cmp-card:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--gold), #fff);
+            z-index: 20;
+            transition: width 0.25s ease;
+        }
+
+        .deck {
+            height: 100%;
+            display: grid;
+            place-items: center;
+            padding: 20px 20px 78px;
+        }
+
+        .slide {
+            display: none;
+            width: min(1040px, 100%);
+            max-height: calc(100vh - 100px);
+            overflow: auto;
+            background: var(--panel);
+            border-radius: 18px;
+            padding: 36px 44px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+            animation: fadeIn 0.35s ease;
+            scrollbar-width: thin;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--red);
+        }
+
+        .brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 4.5vw, 3.1rem);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--navy);
+        }
+
+        .brand span { color: var(--red); }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.45rem, 3.2vw, 2rem);
+            color: var(--navy);
+            line-height: 1.25;
+        }
+
+        .lead {
+            font-size: 1.05rem;
+            line-height: 1.65;
+            color: #334155;
+            max-width: 58ch;
+        }
+
+        .hint {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .quote {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--navy);
+            font-weight: 600;
+            border-left: 4px solid var(--red);
+            padding-left: 16px;
+        }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 12px;
+            padding: 12px 20px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-primary {
+            background: var(--navy);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(26, 42, 108, 0.28);
+        }
+
+        .btn-primary:hover { background: #24398a; }
+
+        .btn-ghost {
+            background: #eef2ff;
+            color: var(--navy);
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chip {
+            background: var(--soft);
+            color: var(--navy);
+            font-weight: 700;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-family: 'IBM Plex Mono', monospace;
+            border: 1px solid transparent;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+        }
+
+        .chip.gold {
+            background: #fff7ed;
+            color: #9a3412;
+            border-color: #fdba74;
+        }
+
+        .chip.pulse {
+            animation: chipPop 0.45s ease;
+        }
+
+        @keyframes chipPop {
+            0% { transform: scale(0.92); opacity: 0.5; }
+            60% { transform: scale(1.04); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .arrow { color: var(--muted); font-weight: 700; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .card p, .card li {
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .card ul {
+            list-style: none;
+            display: grid;
+            gap: 6px;
+        }
+
+        .card li {
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.55em;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--red);
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .badge.returns {
+            background: #e0e7ff;
+            color: var(--navy);
+        }
+
+        .badge.safe {
+            background: #dcfce7;
+            color: var(--ok);
+        }
+
+        .badge.side {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .method-name {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            color: var(--red);
+            font-size: 1.15rem;
+        }
+
+        .code {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 14px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .code .kw { color: #93c5fd; }
+        .code .fn { color: #fdbb2d; }
+        .code .str { color: #86efac; }
+        .code .cm { color: #94a3b8; }
+        .code .num { color: #fdba74; }
+
+        .tip {
+            background: linear-gradient(90deg, rgba(253, 187, 45, 0.18), rgba(255, 255, 255, 0));
+            border-left: 4px solid var(--gold);
+            border-radius: 0 12px 12px 0;
+            padding: 12px 14px;
+            font-size: 0.98rem;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .tip strong { color: var(--navy); }
+
+        .decision {
+            display: grid;
+            gap: 10px;
+        }
+
+        .decision-step {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px;
+            align-items: start;
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px 14px;
+            opacity: 0;
+            transform: translateX(-8px);
+            animation: slideIn 0.45s ease forwards;
+        }
+
+        .decision-step:nth-child(1) { animation-delay: 0.05s; }
+        .decision-step:nth-child(2) { animation-delay: 0.15s; }
+        .decision-step:nth-child(3) { animation-delay: 0.25s; }
+        .decision-step:nth-child(4) { animation-delay: 0.35s; }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: none; }
+        }
+
+        .decision-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--navy);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .decision-step p {
+            font-size: 0.98rem;
+            color: #334155;
+            line-height: 1.45;
+        }
+
+        .decision-step code {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            color: var(--red);
+            font-size: 0.9rem;
+        }
+
+        .cmp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .cmp-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .cmp-card:hover {
+            border-color: var(--navy);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(26, 42, 108, 0.1);
+        }
+
+        .cmp-card.active {
+            border-color: var(--red);
+            background: #fef2f2;
+            box-shadow: 0 0 0 3px rgba(178, 31, 31, 0.12);
+        }
+
+        .cmp-card h3 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .cmp-card p {
+            font-size: 0.88rem;
+            color: #475569;
+            line-height: 1.45;
+        }
+
+        .reveal-box {
+            min-height: 52px;
+            background: #eef2ff;
+            border-left: 4px solid var(--gold);
+            border-radius: 0 12px 12px 0;
+            padding: 12px 14px;
+            color: #334155;
+            font-size: 0.98rem;
+            line-height: 1.5;
+        }
+
+        .reveal-box.empty { opacity: 0.55; font-style: italic; }
+
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+        }
+
+        table.compare {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 640px;
+        }
+
+        table.compare th,
+        table.compare td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+        }
+
+        table.compare th {
+            background: var(--navy);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        table.compare tr:nth-child(even) td { background: #f8fafc; }
+        table.compare td:first-child {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            color: var(--red);
+            white-space: nowrap;
+        }
+
+        .choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .choice {
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--navy);
+            font-family: 'Outfit', sans-serif;
+            min-width: 88px;
+        }
+
+        .choice:hover { border-color: var(--navy); }
+        .choice.correct {
+            background: #dcfce7;
+            border-color: var(--ok);
+            color: var(--ok);
+        }
+        .choice.wrong {
+            background: #fee2e2;
+            border-color: var(--bad);
+            color: var(--bad);
+        }
+        .choice:disabled { cursor: default; opacity: 0.95; }
+
+        .feedback {
+            min-height: 44px;
+            font-size: 0.98rem;
+            line-height: 1.5;
+            color: #334155;
+        }
+
+        .feedback.ok { color: var(--ok); font-weight: 600; }
+        .feedback.bad { color: var(--bad); font-weight: 600; }
+
+        .quiz-q {
+            display: none;
+            gap: 12px;
+        }
+
+        .quiz-q.active { display: grid; }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .live-demo {
+            display: grid;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .array-viz {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .cell {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: var(--navy);
+            transition: transform 0.25s, background 0.25s, border-color 0.25s, opacity 0.25s;
+        }
+
+        .cell.hl {
+            background: #fff7ed;
+            border-color: var(--gold);
+            transform: scale(1.06);
+        }
+
+        .cell.out {
+            background: #dcfce7;
+            border-color: var(--ok);
+        }
+
+        .cell.dim {
+            opacity: 0.35;
+            transform: scale(0.95);
+        }
+
+        .method-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .method-pill {
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            color: var(--navy);
+            transition: border-color 0.15s, background 0.15s, transform 0.15s;
+        }
+
+        .method-pill:hover {
+            border-color: var(--navy);
+            transform: translateY(-1px);
+        }
+
+        .method-pill.active {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy);
+        }
+
+        .nav {
+            position: fixed;
+            inset-inline: 0;
+            bottom: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .nav button {
+            border: none;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--navy);
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        .nav button:hover { background: #fff; }
+        .nav button:disabled { opacity: 0.45; cursor: default; }
+
+        .counter {
+            min-width: 78px;
+            text-align: center;
+            color: var(--navy);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        @media (max-width: 800px) {
+            .slide { padding: 24px 18px; }
+            .grid-2, .grid-3, .cmp-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html, body { animation: none; background-size: auto; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progress" id="progress" role="presentation"></div>
+
+    <div class="deck" id="deck">
+
+        <!-- 01 Opening -->
+        <section class="slide active" data-title="Opening">
+            <p class="eyebrow">Focal X V11 · Lecture 05</p>
+            <p class="brand">Array <span>Methods</span></p>
+            <p class="lead">Seven tools. One job each. Know which to reach for.</p>
+            <div class="flow" id="openFlow" aria-hidden="true">
+                <span class="chip">map</span>
+                <span class="chip">filter</span>
+                <span class="chip">reduce</span>
+                <span class="chip">forEach</span>
+                <span class="chip gold">every</span>
+                <span class="chip gold">some</span>
+                <span class="chip gold">find</span>
+            </div>
+            <p class="hint">Coach: Moones Mezher · Advanced JavaScript 2 — Arrays in practice.</p>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" data-go-next>Start session →</button>
+            </div>
+        </section>
+
+        <!-- 02 Decision guide -->
+        <section class="slide" data-title="When to use which">
+            <h2>When to use which?</h2>
+            <p class="lead">Ask one question first — the answer picks the method.</p>
+            <div class="decision">
+                <div class="decision-step">
+                    <span class="decision-num">1</span>
+                    <p>Need a <strong>new array</strong> of transformed values? → <code>map</code></p>
+                </div>
+                <div class="decision-step">
+                    <span class="decision-num">2</span>
+                    <p>Need a <strong>subset</strong> that passes a test? → <code>filter</code></p>
+                </div>
+                <div class="decision-step">
+                    <span class="decision-num">3</span>
+                    <p>Need <strong>one result</strong> from many values? → <code>reduce</code> · one item? → <code>find</code></p>
+                </div>
+                <div class="decision-step">
+                    <span class="decision-num">4</span>
+                    <p>Need a <strong>yes/no</strong>? → <code>every</code> / <code>some</code> · side effects only? → <code>forEach</code></p>
+                </div>
+            </div>
+            <p class="quote">All seven leave the original array alone (they do not mutate it).</p>
+        </section>
+
+        <!-- 03 map -->
+        <section class="slide" data-title="map">
+            <p class="eyebrow">Transform</p>
+            <h2><span class="method-name">[].map()</span></h2>
+            <p class="lead">Creates a new array by running a function on every element.</p>
+            <div class="meta-row">
+                <span class="badge returns">Returns: new array (same length)</span>
+                <span class="badge safe">Does not mutate</span>
+            </div>
+            <div class="code"><span class="kw">const</span> prices = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>];
+<span class="kw">const</span> withTax = prices.<span class="fn">map</span>(p =&gt; p * <span class="num">1.1</span>);
+<span class="cm">// → [11, 22, 33]</span></div>
+            <p class="tip"><strong>Use when…</strong> you need one output value for every input value (reshape, format, convert).</p>
+        </section>
+
+        <!-- 04 filter -->
+        <section class="slide" data-title="filter">
+            <p class="eyebrow">Select</p>
+            <h2><span class="method-name">[].filter()</span></h2>
+            <p class="lead">Keeps only elements that pass a test — drops the rest.</p>
+            <div class="meta-row">
+                <span class="badge returns">Returns: new array (0…n items)</span>
+                <span class="badge safe">Does not mutate</span>
+            </div>
+            <div class="code"><span class="kw">const</span> scores = [<span class="num">40</span>, <span class="num">75</span>, <span class="num">90</span>, <span class="num">55</span>];
+<span class="kw">const</span> passed = scores.<span class="fn">filter</span>(s =&gt; s &gt;= <span class="num">60</span>);
+<span class="cm">// → [75, 90]</span></div>
+            <p class="tip"><strong>Use when…</strong> you want a shorter list of matching items, not a yes/no or a single item.</p>
+        </section>
+
+        <!-- 05 forEach -->
+        <section class="slide" data-title="forEach">
+            <p class="eyebrow">Side effects</p>
+            <h2><span class="method-name">[].forEach()</span></h2>
+            <p class="lead">Runs a function for each element — and returns nothing useful.</p>
+            <div class="meta-row">
+                <span class="badge returns">Returns: undefined</span>
+                <span class="badge side">Use for side effects</span>
+                <span class="badge safe">Does not mutate (callback might)</span>
+            </div>
+            <div class="code"><span class="kw">const</span> names = [<span class="str">'Ada'</span>, <span class="str">'Lin'</span>];
+names.<span class="fn">forEach</span>(n =&gt; console.log(n));
+<span class="cm">// → logs each name; result is undefined</span></div>
+            <p class="tip"><strong>Use when…</strong> you only need to do something (log, push elsewhere, update DOM) — not build a new array. Prefer <code>map</code>/<code>filter</code> when you need a value back.</p>
+        </section>
+
+        <!-- 06 map vs filter vs forEach -->
+        <section class="slide" data-title="map vs filter vs forEach">
+            <h2>map · filter · forEach</h2>
+            <p class="lead">Same loop shape — three different intents. Tap a card.</p>
+            <div class="cmp-grid" id="trioCards">
+                <button type="button" class="cmp-card" data-tip="map → new array, same length. Transform every item. Never use it only to ‘do something’.">
+                    <h3>map</h3>
+                    <p>Transform → new array</p>
+                </button>
+                <button type="button" class="cmp-card" data-tip="filter → new array, usually shorter. Keep items that pass a test.">
+                    <h3>filter</h3>
+                    <p>Select → subset array</p>
+                </button>
+                <button type="button" class="cmp-card" data-tip="forEach → undefined. Side effects only. You cannot chain it usefully.">
+                    <h3>forEach</h3>
+                    <p>Do work → no return</p>
+                </button>
+            </div>
+            <div class="reveal-box empty" id="trioReveal">Tap a method to compare intent.</div>
+            <div class="live-demo">
+                <p class="hint">Live: <code>[1, 2, 3, 4]</code></p>
+                <div class="method-pills" id="demoPills">
+                    <button type="button" class="method-pill active" data-demo="map">.map(x ⇒ x*2)</button>
+                    <button type="button" class="method-pill" data-demo="filter">.filter(x ⇒ x&gt;2)</button>
+                    <button type="button" class="method-pill" data-demo="forEach">.forEach(…)</button>
+                </div>
+                <div class="array-viz" id="demoOut" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <!-- 07 reduce -->
+        <section class="slide" data-title="reduce">
+            <p class="eyebrow">Accumulate</p>
+            <h2><span class="method-name">[].reduce()</span></h2>
+            <p class="lead">Folds the array into a single value — number, object, string, even another array.</p>
+            <div class="meta-row">
+                <span class="badge returns">Returns: whatever you accumulate</span>
+                <span class="badge safe">Does not mutate</span>
+            </div>
+            <div class="code"><span class="kw">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>];
+<span class="kw">const</span> sum = nums.<span class="fn">reduce</span>((acc, n) =&gt; acc + n, <span class="num">0</span>);
+<span class="cm">// → 10</span></div>
+            <p class="tip"><strong>Use when…</strong> many → one (totals, grouping, building an object). Start with an initial value — it keeps edge cases clear.</p>
+        </section>
+
+        <!-- 08 every & some -->
+        <section class="slide" data-title="every & some">
+            <p class="eyebrow">Boolean checks</p>
+            <h2><span class="method-name">every()</span> &amp; <span class="method-name">some()</span></h2>
+            <p class="lead">Answer a yes/no question about the whole list.</p>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>every()</h3>
+                    <p>True only if <strong>all</strong> pass the test.</p>
+                    <div class="meta-row" style="margin:10px 0;">
+                        <span class="badge returns">boolean</span>
+                        <span class="badge safe">no mutate</span>
+                    </div>
+                    <div class="code" style="font-size:0.8rem;">[2,4,6].<span class="fn">every</span>(n =&gt; n%2===0)
+<span class="cm">// true</span></div>
+                </div>
+                <div class="card">
+                    <h3>some()</h3>
+                    <p>True if <strong>at least one</strong> passes.</p>
+                    <div class="meta-row" style="margin:10px 0;">
+                        <span class="badge returns">boolean</span>
+                        <span class="badge safe">no mutate</span>
+                    </div>
+                    <div class="code" style="font-size:0.8rem;">[1,3,4].<span class="fn">some</span>(n =&gt; n%2===0)
+<span class="cm">// true</span></div>
+                </div>
+            </div>
+            <p class="tip"><strong>Use when…</strong> validation (“are all emails valid?”) or existence (“is any item out of stock?”) — not to collect matching items (that’s <code>filter</code>).</p>
+        </section>
+
+        <!-- 09 find -->
+        <section class="slide" data-title="find">
+            <p class="eyebrow">First match</p>
+            <h2><span class="method-name">[].find()</span></h2>
+            <p class="lead">Returns the first element that passes a test — or <code>undefined</code>.</p>
+            <div class="meta-row">
+                <span class="badge returns">Returns: element | undefined</span>
+                <span class="badge safe">Does not mutate</span>
+            </div>
+            <div class="code"><span class="kw">const</span> users = [
+  { id: <span class="num">1</span>, name: <span class="str">'Ada'</span> },
+  { id: <span class="num">2</span>, name: <span class="str">'Lin'</span> }
+];
+<span class="kw">const</span> user = users.<span class="fn">find</span>(u =&gt; u.id === <span class="num">2</span>);
+<span class="cm">// → { id: 2, name: 'Lin' }</span></div>
+            <p class="tip"><strong>Use when…</strong> you need the item itself (not a boolean, not a list). Sibling: <code>findIndex</code> returns the position.</p>
+        </section>
+
+        <!-- 10 Comparison table -->
+        <section class="slide" data-title="Cheat sheet">
+            <h2>Cheat sheet</h2>
+            <p class="lead">One glance — purpose, return value, mutation.</p>
+            <div class="table-wrap">
+                <table class="compare">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Purpose</th>
+                            <th>Returns</th>
+                            <th>Mutates?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>map</td>
+                            <td>Transform each item</td>
+                            <td>new array (same length)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>filter</td>
+                            <td>Keep matching items</td>
+                            <td>new array (subset)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>reduce</td>
+                            <td>Fold to one value</td>
+                            <td>accumulator result</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>forEach</td>
+                            <td>Side effects only</td>
+                            <td>undefined</td>
+                            <td>No*</td>
+                        </tr>
+                        <tr>
+                            <td>every</td>
+                            <td>All pass?</td>
+                            <td>boolean</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>some</td>
+                            <td>Any pass?</td>
+                            <td>boolean</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>find</td>
+                            <td>First match</td>
+                            <td>item | undefined</td>
+                            <td>No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="hint">*forEach itself does not mutate; your callback might change objects inside the array.</p>
+        </section>
+
+        <!-- 11 Quiz -->
+        <section class="slide" data-title="Pick the method">
+            <h2>Pick the right method</h2>
+            <p class="lead">Four quick calls — choose the best fit.</p>
+            <div id="quiz">
+                <div class="quiz-q active" data-q="0">
+                    <p class="lead"><strong>1.</strong> Turn <code>['a','b']</code> into <code>['A','B']</code>.</p>
+                    <div class="choices">
+                        <button type="button" class="choice" data-correct="true">map</button>
+                        <button type="button" class="choice" data-correct="false">filter</button>
+                        <button type="button" class="choice" data-correct="false">forEach</button>
+                        <button type="button" class="choice" data-correct="false">find</button>
+                    </div>
+                    <p class="feedback"></p>
+                    <button type="button" class="btn btn-ghost reveal-ans">Reveal Answer</button>
+                </div>
+                <div class="quiz-q" data-q="1">
+                    <p class="lead"><strong>2.</strong> Keep only products where <code>price &lt; 50</code>.</p>
+                    <div class="choices">
+                        <button type="button" class="choice" data-correct="false">map</button>
+                        <button type="button" class="choice" data-correct="true">filter</button>
+                        <button type="button" class="choice" data-correct="false">some</button>
+                        <button type="button" class="choice" data-correct="false">reduce</button>
+                    </div>
+                    <p class="feedback"></p>
+                    <button type="button" class="btn btn-ghost reveal-ans">Reveal Answer</button>
+                </div>
+                <div class="quiz-q" data-q="2">
+                    <p class="lead"><strong>3.</strong> Check if <em>any</em> user is an admin.</p>
+                    <div class="choices">
+                        <button type="button" class="choice" data-correct="false">every</button>
+                        <button type="button" class="choice" data-correct="true">some</button>
+                        <button type="button" class="choice" data-correct="false">find</button>
+                        <button type="button" class="choice" data-correct="false">forEach</button>
+                    </div>
+                    <p class="feedback"></p>
+                    <button type="button" class="btn btn-ghost reveal-ans">Reveal Answer</button>
+                </div>
+                <div class="quiz-q" data-q="3">
+                    <p class="lead"><strong>4.</strong> Sum cart totals into one number.</p>
+                    <div class="choices">
+                        <button type="button" class="choice" data-correct="false">map</button>
+                        <button type="button" class="choice" data-correct="false">filter</button>
+                        <button type="button" class="choice" data-correct="true">reduce</button>
+                        <button type="button" class="choice" data-correct="false">every</button>
+                    </div>
+                    <p class="feedback"></p>
+                    <button type="button" class="btn btn-ghost reveal-ans">Reveal Answer</button>
+                </div>
+            </div>
+            <div class="quiz-nav">
+                <button type="button" class="btn btn-ghost" id="quizPrev">← Question</button>
+                <span class="hint" id="quizCounter">1 / 4</span>
+                <button type="button" class="btn btn-ghost" id="quizNext">Question →</button>
+            </div>
+        </section>
+
+        <!-- 12 Closing -->
+        <section class="slide" data-title="Wrap-up">
+            <p class="eyebrow">Focal X V11</p>
+            <h2>Remember the shape</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Build values</h3>
+                    <ul>
+                        <li><code>map</code> — transform list</li>
+                        <li><code>filter</code> — subset list</li>
+                        <li><code>reduce</code> — fold to one</li>
+                        <li><code>find</code> — first item</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Ask or act</h3>
+                    <ul>
+                        <li><code>every</code> — all true?</li>
+                        <li><code>some</code> — any true?</li>
+                        <li><code>forEach</code> — side effects</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="quote">Choose by what you need back — array, item, boolean, or nothing.</p>
+            <p class="brand" style="font-size:clamp(1.35rem,3vw,1.85rem);">Focal X <span>V11</span></p>
+            <p class="hint">Coach: Moones Mezher · Lecture 05 — Array Methods</p>
+        </section>
+    </div>
+
+    <div class="nav">
+        <button type="button" id="prev" aria-label="Previous slide">←</button>
+        <span class="counter" id="counter">1 / 12</span>
+        <button type="button" id="next" aria-label="Next slide">→</button>
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const counter = document.getElementById('counter');
+        const progress = document.getElementById('progress');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        let index = 0;
+        const timers = new Set();
+
+        function later(fn, ms) {
+            const id = setTimeout(() => { timers.delete(id); fn(); }, ms);
+            timers.add(id);
+            return id;
+        }
+
+        function clearTimers() {
+            timers.forEach(clearTimeout);
+            timers.clear();
+        }
+
+        function show(i) {
+            clearTimers();
+            index = Math.max(0, Math.min(i, slides.length - 1));
+            slides.forEach((s, n) => s.classList.toggle('active', n === index));
+            counter.textContent = `${index + 1} / ${slides.length}`;
+            progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === slides.length - 1;
+
+            if (index === 0) pulseOpenChips();
+            if (slides[index].dataset.title === 'map vs filter vs forEach') runDemo('map');
+        }
+
+        nextBtn.addEventListener('click', () => show(index + 1));
+        prevBtn.addEventListener('click', () => show(index - 1));
+        document.querySelectorAll('[data-go-next]').forEach(btn => {
+            btn.addEventListener('click', () => show(index + 1));
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const tag = e.target.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            if (e.key === ' ' && e.target.closest('button, [role="button"], .choice')) return;
+            if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) {
+                e.preventDefault();
+                show(index + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                show(index - 1);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                show(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                show(slides.length - 1);
+            }
+        });
+
+        let touchX = null;
+        document.addEventListener('touchstart', (e) => {
+            touchX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            if (touchX === null) return;
+            const dx = e.changedTouches[0].screenX - touchX;
+            if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+            touchX = null;
+        }, { passive: true });
+
+        function pulseOpenChips() {
+            document.querySelectorAll('#openFlow .chip').forEach((chip, i) => {
+                later(() => {
+                    chip.classList.remove('pulse');
+                    void chip.offsetWidth;
+                    chip.classList.add('pulse');
+                }, i * 80);
+            });
+        }
+
+        /* Trio cards */
+        document.querySelectorAll('#trioCards .cmp-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('#trioCards .cmp-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                const box = document.getElementById('trioReveal');
+                box.classList.remove('empty');
+                box.textContent = card.dataset.tip;
+            });
+        });
+
+        /* Live demo */
+        const demoOut = document.getElementById('demoOut');
+        const demos = {
+            map: () => {
+                const src = [1, 2, 3, 4];
+                const out = src.map(x => x * 2);
+                renderViz(src, out, 'map');
+            },
+            filter: () => {
+                const src = [1, 2, 3, 4];
+                const out = src.filter(x => x > 2);
+                renderViz(src, out, 'filter');
+            },
+            forEach: () => {
+                const src = [1, 2, 3, 4];
+                renderViz(src, null, 'forEach');
+            }
+        };
+
+        function renderViz(src, out, mode) {
+            demoOut.innerHTML = '';
+            src.forEach((n, i) => {
+                later(() => {
+                    const cell = document.createElement('span');
+                    cell.className = 'cell hl';
+                    cell.textContent = n;
+                    demoOut.appendChild(cell);
+                    later(() => {
+                        if (mode === 'map') {
+                            cell.textContent = out[i];
+                            cell.classList.add('out');
+                            cell.classList.remove('hl');
+                        } else if (mode === 'filter') {
+                            if (out.includes(n)) {
+                                cell.classList.add('out');
+                                cell.classList.remove('hl');
+                            } else {
+                                cell.classList.add('dim');
+                                cell.classList.remove('hl');
+                            }
+                        } else {
+                            cell.classList.remove('hl');
+                            if (i === src.length - 1) {
+                                const note = document.createElement('span');
+                                note.className = 'hint';
+                                note.style.marginLeft = '8px';
+                                note.textContent = '→ undefined (side effects only)';
+                                demoOut.appendChild(note);
+                            }
+                        }
+                    }, 280);
+                }, i * 160);
+            });
+        }
+
+        function runDemo(name) {
+            clearTimers();
+            document.querySelectorAll('#demoPills .method-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.demo === name);
+            });
+            demos[name]();
+        }
+
+        document.querySelectorAll('#demoPills .method-pill').forEach(btn => {
+            btn.addEventListener('click', () => runDemo(btn.dataset.demo));
+        });
+
+        /* Quiz */
+        let quizIndex = 0;
+        const quizQs = document.querySelectorAll('#quiz .quiz-q');
+        const quizCounter = document.getElementById('quizCounter');
+
+        function showQuiz(i) {
+            quizIndex = Math.max(0, Math.min(i, quizQs.length - 1));
+            quizQs.forEach((q, n) => q.classList.toggle('active', n === quizIndex));
+            quizCounter.textContent = `${quizIndex + 1} / ${quizQs.length}`;
+        }
+
+        document.getElementById('quizPrev').addEventListener('click', () => showQuiz(quizIndex - 1));
+        document.getElementById('quizNext').addEventListener('click', () => showQuiz(quizIndex + 1));
+
+        quizQs.forEach(q => {
+            const fb = q.querySelector('.feedback');
+            q.querySelectorAll('.choice').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const ok = btn.dataset.correct === 'true';
+                    q.querySelectorAll('.choice').forEach(b => {
+                        b.disabled = true;
+                        if (b.dataset.correct === 'true') b.classList.add('correct');
+                    });
+                    if (!ok) btn.classList.add('wrong');
+                    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+                    fb.textContent = ok ? '✓ Correct!' : 'Not quite — try Reveal Answer.';
+                });
+            });
+            q.querySelector('.reveal-ans').addEventListener('click', () => {
+                q.querySelectorAll('.choice').forEach(b => {
+                    b.disabled = true;
+                    if (b.dataset.correct === 'true') b.classList.add('correct');
+                });
+                fb.className = 'feedback ok';
+                const ans = q.querySelector('.choice[data-correct="true"]');
+                fb.textContent = 'Answer: ' + ans.textContent;
+            });
+        });
+
+        show(0);
+    </script>
+</body>
+
+</html>

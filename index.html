@@ -144,23 +144,22 @@
             }, {
                 number: "05",
                 title: "Advanced JavaScript 2",
-                topics: "Arrays, Objects, Timers, Date, Error Handling",
-                status: "upcoming",
+                topics: "Arrays, Objects",
+                status: "completed",
                 ideas: [
                     "Arrays",
-                    "Objects",
-                    "Timers",
-                    "Date Object",
-                    "Map & Set",
-                    "Error Handling",
-                    "Operators"
+                    "Objects"
                 ]
             }, {
                 number: "06",
                 title: "Advanced JavaScript 3",
-                topics: "Promises, Async/Await, Event Loop, Regex",
-                status: "completed",
+                topics: "Timers, Date Object, Error Handling, Operators, Promises, Async/Await, Event Loop, Regex",
+                status: "upcoming",
                 ideas: [
+                    "Timers",
+                    "Date Object",
+                    "Error Handling",
+                    "Operators",
                     "Promises",
                     "Asynchronous (Async/Await)",
                     "Event Loop",
@@ -481,7 +480,8 @@
         ];
 
         const interactiveSessions = {
-            "01": "featured%20lectures/L1/backend-concepts.html"
+            "01": "featured%20lectures/L1/backend-concepts.html",
+            "05": "featured%20lectures/L5/array-methods.html"
         };
 
         const statusLabels = {
@@ -493,9 +493,9 @@
 
         lectures.forEach(lecture => {
             const lectureNumber = Number.parseInt(lecture.number, 10);
-            lecture.status = lectureNumber <= 4
+            lecture.status = lectureNumber <= 5
                 ? "completed"
-                : lectureNumber === 5
+                : lectureNumber === 6
                     ? "upcoming"
                     : "not-started";
         });

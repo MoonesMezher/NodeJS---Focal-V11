@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task 3: TrendPulse Social Feed Analyzer</title>
+    <title>Task 3: PageFlip Bookstore — Arrays & Objects</title>
     <link rel="manifest" href="../manifest.json" />
     <link rel="apple-touch-icon" href="../logo.jpg">
     <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
@@ -17,7 +17,7 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: #333;
@@ -28,7 +28,7 @@
             flex-direction: column;
             align-items: center;
         }
-        
+
         .container {
             width: 100%;
             max-width: 1000px;
@@ -38,7 +38,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin: 20px 0;
         }
-        
+
         .coach {
             background-color: white;
             width: 80px;
@@ -50,7 +50,7 @@
             top: 0;
             z-index: 100;
         }
-        
+
         header {
             background: #2c3e50;
             color: white;
@@ -58,21 +58,21 @@
             text-align: center;
             position: relative;
         }
-        
+
         h1 {
             font-size: 2.2rem;
             margin-bottom: 10px;
         }
-        
+
         .subtitle {
             font-size: 1.1rem;
             opacity: 0.9;
         }
-        
+
         #title {
             padding-top: 20px;
         }
-        
+
         .language-toggle {
             position: absolute;
             top: 20px;
@@ -86,15 +86,15 @@
             font-weight: 600;
             transition: background 0.3s;
         }
-        
+
         .language-toggle:hover {
             background: #2980b9;
         }
-        
+
         .task-content {
             padding: 30px;
         }
-        
+
         .section {
             margin-bottom: 30px;
             padding: 20px;
@@ -102,68 +102,129 @@
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
-        
+
         h2 {
             color: #2c3e50;
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid #3498db;
         }
-        
+
         h3 {
             color: #2980b9;
-            margin: 15px 0;
+            margin: 15px 0 10px;
         }
-        
+
         p {
             margin-bottom: 15px;
         }
-        
+
         ul,
         ol {
             margin-left: 20px;
             margin-bottom: 15px;
         }
-        
+
         li {
             margin-bottom: 8px;
         }
-        
+
+        .requirements {
+            background: #e8f4fc;
+            border-left: 5px solid #3498db;
+        }
+
+        .download-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            justify-content: space-between;
+        }
+
+        .download-box a {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .download-box a:hover {
+            background: #1e8449;
+        }
+
+        .copy-block {
+            margin: 15px 0 22px;
+        }
+
+        .copy-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .copy-header h3 {
+            margin: 0;
+        }
+
+        .copy-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .copy-btn:hover {
+            background: #2980b9;
+        }
+
+        .copy-btn.copied {
+            background: #27ae60;
+        }
+
         .code-block {
             background: #2c3e50;
             color: #ecf0f1;
             padding: 15px;
             border-radius: 5px;
             overflow-x: auto;
-            margin: 15px 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
+            margin: 0;
+            font-family: Consolas, 'Fira Code', monospace;
+            font-size: 0.85rem;
             line-height: 1.5;
-        }
-        
-        .requirements {
-            background: #e8f4fc;
-            border-left: 5px solid #3498db;
-        }
-        
-        .bonus {
-            background: #fff3cd;
-            border-left: 5px solid #ffc107;
-        }
-        
-        .output-example {
-            background: #d4edda;
-            border-left: 5px solid #28a745;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            font-family: monospace;
             white-space: pre;
-            overflow: auto;
             direction: ltr !important;
             text-align: left !important;
         }
-        
+
+        .task-list li {
+            margin-bottom: 12px;
+        }
+
+        .task-list code {
+            background: #eef2f7;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 0.92em;
+        }
+
+        .expected {
+            color: #566573;
+            font-size: 0.92rem;
+        }
+
         .timer-section {
             text-align: center;
             padding: 20px;
@@ -172,7 +233,7 @@
             margin-top: 30px;
             border-radius: 10px;
         }
-        
+
         .timer {
             font-size: 2rem;
             font-weight: bold;
@@ -181,30 +242,30 @@
             justify-content: center;
             gap: 15px;
         }
-        
+
         .timer-unit {
             background: rgba(255, 255, 255, 0.1);
             padding: 10px;
             border-radius: 5px;
             min-width: 80px;
         }
-        
+
         .timer-value {
             font-size: 2.5rem;
             display: block;
         }
-        
+
         .timer-label {
             font-size: 0.9rem;
             text-transform: uppercase;
             display: block;
         }
-        
+
         .finish-date {
             font-size: 1.2rem;
             margin-top: 10px;
         }
-        
+
         .thank-you {
             text-align: center;
             padding: 20px;
@@ -213,7 +274,7 @@
             border-top: 1px solid #dee2e6;
             margin-top: 30px;
         }
-        
+
         .footer {
             text-align: center;
             padding: 20px;
@@ -223,28 +284,30 @@
             max-width: 1000px;
             border-radius: 15px;
         }
-        
+
         .footer a {
             color: #3498db;
             text-decoration: none;
         }
-        
+
         .footer p {
             padding: 0 !important;
             margin: 0 !important;
         }
-        
+
         .footer a:hover {
             text-decoration: underline;
         }
-        
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8rem;
             }
+
             .task-content {
                 padding: 15px;
             }
+
             .language-toggle {
                 position: relative;
                 top: 0;
@@ -253,13 +316,16 @@
                 display: block;
                 width: 100%;
             }
+
             .timer {
                 font-size: 1.5rem;
                 flex-wrap: wrap;
             }
+
             .timer-unit {
                 min-width: 70px;
             }
+
             .timer-value {
                 font-size: 2rem;
             }
@@ -271,8 +337,8 @@
     <div class="container">
         <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
         <header>
-            <h1 id="title">Task 3: TrendPulse Social Feed Analyzer</h1>
-            <p class="subtitle" id="subtitle">Hard story challenge to recap Lectures 2, 3, and 4 (especially arrays, Date, and timers)</p>
+            <h1 id="title">Task 3: PageFlip Bookstore — Arrays & Objects</h1>
+            <p class="subtitle" id="subtitle">Practice arrays, objects, and ID joins with 24 focused functions</p>
             <button class="language-toggle" id="languageToggle">العربية / English</button>
         </header>
 
@@ -300,7 +366,7 @@
                     <span class="timer-label" id="seconds-label">Seconds</span>
                 </div>
             </div>
-            <p class="finish-date" id="finish-date">Finish by: March 28, 2026</p>
+            <p class="finish-date" id="finish-date">Finish by: September 26, 2026</p>
             <p id="timer-message">Complete the task before the deadline!</p>
         </div>
 
@@ -315,197 +381,256 @@
 
     <script src="../reg.js"></script>
     <script>
-        // Content data structure
+        const BOOKS_CODE = `const books = [
+    {
+        id: 1,
+        title: "Clean Code",
+        author: "Robert Martin",
+        genre: "Programming",
+        price: 28,
+        stock: 12,
+        rating: 4.7
+    },
+    {
+        id: 2,
+        title: "The Alchemist",
+        author: "Paulo Coelho",
+        genre: "Fiction",
+        price: 15,
+        stock: 5,
+        rating: 4.5
+    },
+    {
+        id: 3,
+        title: "Atomic Habits",
+        author: "James Clear",
+        genre: "Self-Help",
+        price: 22,
+        stock: 0,
+        rating: 4.8
+    },
+    {
+        id: 4,
+        title: "Eloquent JavaScript",
+        author: "Marijn Haverbeke",
+        genre: "Programming",
+        price: 32,
+        stock: 8,
+        rating: 4.6
+    },
+    {
+        id: 5,
+        title: "Sapiens",
+        author: "Yuval Noah Harari",
+        genre: "History",
+        price: 25,
+        stock: 3,
+        rating: 4.4
+    },
+    {
+        id: 6,
+        title: "Deep Work",
+        author: "Cal Newport",
+        genre: "Self-Help",
+        price: 20,
+        stock: 7,
+        rating: 4.3
+    },
+    {
+        id: 7,
+        title: "Node.js Design Patterns",
+        author: "Mario Casciaro",
+        genre: "Programming",
+        price: 40,
+        stock: 2,
+        rating: 4.5
+    },
+    {
+        id: 8,
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        genre: "Fiction",
+        price: 12,
+        stock: 15,
+        rating: 4.6
+    }
+];`;
+
+        const ORDERS_CODE = `// bookId refers to books.id
+const orders = [
+    {
+        id: 1001,
+        bookId: 1,
+        customer: "Maya",
+        quantity: 2,
+        status: "delivered",
+        date: "2026-09-10"
+    },
+    {
+        id: 1002,
+        bookId: 4,
+        customer: "Omar",
+        quantity: 1,
+        status: "delivered",
+        date: "2026-09-11"
+    },
+    {
+        id: 1003,
+        bookId: 2,
+        customer: "Lina",
+        quantity: 3,
+        status: "pending",
+        date: "2026-09-12"
+    },
+    {
+        id: 1004,
+        bookId: 1,
+        customer: "Sara",
+        quantity: 1,
+        status: "delivered",
+        date: "2026-09-12"
+    },
+    {
+        id: 1005,
+        bookId: 7,
+        customer: "Maya",
+        quantity: 1,
+        status: "shipped",
+        date: "2026-09-13"
+    },
+    {
+        id: 1006,
+        bookId: 5,
+        customer: "Yousef",
+        quantity: 2,
+        status: "delivered",
+        date: "2026-09-14"
+    },
+    {
+        id: 1007,
+        bookId: 8,
+        customer: "Nour",
+        quantity: 4,
+        status: "delivered",
+        date: "2026-09-15"
+    },
+    {
+        id: 1008,
+        bookId: 4,
+        customer: "Ali",
+        quantity: 2,
+        status: "cancelled",
+        date: "2026-09-16"
+    },
+    {
+        id: 1009,
+        bookId: 6,
+        customer: "Sara",
+        quantity: 1,
+        status: "pending",
+        date: "2026-09-17"
+    },
+    {
+        id: 1010,
+        bookId: 1,
+        customer: "Omar",
+        quantity: 1,
+        status: "delivered",
+        date: "2026-09-18"
+    }
+];`;
+
+        const taskListEn = [
+            { fn: "getInStockBooks()", desc: "Return all books with stock &gt; 0.", expected: "Array of book objects" },
+            { fn: "getBooksByGenre(genre)", desc: "Return all books in a given genre.", expected: "Array of book objects" },
+            { fn: "getBookById(id)", desc: "Find one book by id.", expected: "Book object or undefined" },
+            { fn: "getHighestRatedBook()", desc: "Return the book with the highest rating.", expected: "Book object" },
+            { fn: "getCheapestBook()", desc: "Return the book with the lowest price.", expected: "Book object" },
+            { fn: "getAverageBookPrice()", desc: "Average price of all books.", expected: "Number" },
+            { fn: "getBooksPricedUnder(maxPrice)", desc: "Books priced strictly under maxPrice.", expected: "Array of book objects" },
+            { fn: "getDeliveredOrders()", desc: "Orders with status \"delivered\".", expected: "Array of order objects" },
+            { fn: "getOrdersByCustomer(customer)", desc: "All orders for one customer.", expected: "Array of order objects" },
+            { fn: "getPendingOrders()", desc: "Orders with status \"pending\".", expected: "Array of order objects" },
+            { fn: "getTotalQuantityOrdered()", desc: "Sum of quantity across all orders.", expected: "Number" },
+            { fn: "getOrderCountByStatus(status)", desc: "How many orders have that status.", expected: "Number" },
+            { fn: "getOrdersForBook(bookId)", desc: "Orders linked to a book via bookId.", expected: "Array of order objects" },
+            { fn: "getDeliveredRevenue()", desc: "Sum of price × quantity for delivered orders only (join books).", expected: "Number" },
+            { fn: "getCustomersWhoOrdered(bookId)", desc: "Unique customer names who ordered that book.", expected: "Array of strings" },
+            { fn: "getBooksNeverOrdered()", desc: "Titles of books with no orders.", expected: "Array of strings" },
+            { fn: "getMostOrderedBook()", desc: "Book with the highest total ordered quantity.", expected: "Book object" },
+            { fn: "getTopRevenueGenre()", desc: "Genre with highest delivered revenue.", expected: "String" },
+            { fn: "getCustomerSpending(customer)", desc: "Delivered spending for one customer (join books).", expected: "Number" },
+            { fn: "getLowStockBooks(threshold)", desc: "Books with stock ≤ threshold.", expected: "Array of book objects" },
+            { fn: "getOrderSummaries()", desc: "Map every order to { orderId, customer, bookTitle, quantity, total, status }.", expected: "Array of summary objects" },
+            { fn: "getBooksSortedByRating()", desc: "New array sorted by rating desc — do not mutate books.", expected: "New sorted array" },
+            { fn: "getBestsellers(limit)", desc: "Top N books by total quantity as { title, totalQuantity }.", expected: "Array of up to N objects" },
+            { fn: "generateBookstoreReport()", desc: "Full report object (counts, revenue, top book/genre, low stock).", expected: "One report object" }
+        ];
+
+        const taskListAr = [
+            { fn: "getInStockBooks()", desc: "أرجع كل الكتب المتوفرة (stock &gt; 0).", expected: "مصفوفة كائنات كتب" },
+            { fn: "getBooksByGenre(genre)", desc: "أرجع كتب نوع أدبي معيّن.", expected: "مصفوفة كائنات كتب" },
+            { fn: "getBookById(id)", desc: "ابحث عن كتاب بالمعرّف.", expected: "كائن كتاب أو undefined" },
+            { fn: "getHighestRatedBook()", desc: "الكتاب ذو أعلى تقييم.", expected: "كائن كتاب" },
+            { fn: "getCheapestBook()", desc: "الكتاب الأرخص سعراً.", expected: "كائن كتاب" },
+            { fn: "getAverageBookPrice()", desc: "متوسط أسعار كل الكتب.", expected: "رقم" },
+            { fn: "getBooksPricedUnder(maxPrice)", desc: "كتب بسعر أقل تماماً من القيمة المعطاة.", expected: "مصفوفة كائنات كتب" },
+            { fn: "getDeliveredOrders()", desc: "الطلبات ذات الحالة \"delivered\".", expected: "مصفوفة كائنات طلبات" },
+            { fn: "getOrdersByCustomer(customer)", desc: "كل طلبات زبون معيّن.", expected: "مصفوفة كائنات طلبات" },
+            { fn: "getPendingOrders()", desc: "الطلبات ذات الحالة \"pending\".", expected: "مصفوفة كائنات طلبات" },
+            { fn: "getTotalQuantityOrdered()", desc: "مجموع الكمية في كل الطلبات.", expected: "رقم" },
+            { fn: "getOrderCountByStatus(status)", desc: "عدد الطلبات لحالة معيّنة.", expected: "رقم" },
+            { fn: "getOrdersForBook(bookId)", desc: "طلبات مرتبطة بكتاب عبر bookId.", expected: "مصفوفة كائنات طلبات" },
+            { fn: "getDeliveredRevenue()", desc: "إيراد الطلبات المسلَّمة فقط (السعر × الكمية مع الربط).", expected: "رقم" },
+            { fn: "getCustomersWhoOrdered(bookId)", desc: "أسماء الزبائن الذين طلبوا كتاباً معيّناً (بدون تكرار).", expected: "مصفوفة نصوص" },
+            { fn: "getBooksNeverOrdered()", desc: "عناوين الكتب التي لم تُطلب أبداً.", expected: "مصفوفة نصوص" },
+            { fn: "getMostOrderedBook()", desc: "الكتاب الأكثر طلباً حسب مجموع الكمية.", expected: "كائن كتاب" },
+            { fn: "getTopRevenueGenre()", desc: "النوع الأدبي صاحب أعلى إيراد من الطلبات المسلَّمة.", expected: "نص" },
+            { fn: "getCustomerSpending(customer)", desc: "إنفاق زبون على الطلبات المسلَّمة فقط.", expected: "رقم" },
+            { fn: "getLowStockBooks(threshold)", desc: "كتب مخزونها ≤ العتبة.", expected: "مصفوفة كائنات كتب" },
+            { fn: "getOrderSummaries()", desc: "حوّل كل طلب إلى ملخص { orderId, customer, bookTitle, quantity, total, status }.", expected: "مصفوفة ملخصات" },
+            { fn: "getBooksSortedByRating()", desc: "مصفوفة جديدة مرتبة حسب التقييم تنازلياً — دون تعديل الأصلية.", expected: "مصفوفة مرتبة جديدة" },
+            { fn: "getBestsellers(limit)", desc: "أفضل N كتب حسب الكمية كـ { title, totalQuantity }.", expected: "مصفوفة حتى N عناصر" },
+            { fn: "generateBookstoreReport()", desc: "تقرير كامل (إحصاءات، إيراد، أفضل كتاب/نوع، مخزون منخفض).", expected: "كائن تقرير واحد" }
+        ];
+
         const taskData = {
             en: {
-                title: "Task 3: TrendPulse Social Feed Analyzer",
-                subtitle: "Hard story challenge to recap Lectures 2, 3, and 4 (especially arrays)",
-                sections: [{
-                    type: "idea",
-                    title: "Story Context: TrendPulse Startup",
-                    content: "You are a backend intern at TrendPulse, a social media startup. Your team receives raw post data from many creators every minute. Management wants one JavaScript script that cleans data, validates posts, calculates engagement scores, ranks the feed, extracts trends, and prints a final moderation report. Your mission is to build this in one coherent flow."
-                }, {
-                    type: "requirements",
-                    title: "Core Rules",
-                    content: [{
-                        type: "list",
-                        title: "Constraints (must follow):",
-                        items: [
-                            "Use `let` and `const` (no `var`).",
-                            "You must use arrays heavily (Lecture 4 focus).",
-                            "You must demonstrate both mutating and non-mutating array operations, then explain the difference in comments.",
-                            "You must use strings, coercion, conditions, loops, and functions from Lectures 2 and 3.",
-                            "You must design function-based workflow around one shared posts array.",
-                            "No external libraries."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "Starter Data (you may extend it)",
-                        content: "Use this sample dataset (or a richer one) as your raw feed input.",
-                        example: `const rawPosts = [
-  { id: "p1", author: "  Mira  ", content: "JS Arrays are amazing! #javascript #coding", likes: "120", shares: 18, comments: 40, createdAt: "2026-03-27T09:30:00Z" },
-  { id: "p2", author: "rami", content: "  check this out #Coding  ", likes: 75, shares: "11", comments: "13", createdAt: "2026-03-28T06:10:00Z" },
-  { id: "p3", author: "SARA", content: "", likes: "22", shares: 2, comments: 1, createdAt: "invalid-date" },
-  { id: "p4", author: "leo", content: "Node + Date + Timers #nodejs #javascript", likes: "210", shares: "35", comments: 70, createdAt: "2026-03-28T08:50:00Z" },
-  { id: "p5", author: "Mira", content: "  #coding tips for loops and conditions  ", likes: "95", shares: 20, comments: "25", createdAt: "2026-03-28T07:40:00Z" }
-];`
-                    }]
-                }, {
-                    type: "requirements",
-                    title: "Linked Hard Subtasks (complete in order)",
-                    content: [{
-                        type: "output",
-                        title: "1) Data normalization pipeline",
-                        content: "Normalize text fields, coerce engagement fields to numbers, and return clean post objects.",
-                        example: `function normalizePost(post) {
-  // your code
-}
-
-// Input
-const post = { author: "  Mira  ", content: "  Hello #JS  ", likes: "120", shares: "8", comments: "15" };
-
-// Predicted output
-// { author: "mira", content: "hello #js", likes: 120, shares: 8, comments: 15 }`
-                    }, {
-                        type: "output",
-                        title: "2) Validation gate",
-                        content: "Reject invalid posts using conditions and keep a reason for each rejection.",
-                        example: `function isPostValid(post) {
-  // your code
-}
-
-// Input
-const post = { id: "p3", content: "", likes: 22, shares: 2, comments: 1 };
-
-// Predicted output
-// false (reason: empty content)`
-                    }, {
-                        type: "output",
-                        title: "3) Engagement score model",
-                        content: "Calculate engagement score with a weighted formula and safe handling of missing values.",
-                        example: `function calculateEngagementScore(post) {
-  // your code
-}
-
-// Input
-const post = { likes: 100, shares: 20, comments: 10 };
-
-// Predicted output
-// 180`
-                    }, {
-                        type: "output",
-                        title: "4) Mutate vs non-mutate array track (Lecture 4 emphasis)",
-                        content: "Create two flows: one mutates original array and one keeps original intact.",
-                        example: `function mutateFeed(posts) {
-  // mutating methods
-}
-
-function cloneAndTransformFeed(posts) {
-  // non-mutating methods
-}
-
-// Input
-const posts = [{ id: "p1", score: 20 }, { id: "p2", score: 50 }];
-
-// Predicted output
-// mutateFeed changes original order
-// cloneAndTransformFeed keeps original order unchanged`
-                    }, {
-                        type: "output",
-                        title: "5) Feed ranking and tie-breakers",
-                        content: "Sort by score descending, then id ascending as deterministic tie-breaker.",
-                        example: `function rankPosts(posts) {
-  // your code
-}
-
-// Input
-const posts = [
-  { id: "p2", score: 100 },
-  { id: "p1", score: 100 }
-];
-
-// Predicted output order
-// ["p1", "p2"]`
-                    }, {
-                        type: "output",
-                        title: "6) Hashtag trend extraction",
-                        content: "Extract hashtags, count frequencies, and return top N trends.",
-                        example: `function extractTopHashtags(posts, limit) {
-  // your code
-}
-
-// Input
-const posts = [{ content: "#js #node" }, { content: "#js #arrays" }];
-
-// Predicted output
-// [{ tag: "#js", count: 2 }, { tag: "#node", count: 1 }, { tag: "#arrays", count: 1 }]`
-                    }, {
-                        type: "output",
-                        title: "7) Required function architecture",
-                        content: "Implement and call: addPost, updatePost, deletePost, getPostById, searchPosts, getTopPosts, getStats.",
-                        example: `function addPost(posts, newPost) {
-  // your code
-}
-function updatePost(posts, postId, updates) {
-  // your code
-}
-function deletePost(posts, postId) {
-  // your code
-}
-function getPostById(posts, postId) {
-  // your code
-}
-function searchPosts(posts, keyword) {
-  // your code
-}
-function getTopPosts(posts, limit) {
-  // your code
-}
-function getStats(posts) {
-  // your code
-}
-
-// Input
-let posts = [{ id: "p1", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 }];
-const newPost = { id: "p2", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 };
-const updates = { likes: 15 };
-
-// Predicted output
-// addPost(posts, newPost) => posts.length: 1 -> 2
-// updatePost(posts, "p2", updates) => likes for p2 becomes 15
-// getPostById(posts, "p2") => returns post object with id "p2"
-// searchPosts(posts, "hello") => returns matching posts
-// getTopPosts(posts, 1) => returns one highest-scored post
-// getStats(posts) => returns summary object (count, avgScore, topId)
-// deletePost(posts, "p1") => posts no longer contains id "p1"`
-                    }, {
-                        type: "output",
-                        title: "8) Final moderation summary",
-                        content: "Print a clear final report with accepted/rejected counts, top posts, top hashtag, and average score.",
-                        example: `function buildSummaryReport(validPosts, rejectedPosts) {
-  // your code
-}
-
-// Input
-// validPosts.length = 4, rejectedPosts.length = 1
-
-// Predicted output
-// Accepted: 4 | Rejected: 1 | TopTag: #js | AvgScore: <number>`
-                    }]
-                }, {
-                    type: "note",
-                    title: "Submission",
-                    content: "Submit one JavaScript file (`task3.js`) in the tasks topic on Telegram. Message format: `#TASK3 - Your Name`. Include short inline comments explaining key logic decisions and the mutate vs non-mutate comparison."
-                }, {
-                    type: "learning",
-                    title: "Targeted Learning Recap",
-                    content: [
-                        "Lecture 2: data types, coercion, numbers, Math methods.",
-                        "Lecture 3: string handling, truthy/falsy checks, conditions, loops, function decomposition.",
-                        "Lecture 4: deep array processing and mutate vs non-mutate behavior.",
-                        "Real-world thinking: transforming messy raw data into reliable ranked outputs."
-                    ]
-                }],
+                title: "Task 3: PageFlip Bookstore — Arrays & Objects",
+                subtitle: "Practice arrays, objects, and ID joins with 24 focused functions",
+                storyTitle: "Story: PageFlip Online Bookstore",
+                story: "You are a junior analyst at PageFlip. Management gave you two datasets — the book catalog and recent customer orders. Orders link to books through bookId. Your job is to fill 24 empty functions that filter, find, aggregate, join, and finally build a bookstore report. Do not change the original arrays.",
+                rulesTitle: "Core Rules",
+                rules: [
+                    "Do not modify the original <code>books</code> or <code>orders</code> arrays.",
+                    "Each function must return the requested result.",
+                    "Use array methods where appropriate (<code>filter</code>, <code>find</code>, <code>map</code>, <code>reduce</code>, <code>sort</code> on a copy, …).",
+                    "No external libraries.",
+                    "Connect data with IDs: <code>orders.bookId</code> → <code>books.id</code>.",
+                    "Use <code>let</code> / <code>const</code> only (no <code>var</code>)."
+                ],
+                downloadTitle: "Starter File",
+                downloadText: "Download the starter and complete the empty functions inside it.",
+                downloadLabel: "Download task3.js",
+                dataTitle: "Copy the Two Arrays",
+                dataHint: "Same data lives in the starter file. Use the copy buttons if you prefer to paste into your own file.",
+                booksLabel: "books",
+                ordersLabel: "orders",
+                copyLabel: "Copy",
+                copiedLabel: "Copied!",
+                tasksTitle: "The 24 Functions (complete in order)",
+                tasksIntro: "Difficulty ramps gently: filters → finds → aggregates → joins across both arrays → summary/report.",
+                expectedPrefix: "Expected:",
+                taskList: taskListEn,
+                submitTitle: "Submission",
+                submit: "Submit one JavaScript file (task3.js) in the tasks topic on Telegram. Message format: #TASK3 - Your Name. You may uncomment the optional console.log tests at the bottom while developing.",
+                learningTitle: "What You Practice",
+                learning: [
+                    "Filtering and finding objects in arrays",
+                    "Aggregates with reduce / map",
+                    "Joining two arrays through foreign-key IDs",
+                    "Building summary objects and a final report without mutating source data"
+                ],
                 timer: {
                     title: "Time Remaining to Complete Task",
                     message: "Complete the task before the deadline!",
@@ -516,197 +641,44 @@ const updates = { likes: 15 };
                 },
                 thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
                 buttonText: "العربية / English",
-                finishDate: "Finish by: March 28, 2026"
+                finishDate: "Finish by: September 26, 2026"
             },
             ar: {
-                title: "المهمة 3: محلل TrendPulse لتغذية السوشيال ميديا",
-                subtitle: "تحدٍّ قصصي صعب لمراجعة المحاضرات 2 و3 و4",
-                sections: [{
-                    type: "idea",
-                    title: "سياق القصة: شركة TrendPulse",
-                    content: "أنت متدرب Backend في شركة TrendPulse الناشئة. الفريق يستقبل بيانات منشورات خام من صناع محتوى كل دقيقة. الإدارة تريد سكربت JavaScript واحد ينظّف البيانات، يتحقق من صحتها، يحسب نقاط التفاعل، يرتّب التغذية، يستخرج الترندات، ويطبع تقرير إشراف نهائي. مهمتك تنفيذ هذا التدفق كاملًا."
-                }, {
-                    type: "requirements",
-                    title: "القواعد الأساسية",
-                    content: [{
-                        type: "list",
-                        title: "القيود (يجب الالتزام بها):",
-                        items: [
-                            "استخدم `let` و `const` فقط (بدون `var`).",
-                            "يجب الاعتماد بشكل واضح على المصفوفات (تركيز المحاضرة 4).",
-                            "يجب إظهار عمليات mutating و non-mutating على المصفوفات ثم شرح الفرق بالتعليقات.",
-                            "يجب استخدام النصوص، التحويل (coercion)، الشروط، الحلقات، وأساسيات الدوال من المحاضرتين 2 و3.",
-                            "يجب بناء تدفق يعتمد على دوال تعمل فوق مصفوفة منشورات واحدة.",
-                            "ممنوع استخدام أي مكتبات خارجية."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "بيانات البداية (يمكنك توسيعها)",
-                        content: "استخدم مجموعة البيانات التالية (أو نسخة أغنى منها) كمدخل خام للتغذية:",
-                        example: `const rawPosts = [
-  { id: "p1", author: "  Mira  ", content: "JS Arrays are amazing! #javascript #coding", likes: "120", shares: 18, comments: 40, createdAt: "2026-03-27T09:30:00Z" },
-  { id: "p2", author: "rami", content: "  check this out #Coding  ", likes: 75, shares: "11", comments: "13", createdAt: "2026-03-28T06:10:00Z" },
-  { id: "p3", author: "SARA", content: "", likes: "22", shares: 2, comments: 1, createdAt: "invalid-date" },
-  { id: "p4", author: "leo", content: "Node + Date + Timers #nodejs #javascript", likes: "210", shares: "35", comments: 70, createdAt: "2026-03-28T08:50:00Z" },
-  { id: "p5", author: "Mira", content: "  #coding tips for loops and conditions  ", likes: "95", shares: 20, comments: "25", createdAt: "2026-03-28T07:40:00Z" }
-];`
-                    }]
-                }, {
-                    type: "requirements",
-                    title: "المهام الصعبة المرتبطة (نفّذها بالترتيب)",
-                    content: [{
-                        type: "output",
-                        title: "1) مسار توحيد البيانات (Normalization)",
-                        content: "وحّد النصوص وحوّل قيم التفاعل إلى أرقام ثم أعد منشورًا نظيفًا.",
-                        example: `function normalizePost(post) {
-  // your code
-}
-
-// Input
-const post = { author: "  Mira  ", content: "  Hello #JS  ", likes: "120", shares: "8", comments: "15" };
-
-// Predicted output
-// { author: "mira", content: "hello #js", likes: 120, shares: 8, comments: 15 }`
-                    }, {
-                        type: "output",
-                        title: "2) بوابة التحقق (Validation Gate)",
-                        content: "تحقق من صحة المنشور وارجع false عند وجود خطأ مع سبب واضح.",
-                        example: `function isPostValid(post) {
-  // your code
-}
-
-// Input
-const post = { id: "p3", content: "", likes: 22, shares: 2, comments: 1 };
-
-// Predicted output
-// false (reason: empty content)`
-                    }, {
-                        type: "output",
-                        title: "3) نموذج نقاط التفاعل",
-                        content: "احسب نقاط التفاعل بمعادلة موزونة وتعامل مع القيم الناقصة.",
-                        example: `function calculateEngagementScore(post) {
-  // your code
-}
-
-// Input
-const post = { likes: 100, shares: 20, comments: 10 };
-
-// Predicted output
-// 180`
-                    }, {
-                        type: "output",
-                        title: "4) مسار المصفوفات: mutate vs non-mutate (تركيز المحاضرة 4)",
-                        content: "أنشئ مسارين: واحد يغيّر المصفوفة الأصلية وواحد يحافظ عليها بدون تغيير.",
-                        example: `function mutateFeed(posts) {
-  // mutating methods
-}
-
-function cloneAndTransformFeed(posts) {
-  // non-mutating methods
-}
-
-// Input
-const posts = [{ id: "p1", score: 20 }, { id: "p2", score: 50 }];
-
-// Predicted output
-// mutateFeed changes original order
-// cloneAndTransformFeed keeps original order unchanged`
-                    }, {
-                        type: "output",
-                        title: "5) ترتيب التغذية وكسر التعادل",
-                        content: "رتّب حسب النقاط تنازليًا، ثم حسب المعرّف تصاعديًا كقاعدة حسم ثابتة.",
-                        example: `function rankPosts(posts) {
-  // your code
-}
-
-// Input
-const posts = [
-  { id: "p2", score: 100 },
-  { id: "p1", score: 100 }
-];
-
-// Predicted output order
-// ["p1", "p2"]`
-                    }, {
-                        type: "output",
-                        title: "6) استخراج ترند الهاشتاغات",
-                        content: "استخرج الهاشتاغات واحسب تكرارها ثم أعد أعلى N ترندات.",
-                        example: `function extractTopHashtags(posts, limit) {
-  // your code
-}
-
-// Input
-const posts = [{ content: "#js #node" }, { content: "#js #arrays" }];
-
-// Predicted output
-// [{ tag: "#js", count: 2 }, { tag: "#node", count: 1 }, { tag: "#arrays", count: 1 }]`
-                    }, {
-                        type: "output",
-                        title: "7) هيكل الدوال المطلوب",
-                        content: "نفّذ واستعمل الدوال المطلوبة وكلها تعمل على نفس مصفوفة posts.",
-                        example: `function addPost(posts, newPost) {
-  // your code
-}
-function updatePost(posts, postId, updates) {
-  // your code
-}
-function deletePost(posts, postId) {
-  // your code
-}
-function getPostById(posts, postId) {
-  // your code
-}
-function searchPosts(posts, keyword) {
-  // your code
-}
-function getTopPosts(posts, limit) {
-  // your code
-}
-function getStats(posts) {
-  // your code
-}
-
-// Input
-let posts = [{ id: "p1", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 }];
-const newPost = { id: "p2", author: "mira", content: "hello", likes: 10, shares: 2, comments: 1 };
-const updates = { likes: 15 };
-
-// Predicted output
-// addPost(posts, newPost) => posts.length: 1 -> 2
-// updatePost(posts, "p2", updates) => likes of p2 becomes 15
-// getPostById(posts, "p2") => returns post object with id "p2"
-// searchPosts(posts, "hello") => returns matching posts
-// getTopPosts(posts, 1) => returns one highest-scored post
-// getStats(posts) => returns summary object (count, avgScore, topId)
-// deletePost(posts, "p1") => posts no longer contains id "p1"`
-                    }, {
-                        type: "output",
-                        title: "8) ملخص الإشراف النهائي",
-                        content: "ابنِ تقريرًا نهائيًا واضحًا يتضمن الإحصاءات الرئيسية ومخرجات الترتيب.",
-                        example: `function buildSummaryReport(validPosts, rejectedPosts) {
-  // your code
-}
-
-// Input
-// validPosts.length = 4, rejectedPosts.length = 1
-
-// Predicted output
-// Accepted: 4 | Rejected: 1 | TopTag: #js | AvgScore: <number>`
-                    }]
-                }, {
-                    type: "note",
-                    title: "التسليم",
-                    content: "سلّم ملف JavaScript واحد (`task3.js`) في توبك التاسكات على التلغرام. صيغة الرسالة: `#TASK3 - اسمك`. أضف تعليقات قصيرة تشرح قراراتك المهمة وخاصة فرق mutate و non-mutate."
-                }, {
-                    type: "learning",
-                    title: "ملخص نقاط التعلّم المستهدفة",
-                    content: [
-                        "المحاضرة 2: أنواع البيانات، التحويل (coercion)، الأرقام ودوال Math.",
-                        "المحاضرة 3: معالجة النصوص، truthy/falsy، الشروط، الحلقات، وتقسيم المنطق عبر الدوال.",
-                        "المحاضرة 4: معالجة المصفوفات بعمق وفرق mutate/non-mutate.",
-                        "تفكير واقعي: تحويل بيانات خام فوضوية إلى نتائج مرتبة وموثوقة."
-                    ]
-                }],
+                title: "المهمة 3: مكتبة PageFlip — المصفوفات والكائنات",
+                subtitle: "تمرين عملي: 24 دالة على مصفوفتين مع ربط عبر المعرّفات",
+                storyTitle: "القصة: مكتبة PageFlip الإلكترونية",
+                story: "أنت محلل مبتدئ في PageFlip. لديك مصفوفتان: كتالوج الكتب وطلبات الزبائن. الطلبات ترتبط بالكتب عبر bookId. مهمتك إكمال 24 دالة فارغة للتصفية والبحث والتجميع والربط ثم بناء تقرير نهائي. لا تعدّل المصفوفات الأصلية.",
+                rulesTitle: "القواعد الأساسية",
+                rules: [
+                    "لا تعدّل مصفوفتي <code>books</code> و <code>orders</code> الأصليتين.",
+                    "كل دالة يجب أن تُرجع النتيجة المطلوبة.",
+                    "استخدم دوال المصفوفات حيث يناسب (<code>filter</code>، <code>find</code>، <code>map</code>، <code>reduce</code>، <code>sort</code> على نسخة، …).",
+                    "ممنوع المكتبات الخارجية.",
+                    "اربط البيانات بالمعرّفات: <code>orders.bookId</code> → <code>books.id</code>.",
+                    "استخدم <code>let</code> / <code>const</code> فقط (بدون <code>var</code>)."
+                ],
+                downloadTitle: "ملف البداية",
+                downloadText: "حمّل ملف البداية وأكمل الدوال الفارغة داخله.",
+                downloadLabel: "تحميل task3.js",
+                dataTitle: "انسخ المصفوفتين",
+                dataHint: "نفس البيانات موجودة في ملف البداية. استخدم أزرار النسخ إن أردت لصقها في ملفك.",
+                booksLabel: "books",
+                ordersLabel: "orders",
+                copyLabel: "نسخ",
+                copiedLabel: "تم النسخ!",
+                tasksTitle: "الدوال الـ 24 (نفّذها بالترتيب)",
+                tasksIntro: "الصعوبة تصعد تدريجياً: تصفية → بحث → تجميع → ربط بين المصفوفتين → تقرير نهائي.",
+                expectedPrefix: "المتوقع:",
+                taskList: taskListAr,
+                submitTitle: "التسليم",
+                submit: "سلّم ملف JavaScript واحد (task3.js) في توبك التاسكات على التلغرام. صيغة الرسالة: #TASK3 - اسمك. يمكنك فك تعليق اختبارات console.log الاختيارية أثناء التطوير.",
+                learningTitle: "ما الذي تتدرّب عليه",
+                learning: [
+                    "تصفية والبحث داخل مصفوفات من الكائنات",
+                    "التجميع باستخدام reduce / map",
+                    "ربط مصفوفتين عبر معرّف أجنبي",
+                    "بناء ملخصات وتقرير نهائي دون تعديل البيانات الأصلية"
+                ],
                 timer: {
                     title: "الوقت المتبقي لإكمال المهمة",
                     message: "أكمل المهمة قبل الموعد النهائي!",
@@ -717,19 +689,45 @@ const updates = { likes: 15 };
                 },
                 thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
                 buttonText: "English / العربية",
-                finishDate: "الانتهاء بحلول: 28 مارس 2026"
+                finishDate: "الانتهاء بحلول: 26 سبتمبر 2026"
             }
         };
-        // Render content based on language
+
+        function createCopyBlock(label, code, copyLabel) {
+            const wrap = document.createElement('div');
+            wrap.className = 'copy-block';
+
+            const header = document.createElement('div');
+            header.className = 'copy-header';
+
+            const h3 = document.createElement('h3');
+            h3.textContent = label;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'copy-btn';
+            btn.textContent = copyLabel;
+            btn.dataset.copy = code;
+            btn.dataset.label = copyLabel;
+
+            header.appendChild(h3);
+            header.appendChild(btn);
+
+            const pre = document.createElement('pre');
+            pre.className = 'code-block';
+            pre.textContent = code;
+
+            wrap.appendChild(header);
+            wrap.appendChild(pre);
+            return wrap;
+        }
+
         function renderContent(lang) {
             const data = taskData[lang];
             const taskContent = document.getElementById('taskContent');
 
-            // Update page title and subtitle
             document.getElementById('title').textContent = data.title;
             document.getElementById('subtitle').textContent = data.subtitle;
-
-            // Update timer section
             document.getElementById('timer-title').textContent = data.timer.title;
             document.getElementById('timer-message').textContent = data.timer.message;
             document.getElementById('days-label').textContent = data.timer.days;
@@ -737,74 +735,88 @@ const updates = { likes: 15 };
             document.getElementById('minutes-label').textContent = data.timer.minutes;
             document.getElementById('seconds-label').textContent = data.timer.seconds;
             document.getElementById('finish-date').textContent = data.finishDate;
-
-            // Update thank you message
             document.getElementById('thankYou').textContent = data.thankYou;
-
-            // Update button text
             document.getElementById('languageToggle').textContent = data.buttonText;
 
-            // Clear existing content
             taskContent.innerHTML = '';
 
-            // Render each section
-            data.sections.forEach(section => {
-                const sectionEl = document.createElement('div');
-                sectionEl.className = 'section';
+            // Story
+            const story = document.createElement('div');
+            story.className = 'section';
+            story.innerHTML = `<h2>${data.storyTitle}</h2><p>${data.story}</p>`;
+            taskContent.appendChild(story);
 
-                if (section.type === 'requirements') {
-                    sectionEl.classList.add('requirements');
-                } else if (section.type === 'bonus') {
-                    sectionEl.classList.add('bonus');
-                }
-
-                const titleEl = document.createElement('h2');
-                titleEl.textContent = section.title;
-                sectionEl.appendChild(titleEl);
-
-                if (section.type === 'idea' || section.type === 'note') {
-                    const contentEl = document.createElement('p');
-                    contentEl.textContent = section.content;
-                    sectionEl.appendChild(contentEl);
-                } else if (section.type === 'requirements') {
-                    section.content.forEach(item => {
-                        const itemTitle = document.createElement('h3');
-                        itemTitle.textContent = item.title;
-                        sectionEl.appendChild(itemTitle);
-
-                        if (item.type === 'list') {
-                            const listEl = document.createElement('ul');
-                            item.items.forEach(listItem => {
-                                const li = document.createElement('li');
-                                li.innerHTML = listItem;
-                                listEl.appendChild(li);
-                            });
-                            sectionEl.appendChild(listEl);
-                        } else if (item.type === 'output') {
-                            const contentEl = document.createElement('p');
-                            contentEl.textContent = item.content;
-                            sectionEl.appendChild(contentEl);
-
-                            const exampleEl = document.createElement('div');
-                            exampleEl.className = 'output-example';
-                            exampleEl.textContent = item.example;
-                            sectionEl.appendChild(exampleEl);
-                        }
-                    });
-                } else if (section.type === 'learning' || section.type === 'bonus') {
-                    const listEl = document.createElement('ul');
-                    section.content.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        listEl.appendChild(li);
-                    });
-                    sectionEl.appendChild(listEl);
-                }
-
-                taskContent.appendChild(sectionEl);
+            // Rules
+            const rules = document.createElement('div');
+            rules.className = 'section requirements';
+            const rulesTitle = document.createElement('h2');
+            rulesTitle.textContent = data.rulesTitle;
+            rules.appendChild(rulesTitle);
+            const rulesList = document.createElement('ul');
+            data.rules.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = item;
+                rulesList.appendChild(li);
             });
+            rules.appendChild(rulesList);
+            taskContent.appendChild(rules);
 
-            // Set text direction based on language
+            // Download
+            const download = document.createElement('div');
+            download.className = 'section download-box';
+            download.innerHTML = `
+                <div>
+                    <h2 style="border:none;padding:0;margin:0 0 6px;">${data.downloadTitle}</h2>
+                    <p style="margin:0;">${data.downloadText}</p>
+                </div>
+                <a href="task3.js" download="task3.js">${data.downloadLabel}</a>
+            `;
+            taskContent.appendChild(download);
+
+            // Copyable data
+            const dataSection = document.createElement('div');
+            dataSection.className = 'section';
+            dataSection.innerHTML = `<h2>${data.dataTitle}</h2><p>${data.dataHint}</p>`;
+            dataSection.appendChild(createCopyBlock(data.booksLabel, BOOKS_CODE, data.copyLabel));
+            dataSection.appendChild(createCopyBlock(data.ordersLabel, ORDERS_CODE, data.copyLabel));
+            taskContent.appendChild(dataSection);
+
+            // Tasks
+            const tasksSection = document.createElement('div');
+            tasksSection.className = 'section requirements';
+            tasksSection.innerHTML = `<h2>${data.tasksTitle}</h2><p>${data.tasksIntro}</p>`;
+            const ol = document.createElement('ol');
+            ol.className = 'task-list';
+            data.taskList.forEach(task => {
+                const li = document.createElement('li');
+                li.innerHTML = `<code>${task.fn}</code> — ${task.desc}<br><span class="expected">${data.expectedPrefix} ${task.expected}</span>`;
+                ol.appendChild(li);
+            });
+            tasksSection.appendChild(ol);
+            taskContent.appendChild(tasksSection);
+
+            // Submit
+            const submit = document.createElement('div');
+            submit.className = 'section';
+            submit.innerHTML = `<h2>${data.submitTitle}</h2><p>${data.submit}</p>`;
+            taskContent.appendChild(submit);
+
+            // Learning
+            const learning = document.createElement('div');
+            learning.className = 'section';
+            const learningTitle = document.createElement('h2');
+            learningTitle.textContent = data.learningTitle;
+            learning.appendChild(learningTitle);
+            const learningList = document.createElement('ul');
+            data.learning.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                learningList.appendChild(li);
+            });
+            learning.appendChild(learningList);
+            taskContent.appendChild(learning);
+
+            // Direction
             if (lang === 'ar') {
                 document.body.setAttribute('dir', 'rtl');
                 document.querySelectorAll('.section').forEach(section => {
@@ -816,22 +828,39 @@ const updates = { likes: 15 };
                     section.style.textAlign = 'left';
                 });
             }
+
+            // Wire copy buttons
+            taskContent.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const text = btn.dataset.copy;
+                    const original = btn.dataset.label;
+                    try {
+                        await navigator.clipboard.writeText(text);
+                    } catch (err) {
+                        const ta = document.createElement('textarea');
+                        ta.value = text;
+                        document.body.appendChild(ta);
+                        ta.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(ta);
+                    }
+                    btn.classList.add('copied');
+                    btn.textContent = taskData[lang].copiedLabel;
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        btn.textContent = original;
+                    }, 1500);
+                });
+            });
         }
 
-        // Timer functionality
         function startCountdown() {
-            // Set the date we're counting down to (March 28, 2026)
-            const countDownDate = new Date("Mar 28, 2026 23:59:59").getTime();
+            const countDownDate = new Date("2026-09-26T23:59:59").getTime();
 
-            // Update the countdown every 1 second
             const countdown = setInterval(() => {
-                // Get today's date and time
                 const now = new Date().getTime();
-
-                // Find the distance between now and the countdown date
                 const distance = countDownDate - now;
 
-                // If the countdown is over, write some text
                 if (distance < 0) {
                     clearInterval(countdown);
                     document.getElementById("days").textContent = "00";
@@ -841,13 +870,11 @@ const updates = { likes: 15 };
                     return;
                 }
 
-                // Time calculations for days, hours, minutes and seconds
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // Display the results
                 document.getElementById("days").textContent = days.toString().padStart(2, '0');
                 document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
                 document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
@@ -855,16 +882,11 @@ const updates = { likes: 15 };
             }, 1000);
         }
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Render English content by default
+        document.addEventListener('DOMContentLoaded', function () {
             renderContent('en');
-
-            // Start the countdown timer
             startCountdown();
 
-            // Language toggle functionality
-            document.getElementById('languageToggle').addEventListener('click', function() {
+            document.getElementById('languageToggle').addEventListener('click', function () {
                 const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
                 const newLang = currentLang === 'en' ? 'ar' : 'en';
                 renderContent(newLang);
