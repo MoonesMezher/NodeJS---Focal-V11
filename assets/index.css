@@ -123,6 +123,70 @@ h2 {
     transition: background-color 0.3s;
 }
 
+.lecture-number {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #1a2a6c;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Solve-task sessions (isTaskLecture or numbers with *) — gold accent, stays in-table */
+.lecture-row--task {
+    background: linear-gradient(90deg, rgba(253, 187, 45, 0.18) 0%, rgba(253, 187, 45, 0.06) 42%, transparent 100%);
+    box-shadow: inset 4px 0 0 #fdbb2d;
+}
+
+.lectures-table tr.lecture-row--task:nth-child(even) {
+    background: linear-gradient(90deg, rgba(253, 187, 45, 0.22) 0%, rgba(253, 187, 45, 0.08) 42%, #f8f9fa 100%);
+}
+
+.lectures-table tr.lecture-row--task:hover {
+    background: linear-gradient(90deg, rgba(253, 187, 45, 0.28) 0%, rgba(253, 187, 45, 0.12) 50%, #fff8e6 100%);
+}
+
+.lecture-number-badge {
+    display: inline-block;
+    min-width: 2.75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #fdbb2d, #f0a500);
+    color: #1a2a6c;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-align: center;
+    box-shadow: 0 1px 0 rgba(26, 42, 108, 0.15);
+    border: 1px solid rgba(178, 31, 31, 0.2);
+}
+
+.lecture-title-with-badge {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+}
+
+.task-lecture-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #fdbb2d, #f0a500);
+    color: #1a2a6c;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1.35;
+    border: 1px solid rgba(178, 31, 31, 0.2);
+    box-shadow: 0 1px 0 rgba(26, 42, 108, 0.12);
+    vertical-align: middle;
+}
+
+.lectures-table tr.lecture-row--task:hover .lecture-link {
+    color: #1a2a6c;
+}
+
 .lecture-link {
     color: #2c3e50;
     font-weight: 500;
@@ -311,6 +375,21 @@ body.modal-open {
     .lectures-table th:nth-child(3),
     .lectures-table td:nth-child(3) {
         min-width: 240px;
+    }
+
+    .lecture-row--task {
+        box-shadow: inset 3px 0 0 #fdbb2d;
+    }
+
+    .lecture-number-badge {
+        min-width: 2.5rem;
+        padding: 3px 8px;
+        font-size: 0.9rem;
+    }
+
+    .task-lecture-badge {
+        font-size: 0.62rem;
+        padding: 2px 6px;
     }
 
     .interactive-session-button {

@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../logo.jpg" type="image/x-icon">
+    <title>Focal X V11 – Session 6 — Time, Dates &amp; The Evolution of Code</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Outfit:wght@500;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+        :root {
+            --navy: #1a2a6c;
+            --red: #b21f1f;
+            --gold: #fdbb2d;
+            --ink: #1e293b;
+            --muted: #64748b;
+            --panel: rgba(255, 255, 255, 0.96);
+            --ok: #15803d;
+            --bad: #b91c1c;
+            --soft: #f1f5f9;
+            --line: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'IBM Plex Sans', sans-serif;
+            color: var(--ink);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 200% 200%;
+            animation: bgShift 18s ease infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        button, input, textarea, select { font-family: inherit; }
+
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        .choice:focus-visible,
+        .chip:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        [hidden] { display: none !important; }
+
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--gold), #fff);
+            z-index: 20;
+            transition: width 0.25s ease;
+        }
+
+        .deck {
+            height: 100%;
+            display: grid;
+            place-items: center;
+            padding: 18px 18px 108px;
+        }
+
+        .slide {
+            display: none;
+            width: min(1040px, 100%);
+            max-height: calc(100vh - 124px);
+            overflow: auto;
+            background: var(--panel);
+            border-radius: 18px;
+            padding: 32px 40px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+            animation: fadeIn 0.35s ease;
+            scrollbar-width: thin;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--red);
+        }
+
+        .brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.7rem, 4vw, 2.55rem);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--navy);
+        }
+
+        .brand span { color: var(--red); }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.35rem, 3vw, 1.85rem);
+            color: var(--navy);
+            line-height: 1.25;
+        }
+
+        h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            color: var(--navy);
+        }
+
+        .lead {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #334155;
+            max-width: 62ch;
+        }
+
+        .hint { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+
+        .quote {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--navy);
+            font-weight: 600;
+            border-left: 4px solid var(--red);
+            padding-left: 14px;
+        }
+
+        .big-line {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.25rem, 3vw, 1.7rem);
+            color: var(--navy);
+            background: linear-gradient(90deg, #fff7ed, #eef2ff);
+            border-left: 4px solid var(--gold);
+            padding: 12px 14px;
+            border-radius: 12px;
+        }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.98rem;
+            border-radius: 12px;
+            padding: 12px 18px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.55; cursor: default; transform: none; }
+
+        .btn-primary {
+            background: var(--navy);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(26, 42, 108, 0.28);
+        }
+
+        .btn-primary:hover { background: #24398a; }
+
+        .btn-ghost { background: #eef2ff; color: var(--navy); }
+
+        .btn-gold { background: var(--gold); color: var(--navy); }
+
+        .btn-row, .flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chip, .tl-step {
+            background: var(--soft);
+            color: var(--navy);
+            font-weight: 700;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            border: 1px solid transparent;
+        }
+
+        button.chip, button.tl-step, button.choice {
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .chip.on, .tl-step.on {
+            background: var(--navy);
+            color: #fff;
+        }
+
+        .tl-step.hot { background: var(--red); color: #fff; }
+
+        .chip.gold {
+            background: #fff7ed;
+            color: #9a3412;
+            border-color: #fdba74;
+        }
+
+        .arrow { color: var(--red); font-weight: 800; }
+
+        .code, .log, .getter, .mono {
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        }
+
+        .code {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.84rem;
+            line-height: 1.55;
+            overflow-x: auto;
+        }
+
+        .kw { color: var(--red); font-weight: 600; }
+        .fn { color: var(--navy); font-weight: 600; }
+        .str { color: #9a3412; }
+        .num { color: #1d4ed8; }
+        .cm { color: var(--muted); }
+
+        .log {
+            background: var(--navy);
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            min-height: 76px;
+            max-height: 140px;
+            overflow: auto;
+            white-space: pre-wrap;
+            font-size: 0.84rem;
+            line-height: 1.5;
+        }
+
+        .timeline { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+        .card, .lane, .quiz {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .lane h3 { font-size: 0.95rem; }
+
+        .out {
+            min-height: 42px;
+            background: var(--soft);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.45;
+        }
+
+        .getter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+        .getter {
+            background: var(--soft);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            color: var(--navy);
+        }
+
+        label {
+            display: grid;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        textarea {
+            font: inherit;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: var(--ink);
+            background: #fff;
+            width: 100%;
+            min-width: 0;
+        }
+
+        textarea { min-height: 72px; resize: vertical; }
+        input[type="range"] { width: 100%; accent-color: var(--navy); }
+
+        .fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .fields-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 10px;
+        }
+
+        .blueprint {
+            border: 2px dashed var(--navy);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            background: #eef2ff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .inst {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-top: 4px solid var(--gold);
+            border-radius: 12px;
+            padding: 12px;
+            opacity: 0.4;
+        }
+
+        .inst.on { opacity: 1; }
+
+        .choice {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .choice.good { border-color: var(--ok); background: #f0fdf4; }
+        .choice.bad { border-color: var(--bad); background: #fef2f2; }
+
+        .feedback { min-height: 1.3em; font-weight: 650; font-weight: 600; }
+        .feedback.ok { color: var(--ok); }
+        .feedback.bad { color: var(--bad); }
+
+        .balance {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            color: var(--navy);
+        }
+
+        .map-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: baseline;
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px 12px;
+            cursor: pointer;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .map-row strong { font-family: 'Outfit', sans-serif; }
+        .map-row.on { border-color: var(--navy); background: #eef2ff; }
+
+        .badge {
+            display: inline-block;
+            background: #fff7ed;
+            color: #9a3412;
+            border: 1px solid #fdba74;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            width: fit-content;
+        }
+
+        .nav {
+            position: fixed;
+            inset-inline: 0;
+            bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .nav-row { display: flex; align-items: center; gap: 12px; }
+
+        .nav button {
+            border: none;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--navy);
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        .nav button:hover { background: #fff; }
+        .nav button:disabled { opacity: 0.45; cursor: default; }
+
+        .counter {
+            min-width: 78px;
+            text-align: center;
+            color: var(--navy);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        .credit {
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+        }
+
+        @media (max-width: 800px) {
+            .deck { padding: 12px 12px 118px; }
+            .slide { padding: 20px 14px; }
+            .grid-2, .grid-3, .fields, .fields-2, .getter-grid { grid-template-columns: 1fr; }
+            .brand { font-size: clamp(1.45rem, 7vw, 2rem); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html, body { animation: none; background-size: auto; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progress" id="progress" role="presentation"></div>
+    <div class="deck" id="deck">
+
+        <section class="slide active" data-id="open">
+            <p class="eyebrow">Focal X V11 · Session 6</p>
+            <p class="brand">Time, Dates &amp; <span>The Evolution of Code</span></p>
+            <p class="lead">We've learned how to write code. Now let's look at what happens when the code becomes bigger.</p>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>How do we make JS wait or repeat?</h3>
+                    <p class="hint">Timers schedule work. They do not freeze the page.</p>
+                </article>
+                <article class="card">
+                    <h3>How do we represent real things without chaos?</h3>
+                    <p class="hint">Names, functions, objects, and classes — each for a size of problem.</p>
+                </article>
+            </div>
+            <div class="flow" id="openFlow" aria-hidden="true">
+                <span class="chip">statements</span>
+                <span class="chip">variables</span>
+                <span class="chip">functions</span>
+                <span class="chip">objects</span>
+                <span class="chip gold">classes</span>
+                <span class="chip gold">modules</span>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" data-goto="1">Timers</button>
+                <button type="button" class="btn btn-ghost" data-goto="7">Dates</button>
+                <button type="button" class="btn btn-ghost" data-goto="11">Objects &amp; classes</button>
+            </div>
+            <p class="hint">Arrow keys move between slides. Focal X V11 / Moones Mezher</p>
+        </section>
+
+        <section class="slide" data-id="timeout">
+            <p class="eyebrow">Timers</p>
+            <h2>setTimeout schedules a callback</h2>
+            <div class="code">
+                <div><span class="fn">console</span>.log(<span class="str">"Start"</span>);</div>
+                <div><span class="fn">setTimeout</span>(() =&gt; <span class="fn">console</span>.log(<span class="str">"Hello after 2 seconds"</span>), <span class="num" id="delayShown">2000</span>);</div>
+                <div><span class="fn">console</span>.log(<span class="str">"End"</span>);</div>
+            </div>
+            <div class="timeline" id="tl">
+                <span class="tl-step" data-step="start">Start</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step" data-step="sched">scheduled</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step" data-step="end">End</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step" data-step="wait">delay</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step" data-step="cb">callback</span>
+            </div>
+            <label>Delay (ms)
+                <input id="delayInput" type="number" min="0" max="15000" step="100" value="2000">
+            </label>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="runTimeout">Run</button>
+                <button type="button" class="btn btn-ghost" id="resetTimeout">Reset</button>
+            </div>
+            <pre class="log" id="toLog" aria-live="polite"></pre>
+        </section>
+
+        <section class="slide" data-id="idea">
+            <p class="eyebrow">Timers</p>
+            <h2>Schedule is not freeze</h2>
+            <p class="quote">"Schedule this function to run after 2 seconds" is not "freeze the program for 2 seconds".</p>
+            <div class="grid-2">
+                <article class="lane">
+                    <h3>Freeze</h3>
+                    <p class="out" id="ideaFreeze">Other work waits.</p>
+                </article>
+                <article class="lane">
+                    <h3>Schedule</h3>
+                    <p class="out" id="ideaLive">Start and End finish first. The callback comes later.</p>
+                </article>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="ideaPlay">Play 2 seconds</button>
+                <button type="button" class="btn btn-ghost" id="ideaReset">Reset</button>
+            </div>
+        </section>
+
+        <section class="slide" data-id="clear">
+            <p class="eyebrow">Timers</p>
+            <h2>clearTimeout cancels the callback</h2>
+            <div class="code">
+                <div><span class="kw">const</span> id = <span class="fn">setTimeout</span>(() =&gt; {</div>
+                <div>  <span class="fn">console</span>.log(<span class="str">"Saved!"</span>);</div>
+                <div>}, <span class="num">2000</span>);</div>
+                <div><span class="fn">clearTimeout</span>(id); <span class="cm">// Saved! never runs</span></div>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="scheduleSave">Schedule Save</button>
+                <button type="button" class="btn btn-gold" id="cancelSave">Cancel Save</button>
+            </div>
+            <p class="out" id="saveState">Nothing scheduled.</p>
+            <p class="hint" id="saveRan">Saved! ran: no</p>
+        </section>
+
+        <section class="slide" data-id="interval">
+            <p class="eyebrow">Timers</p>
+            <h2>setInterval repeats until you stop it</h2>
+            <p class="balance" id="tickNum">0</p>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="startTick">Start</button>
+                <button type="button" class="btn btn-ghost" id="pauseTick">Pause</button>
+                <button type="button" class="btn btn-ghost" id="resetTick">Reset</button>
+                <button type="button" class="btn btn-gold" id="onceTick">Once</button>
+            </div>
+            <p class="out" id="tickNote">setTimeout runs once. setInterval repeats. clearInterval stops it.</p>
+        </section>
+
+        <section class="slide" data-id="frontend">
+            <p class="eyebrow">Frontend</p>
+            <h2>Timers people can see</h2>
+            <div class="flow">
+                <span class="chip">countdowns</span>
+                <span class="chip">messages</span>
+                <span class="chip">delays</span>
+                <span class="chip">animations</span>
+                <span class="chip">polling</span>
+                <span class="chip gold">auto-save</span>
+            </div>
+            <div class="grid-2">
+                <article class="lane">
+                    <h3 id="offerNote">Offer ends in</h3>
+                    <p class="balance" id="offerTime">00:29</p>
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-primary" id="startOffer">Start</button>
+                        <button type="button" class="btn btn-ghost" id="resetOffer">Reset</button>
+                    </div>
+                </article>
+                <article class="lane">
+                    <h3>Auto-save</h3>
+                    <label>Draft
+                        <textarea id="draft" placeholder="Type, then pause for 2 seconds"></textarea>
+                    </label>
+                    <p class="out" id="saveStatus">Waiting for typing</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="slide" data-id="backend">
+            <p class="eyebrow">Backend</p>
+            <h2>A repeating check</h2>
+            <div class="code">
+                <div><span class="fn">setInterval</span>(() =&gt; <span class="fn">console</span>.log(<span class="str">"Checking pending jobs..."</span>), <span class="num">5000</span>);</div>
+            </div>
+            <p class="badge">Sped-up demo · logs every 1s so you can see it</p>
+            <div class="flow">
+                <span class="chip">jobs</span>
+                <span class="chip">polling</span>
+                <span class="chip">cleanup</span>
+                <span class="chip">periodic checks</span>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="startJobs">Start</button>
+                <button type="button" class="btn btn-ghost" id="stopJobs">Stop</button>
+            </div>
+            <pre class="log" id="jobLog" aria-live="polite"></pre>
+            <p class="hint" id="jobNote">The snippet waits 5000ms. This demo uses 1s.</p>
+            <p class="quote">setInterval is NOT a replacement for a real job queue or cron in production.</p>
+        </section>
+
+        <section class="slide" data-id="clock">
+            <p class="eyebrow">Dates</p>
+            <h2>new Date() is a snapshot of now</h2>
+            <div class="code"><div><span class="kw">const</span> now = <span class="kw">new</span> <span class="fn">Date</span>();</div></div>
+            <div class="getter-grid">
+                <p class="getter" id="clockDate">date</p>
+                <p class="getter" id="clockTime">time</p>
+                <p class="getter" id="clockWeekday">weekday</p>
+                <p class="getter" id="clockMonth">month</p>
+                <p class="getter" id="clockYear">year</p>
+            </div>
+            <p class="hint">Updates every second while this slide is open.</p>
+        </section>
+
+        <section class="slide" data-id="controls">
+            <p class="eyebrow">Dates</p>
+            <h2>Move a date, compare two dates</h2>
+            <p class="out" id="workingLabel">September 27, 2026 · 09:00</p>
+            <div class="fields-2">
+                <label>Add days
+                    <input id="addDays" type="number" value="1">
+                </label>
+                <label>Add hours
+                    <input id="addHours" type="number" value="2">
+                </label>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="addDaysBtn">Add days</button>
+                <button type="button" class="btn btn-primary" id="addHoursBtn">Add hours</button>
+                <button type="button" class="btn btn-ghost" id="resetDate">Reset date</button>
+            </div>
+            <div class="getter-grid" id="getters">
+                <p class="getter" id="gFull">getFullYear()</p>
+                <p class="getter" id="gMonth">getMonth()</p>
+                <p class="getter" id="gDate">getDate()</p>
+                <p class="getter" id="gDay">getDay()</p>
+                <p class="getter" id="gHours">getHours()</p>
+                <p class="getter" id="gMin">getMinutes()</p>
+            </div>
+            <p class="hint">getMonth is 0-based: January 0 … December 11. getDay starts at Sunday = 0.</p>
+            <div class="fields-2">
+                <label>From
+                    <input id="dateA" type="date" value="2026-09-27">
+                </label>
+                <label>To
+                    <input id="dateB" type="date" value="2026-10-04">
+                </label>
+            </div>
+            <p class="big-line" id="dayDiff">7 days</p>
+        </section>
+
+        <section class="slide" data-id="relative">
+            <p class="eyebrow">Frontend dates</p>
+            <h2>Say when, in human words</h2>
+            <label>Last seen (minutes)
+                <input id="seenRange" type="range" min="0" max="180" value="12">
+            </label>
+            <p class="out" id="seenOut">Last seen 12 minutes ago</p>
+            <label>Posted (days)
+                <input id="postedRange" type="range" min="0" max="30" value="3">
+            </label>
+            <p class="out" id="postedOut">Posted 3 days ago</p>
+            <label>Appointment time tomorrow
+                <input id="apptTime" type="time" value="15:30">
+            </label>
+            <p class="out" id="apptOut">Appointment tomorrow at 3:30 PM</p>
+        </section>
+
+        <section class="slide" data-id="datesbe">
+            <p class="eyebrow">Backend dates</p>
+            <h2>The server stamps the moment</h2>
+            <div class="timeline" id="pipe">
+                <span class="tl-step">Request</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step">Backend</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step">new Date()</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step">createdAt</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="tl-step">Database</span>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="stampBtn">Stamp createdAt</button>
+            </div>
+            <p class="out mono" id="stampOut">Press stamp to store a Date.</p>
+            <div class="flow" id="dateUses">
+                <button type="button" class="chip" data-use="createdAt">createdAt</button>
+                <button type="button" class="chip" data-use="updatedAt">updatedAt</button>
+                <button type="button" class="chip" data-use="expiresAt">expiresAt</button>
+                <button type="button" class="chip" data-use="login">login</button>
+                <button type="button" class="chip" data-use="token">token expiry</button>
+                <button type="button" class="chip" data-use="logs">logs</button>
+            </div>
+            <p class="hint" id="useOut">Pick a field.</p>
+        </section>
+
+        <section class="slide" data-id="vars">
+            <p class="eyebrow">When the code grows</p>
+            <h2>One student, then another</h2>
+            <div class="code">
+                <div><span class="kw">let</span> studentName = <span class="str">"Ahmad"</span>;</div>
+                <div><span class="kw">let</span> studentAge = <span class="num">20</span>;</div>
+                <div><span class="kw">let</span> studentGrade = <span class="num">85</span>;</div>
+                <div><span class="kw">let</span> student2Name = <span class="str">"Sara"</span>;</div>
+                <div><span class="kw">let</span> student2Age = <span class="num">21</span>;</div>
+                <div><span class="kw">let</span> student2Grade = <span class="num">88</span>;</div>
+            </div>
+            <p class="lead">Imagine 100 students. Would you keep writing variables like this?</p>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="yesVars">Yes</button>
+                <button type="button" class="btn btn-ghost" id="noVars">No</button>
+            </div>
+            <p class="out" id="messOut" hidden></p>
+        </section>
+
+        <section class="slide" data-id="procedural">
+            <p class="eyebrow">Simple problems</p>
+            <h2>Procedural code is enough here</h2>
+            <div class="code">
+                <div><span class="kw">const</span> studentName = <span class="str">"Ahmad"</span>;</div>
+                <div><span class="kw">const</span> studentAge = <span class="num">20</span>;</div>
+                <div><span class="kw">const</span> studentGrade = <span class="num">85</span>;</div>
+                <div><span class="fn">console</span>.log(studentName, studentAge, studentGrade);</div>
+            </div>
+            <p class="quote">Nothing is wrong with this.</p>
+            <p class="hint">Simple code is fine for simple problems. One student does not need a system.</p>
+            <button type="button" class="btn btn-primary" id="procRun">Run</button>
+            <p class="out" id="procOut">Output appears here.</p>
+        </section>
+
+        <section class="slide" data-id="fn">
+            <p class="eyebrow">Reusable behavior</p>
+            <h2>A function names the repeated work</h2>
+            <div class="code">
+                <div><span class="kw">function</span> <span class="fn">printStudent</span>(name, age, grade) {</div>
+                <div>  <span class="fn">console</span>.log(name, age, grade);</div>
+                <div>}</div>
+            </div>
+            <div class="flow" id="fnFlow">
+                <span class="chip" id="fnA">repeated logic</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="chip" id="fnB">function</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="chip" id="fnC">reusable behavior</span>
+            </div>
+            <div class="fields">
+                <label>Name <input id="fnName" type="text" value="Ahmad"></label>
+                <label>Age <input id="fnAge" type="number" value="20"></label>
+                <label>Grade <input id="fnGrade" type="number" value="85"></label>
+            </div>
+            <button type="button" class="btn btn-primary" id="fnRun">Run</button>
+            <p class="out mono" id="fnOut">printStudent(…)</p>
+        </section>
+
+        <section class="slide" data-id="object">
+            <p class="eyebrow">Data + behavior</p>
+            <h2>An object keeps them together</h2>
+            <p class="big-line">Object = Data + Related behavior</p>
+            <div class="code">
+                <div><span class="kw">const</span> student = {</div>
+                <div>  name: <span class="str">"Ahmad"</span>, age: <span class="num">20</span>, grade: <span class="num">85</span>,</div>
+                <div>  <span class="fn">introduce</span>() { <span class="kw">return</span> <span class="str">`Hi, I'm ${this.name}`</span> }</div>
+                <div>};</div>
+            </div>
+            <label>Name
+                <input id="objName" type="text" value="Ahmad">
+            </label>
+            <button type="button" class="btn btn-primary" id="objIntro">introduce()</button>
+            <p class="out" id="objOut">Data: name, age 20, grade 85. Behavior waits for the button.</p>
+        </section>
+
+        <section class="slide" data-id="literals">
+            <p class="eyebrow">A pattern</p>
+            <h2>Three students, same shape</h2>
+            <div class="grid-3" id="literalGrid"></div>
+            <p class="quote">What if 10,000 students? We have a pattern.</p>
+            <p class="out" id="literalOut">Introduce any card.</p>
+        </section>
+
+        <section class="slide" data-id="class">
+            <p class="eyebrow">Blueprint</p>
+            <h2>A class describes the pattern once</h2>
+            <div class="code">
+                <div><span class="kw">class</span> <span class="fn">Student</span> {</div>
+                <div>  <span class="fn">constructor</span>(name, age, grade) {</div>
+                <div>    <span class="kw">this</span>.name = name;</div>
+                <div>    <span class="kw">this</span>.age = age;</div>
+                <div>    <span class="kw">this</span>.grade = grade;</div>
+                <div>  }</div>
+                <div>  <span class="fn">introduce</span>() { <span class="kw">return</span> <span class="str">`Hi, I'm ${this.name}`</span> }</div>
+                <div>}</div>
+            </div>
+            <p class="hint">A class is a beginner mental model of a blueprint, not magic. No inheritance here.</p>
+            <button type="button" class="btn btn-primary" id="buildInstances">new Student()</button>
+            <div class="blueprint">class Student</div>
+            <div class="grid-3" id="instances">
+                <article class="inst"><h3>Ahmad</h3><p class="mono">new Student("Ahmad", 20, 85)</p></article>
+                <article class="inst"><h3>Sara</h3><p class="mono">new Student("Sara", 21, 88)</p></article>
+                <article class="inst"><h3>Omar</h3><p class="mono">new Student("Omar", 19, 76)</p></article>
+            </div>
+        </section>
+
+        <section class="slide" data-id="form">
+            <p class="eyebrow">Make instances</p>
+            <h2>Create a student</h2>
+            <div class="fields">
+                <label>Name <input id="stuName" type="text" value="Ahmad"></label>
+                <label>Age <input id="stuAge" type="number" value="20"></label>
+                <label>Grade <input id="stuGrade" type="number" value="85"></label>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="stuCreate">Create Student</button>
+            </div>
+            <p class="hint" id="stuMsg">Each card is one instance.</p>
+            <div class="cards" id="stuCards"></div>
+        </section>
+
+        <section class="slide" data-id="patient">
+            <p class="eyebrow">Real things</p>
+            <h2>Same idea, many nouns</h2>
+            <div class="flow" id="roles">
+                <button type="button" class="chip" data-role="User">User</button>
+                <button type="button" class="chip" data-role="Patient">Patient</button>
+                <button type="button" class="chip" data-role="Doctor">Doctor</button>
+                <button type="button" class="chip" data-role="Product">Product</button>
+                <button type="button" class="chip" data-role="Order">Order</button>
+                <button type="button" class="chip" data-role="BankAccount">BankAccount</button>
+                <button type="button" class="chip" data-role="Message">Message</button>
+                <button type="button" class="chip" data-role="GameCharacter">GameCharacter</button>
+            </div>
+            <p class="out" id="roleOut">Pick a noun. Then try the patient.</p>
+            <article class="lane">
+                <h3>Patient · Lina</h3>
+                <div class="code">
+                    <div><span class="fn">addVisit</span>(note) · <span class="fn">getVisitCount</span>()</div>
+                </div>
+                <label>Visit note
+                    <input id="visitNote" type="text" value="Checkup" placeholder="Visit note">
+                </label>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-primary" id="addVisit">addVisit</button>
+                </div>
+                <p class="out" id="visitCount">Visits: 0</p>
+                <p class="hint" id="visitList">No visits yet</p>
+            </article>
+        </section>
+
+        <section class="slide" data-id="columns">
+            <p class="eyebrow">Both sides</p>
+            <h2>Frontend and backend</h2>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>Frontend</h3>
+                    <button type="button" class="map-row" data-col="feTime"><strong>Timers</strong><span>countdowns, delays</span></button>
+                    <button type="button" class="map-row" data-col="feDate"><strong>Dates</strong><span>last seen, posted</span></button>
+                    <button type="button" class="map-row" data-col="feObj"><strong>Objects</strong><span>cart, form, player</span></button>
+                </article>
+                <article class="card">
+                    <h3>Backend</h3>
+                    <button type="button" class="map-row" data-col="beTime"><strong>Timers</strong><span>checks, cleanup</span></button>
+                    <button type="button" class="map-row" data-col="beDate"><strong>Dates</strong><span>createdAt, expiry</span></button>
+                    <button type="button" class="map-row" data-col="beObj"><strong>Objects</strong><span>User, Order, Patient</span></button>
+                </article>
+            </div>
+            <p class="out" id="colOut">Tap a row.</p>
+            <p class="quote">Modern JavaScript uses many styles.</p>
+        </section>
+
+        <section class="slide" data-id="picture">
+            <p class="eyebrow">Big picture</p>
+            <h2>Abstractions show up when complexity grows</h2>
+            <div class="flow" id="evo"></div>
+            <p class="out" id="evoOut">Tap a step.</p>
+            <p class="hint">Not a historical rule. Abstractions appear when complexity grows.</p>
+            <p class="quote">Functions, objects, modules, and classes all have a place.</p>
+        </section>
+
+        <section class="slide" data-id="quiz">
+            <p class="eyebrow">Choose the simplest fit</p>
+            <h2>Three quick checks</h2>
+            <div class="quiz" id="q1">
+                <p>You need the area of 10 rectangles.</p>
+                <button type="button" class="choice" data-correct="false">A · Repeat the formula 10 times</button>
+                <button type="button" class="choice" data-correct="true">B · Write a function</button>
+                <button type="button" class="choice" data-correct="false">C · Make 10 classes</button>
+                <p class="feedback" aria-live="polite"></p>
+            </div>
+            <div class="quiz" id="q2">
+                <p>A user has name, email, age, and behavior.</p>
+                <button type="button" class="choice" data-correct="true">An object or a class — both are fine</button>
+                <button type="button" class="choice" data-correct="false">Only a class is correct</button>
+                <button type="button" class="choice" data-correct="false">A separate variable for every field</button>
+                <p class="feedback" aria-live="polite"></p>
+            </div>
+            <div class="quiz" id="q3">
+                <p>A clinic keeps 5,000 patients.</p>
+                <button type="button" class="choice" data-correct="true">A reusable model (a class) is useful</button>
+                <button type="button" class="choice" data-correct="false">5,000 sets of loose variables</button>
+                <button type="button" class="choice" data-correct="false">Every problem should become a class</button>
+                <p class="feedback" aria-live="polite"></p>
+            </div>
+        </section>
+
+        <section class="slide" data-id="bank">
+            <p class="eyebrow">Challenge</p>
+            <h2>BankAccount</h2>
+            <div class="flow">
+                <span class="chip">owner</span>
+                <span class="chip">balance</span>
+                <span class="chip gold">deposit(amount)</span>
+                <span class="chip gold">withdraw(amount)</span>
+                <span class="chip gold">getBalance()</span>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-ghost" id="hint1">Hint 1</button>
+                <button type="button" class="btn btn-ghost" id="hint2">Hint 2</button>
+                <button type="button" class="btn btn-primary" id="showSol">Show solution</button>
+            </div>
+            <p class="hint" id="hintOut"></p>
+            <pre class="code" id="solution" hidden></pre>
+            <h3>Try it · Ahmad starts at $100</h3>
+            <p class="balance" id="balOut">Ahmad · $100</p>
+            <div class="fields-2">
+                <label>Deposit
+                    <input id="depAmt" type="number" min="0" value="25">
+                </label>
+                <label>Withdraw
+                    <input id="wdAmt" type="number" min="0" value="10">
+                </label>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="depBtn">Deposit</button>
+                <button type="button" class="btn btn-gold" id="wdBtn">Withdraw</button>
+                <button type="button" class="btn btn-ghost" id="balReset">Reset</button>
+            </div>
+            <p class="hint" id="balMsg" aria-live="polite"></p>
+        </section>
+
+        <section class="slide" data-id="summary">
+            <p class="eyebrow">Session 6</p>
+            <h2>What to reach for</h2>
+            <button type="button" class="map-row" data-sum="timers"><strong>Timers</strong><span>when code runs</span></button>
+            <button type="button" class="map-row" data-sum="date"><strong>Date</strong><span>when something happened</span></button>
+            <button type="button" class="map-row" data-sum="fn"><strong>Functions</strong><span>reusable behavior</span></button>
+            <button type="button" class="map-row" data-sum="obj"><strong>Objects</strong><span>data + behavior</span></button>
+            <button type="button" class="map-row" data-sum="class"><strong>Classes</strong><span>many similar objects</span></button>
+            <button type="button" class="map-row" data-sum="abs"><strong>Abstraction</strong><span>manage complexity</span></button>
+            <p class="out" id="sumOut">Tap a line.</p>
+            <p class="quote">The goal is to choose the simplest structure that keeps the problem understandable.</p>
+            <p class="brand">Focal X <span>V11</span></p>
+            <p class="hint">Focal X V11 / Moones Mezher</p>
+        </section>
+    </div>
+
+    <div class="nav">
+        <p class="credit">Focal X V11 / Moones Mezher</p>
+        <div class="nav-row">
+            <button type="button" id="prev" aria-label="Previous slide">←</button>
+            <span class="counter" id="counter" aria-live="polite">1 / 24</span>
+            <button type="button" id="next" aria-label="Next slide">→</button>
+        </div>
+    </div>
+
+    <script>
+        const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function $(id) { return document.getElementById(id); }
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        class Student {
+            constructor(name, age, grade) {
+                this.name = name;
+                this.age = age;
+                this.grade = grade;
+            }
+            introduce() {
+                return "Hi, I'm " + this.name;
+            }
+        }
+
+        class Patient {
+            constructor(name) {
+                this.name = name;
+                this.visits = [];
+            }
+            addVisit(note) {
+                this.visits.push(note);
+            }
+            getVisitCount() {
+                return this.visits.length;
+            }
+        }
+
+        class BankAccount {
+            constructor(owner, balance) {
+                this.owner = owner;
+                this.balance = balance === undefined ? 0 : balance;
+            }
+            deposit(amount) {
+                this.balance += amount;
+            }
+            withdraw(amount) {
+                if (amount <= this.balance) this.balance -= amount;
+            }
+            getBalance() {
+                return this.balance;
+            }
+        }
+
+        const jobs = new Set();
+
+        function later(fn, ms) {
+            const job = { id: 0, kind: 'timeout', done: false };
+            job.id = setTimeout(function () {
+                job.done = true;
+                jobs.delete(job);
+                fn();
+            }, ms);
+            jobs.add(job);
+            return job;
+        }
+
+        function every(fn, ms) {
+            const job = { id: 0, kind: 'interval', done: false };
+            job.id = setInterval(fn, ms);
+            jobs.add(job);
+            return job;
+        }
+
+        function stop(job) {
+            if (!job || job.done) return;
+            job.done = true;
+            if (job.kind === 'interval') clearInterval(job.id);
+            else clearTimeout(job.id);
+            jobs.delete(job);
+        }
+
+        function stopAll() {
+            jobs.forEach(function (job) {
+                if (job.done) return;
+                job.done = true;
+                if (job.kind === 'interval') clearInterval(job.id);
+                else clearTimeout(job.id);
+            });
+            jobs.clear();
+        }
+
+        function tracker() {
+            const mine = new Set();
+            return {
+                later: function (fn, ms) {
+                    const job = later(fn, ms);
+                    mine.add(job);
+                    return job;
+                },
+                every: function (fn, ms) {
+                    const job = every(fn, ms);
+                    mine.add(job);
+                    return job;
+                },
+                clear: function () {
+                    mine.forEach(stop);
+                    mine.clear();
+                }
+            };
+        }
+
+        const openTrack = tracker();
+        const labTrack = tracker();
+        const ideaTrack = tracker();
+        const clearTrack = tracker();
+        const tickTrack = tracker();
+        const offerTrack = tracker();
+        const saveTrack = tracker();
+        const backTrack = tracker();
+        const clockTrack = tracker();
+        const datesTrack = tracker();
+        const fnTrack = tracker();
+        const classTrack = tracker();
+
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const counter = $('counter');
+        const progress = $('progress');
+        const prevBtn = $('prev');
+        const nextBtn = $('next');
+        let index = 0;
+        let booted = false;
+
+        let labRun = 0;
+        let savePending = false;
+        let tickCount = 0;
+        let tickOn = false;
+        let remain = 29;
+        let offerOn = false;
+        let backendOn = false;
+        let working = new Date(2026, 8, 27, 9, 0, 0);
+        const patient = new Patient('Lina');
+        let account = new BankAccount('Ahmad', 100);
+
+        const studentObj = {
+            name: 'Ahmad',
+            age: 20,
+            grade: 85,
+            introduce: function () {
+                return "Hi, I'm " + this.name;
+            }
+        };
+
+        function show(nextIndex) {
+            const prevId = slides[index].dataset.id;
+            stopAll();
+            if (booted && leaveById[prevId]) leaveById[prevId]();
+            booted = true;
+            index = Math.max(0, Math.min(nextIndex, slides.length - 1));
+            slides.forEach(function (s, n) {
+                const on = n === index;
+                s.classList.toggle('active', on);
+                s.setAttribute('aria-hidden', on ? 'false' : 'true');
+            });
+            counter.textContent = (index + 1) + ' / ' + slides.length;
+            progress.style.width = ((index + 1) / slides.length) * 100 + '%';
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === slides.length - 1;
+            const id = slides[index].dataset.id;
+            if (enterById[id]) enterById[id]();
+        }
+
+        function resetTimeoutVisual() {
+            $('toLog').textContent = '';
+            document.querySelectorAll('#tl .tl-step').forEach(function (el) {
+                el.classList.remove('on', 'hot');
+            });
+        }
+
+        function readDelay() {
+            const n = Number($('delayInput').value);
+            if (!Number.isFinite(n) || n < 0) return 2000;
+            return Math.min(n, 15000);
+        }
+
+        function runTimeoutLab() {
+            const runId = ++labRun;
+            labTrack.clear();
+            resetTimeoutVisual();
+            const delay = readDelay();
+            const stagger = reduceMotion ? 0 : 280;
+            const log = $('toLog');
+            function mark(step, cls) {
+                const el = document.querySelector('#tl [data-step="' + step + '"]');
+                if (el) el.classList.add(cls || 'on');
+            }
+            function line(text) {
+                log.textContent += (log.textContent ? '\n' : '') + text;
+            }
+            line('Start');
+            mark('start');
+            labTrack.later(function () {
+                if (runId !== labRun) return;
+                line('// setTimeout scheduled');
+                mark('sched');
+            }, stagger);
+            labTrack.later(function () {
+                if (runId !== labRun) return;
+                line('End');
+                mark('end');
+                mark('wait');
+            }, stagger * 2);
+            labTrack.later(function () {
+                if (runId !== labRun) return;
+                line('Hello after 2 seconds');
+                const wait = document.querySelector('#tl [data-step="wait"]');
+                if (wait) wait.classList.remove('on');
+                mark('cb', 'hot');
+            }, stagger * 2 + delay);
+        }
+
+        function resetIdea() {
+            ideaTrack.clear();
+            $('ideaFreeze').textContent = 'Other work waits.';
+            $('ideaLive').textContent = 'Start and End finish first. The callback comes later.';
+        }
+
+        function playIdea() {
+            ideaTrack.clear();
+            let live = 0;
+            $('ideaFreeze').textContent = 'Frozen… other work: 0';
+            $('ideaLive').textContent = 'Start';
+            ideaTrack.later(function () {
+                $('ideaLive').textContent = 'Start\nEnd';
+            }, reduceMotion ? 0 : 200);
+            const pulse = ideaTrack.every(function () {
+                live += 1;
+                $('ideaLive').textContent = 'Start\nEnd\nother work: ' + live;
+            }, reduceMotion ? 400 : 400);
+            ideaTrack.later(function () {
+                stop(pulse);
+                $('ideaFreeze').textContent = 'Unfrozen. Other work during the wait: 0';
+                $('ideaLive').textContent = 'Start\nEnd\nother work: ' + live + '\nHello after 2 seconds';
+            }, 2000);
+        }
+
+        function scheduleSave() {
+            clearTrack.clear();
+            savePending = true;
+            $('saveState').textContent = 'Waiting…';
+            $('saveRan').textContent = 'Saved! ran: not yet';
+            clearTrack.later(function () {
+                savePending = false;
+                $('saveState').textContent = 'Saved!';
+                $('saveRan').textContent = 'Saved! ran: yes';
+            }, 2000);
+        }
+
+        function cancelSave() {
+            if (!savePending) {
+                $('saveState').textContent = 'Nothing waiting to cancel';
+                return;
+            }
+            clearTrack.clear();
+            savePending = false;
+            $('saveState').textContent = 'Cancelled — Saved! did not run';
+            $('saveRan').textContent = 'Saved! ran: no';
+        }
+
+        function renderTick() {
+            $('tickNum').textContent = String(tickCount);
+        }
+
+        function startTick() {
+            if (tickOn) return;
+            tickOn = true;
+            $('tickNote').textContent = 'setInterval repeats.';
+            tickTrack.every(function () {
+                tickCount += 1;
+                renderTick();
+            }, 1000);
+        }
+
+        function pauseTick() {
+            tickTrack.clear();
+            tickOn = false;
+            $('tickNote').textContent = 'clearInterval stops it.';
+        }
+
+        function resetTick() {
+            pauseTick();
+            tickCount = 0;
+            renderTick();
+            $('tickNote').textContent = 'setTimeout runs once. setInterval repeats. clearInterval stops it.';
+        }
+
+        function onceTick() {
+            $('tickNote').textContent = 'setTimeout runs once.';
+            tickTrack.later(function () {
+                tickCount += 1;
+                renderTick();
+            }, reduceMotion ? 0 : 400);
+        }
+
+        function renderOffer() {
+            $('offerTime').textContent = '00:' + pad(remain);
+            if (remain === 0) $('offerNote').textContent = 'Offer ended';
+        }
+
+        function startOffer() {
+            if (offerOn || remain <= 0) return;
+            offerOn = true;
+            $('offerNote').textContent = 'Offer ends in';
+            offerTrack.every(function () {
+                remain -= 1;
+                if (remain <= 0) {
+                    remain = 0;
+                    renderOffer();
+                    offerTrack.clear();
+                    offerOn = false;
+                    $('offerNote').textContent = 'Offer ended';
+                    return;
+                }
+                renderOffer();
+            }, 1000);
+        }
+
+        function resetOffer() {
+            offerTrack.clear();
+            offerOn = false;
+            remain = 29;
+            $('offerNote').textContent = 'Offer ends in';
+            renderOffer();
+        }
+
+        function startBackend() {
+            if (backendOn) return;
+            backendOn = true;
+            $('jobNote').textContent = 'Sped-up demo running every 1s. The snippet uses 5000.';
+            backTrack.every(function () {
+                const t = new Date();
+                const log = $('jobLog');
+                const row = pad(t.getHours()) + ':' + pad(t.getMinutes()) + ':' + pad(t.getSeconds()) + '  Checking pending jobs...';
+                const lines = log.textContent ? log.textContent.split('\n') : [];
+                lines.push(row);
+                log.textContent = lines.slice(-8).join('\n');
+            }, 1000);
+        }
+
+        function stopBackend() {
+            backTrack.clear();
+            backendOn = false;
+            $('jobNote').textContent = 'Stopped. clearInterval is the cleanup.';
+        }
+
+        function tickClock() {
+            const now = new Date();
+            $('clockDate').textContent = 'Date · ' + MONTHS[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+            $('clockTime').textContent = 'Time · ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+            $('clockWeekday').textContent = 'Weekday · ' + WEEKDAYS[now.getDay()];
+            $('clockMonth').textContent = 'Month · ' + MONTHS[now.getMonth()];
+            $('clockYear').textContent = 'Year · ' + now.getFullYear();
+        }
+
+        function renderWorking() {
+            $('workingLabel').textContent = MONTHS[working.getMonth()] + ' ' + working.getDate() + ', ' + working.getFullYear() + ' · ' + pad(working.getHours()) + ':' + pad(working.getMinutes());
+            $('gFull').textContent = 'getFullYear() → ' + working.getFullYear();
+            $('gMonth').textContent = 'getMonth() → ' + working.getMonth() + ' (' + MONTHS[working.getMonth()] + ')';
+            $('gDate').textContent = 'getDate() → ' + working.getDate();
+            $('gDay').textContent = 'getDay() → ' + working.getDay() + ' (' + WEEKDAYS[working.getDay()] + ')';
+            $('gHours').textContent = 'getHours() → ' + working.getHours();
+            $('gMin').textContent = 'getMinutes() → ' + working.getMinutes();
+        }
+
+        function resetWorking() {
+            working = new Date(2026, 8, 27, 9, 0, 0);
+            renderWorking();
+        }
+
+        function parseISO(value) {
+            const parts = String(value || '').split('-').map(Number);
+            if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2]) return null;
+            return new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+
+        function renderDiff() {
+            const a = parseISO($('dateA').value);
+            const b = parseISO($('dateB').value);
+            if (!a || !b) {
+                $('dayDiff').textContent = 'Enter both dates';
+                return;
+            }
+            const days = Math.round((Date.UTC(b.getFullYear(), b.getMonth(), b.getDate()) - Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())) / 86400000);
+            $('dayDiff').textContent = days + ' days';
+        }
+
+        function renderSeen() {
+            const n = Number($('seenRange').value);
+            if (n <= 0) $('seenOut').textContent = 'Last seen just now';
+            else if (n === 1) $('seenOut').textContent = 'Last seen 1 minute ago';
+            else $('seenOut').textContent = 'Last seen ' + n + ' minutes ago';
+        }
+
+        function renderPosted() {
+            const n = Number($('postedRange').value);
+            if (n <= 0) $('postedOut').textContent = 'Posted today';
+            else if (n === 1) $('postedOut').textContent = 'Posted 1 day ago';
+            else $('postedOut').textContent = 'Posted ' + n + ' days ago';
+        }
+
+        function renderAppt() {
+            const value = $('apptTime').value || '15:30';
+            const bits = value.split(':').map(Number);
+            const d = new Date();
+            d.setHours(bits[0] || 0, bits[1] || 0, 0, 0);
+            const label = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            $('apptOut').textContent = 'Appointment tomorrow at ' + label;
+        }
+
+        function stampCreated() {
+            datesTrack.clear();
+            const steps = document.querySelectorAll('#pipe .tl-step');
+            steps.forEach(function (step) { step.classList.remove('on'); });
+            const when = new Date();
+            steps.forEach(function (step, i) {
+                datesTrack.later(function () {
+                    step.classList.add('on');
+                    if (i === steps.length - 1) {
+                        $('stampOut').textContent = 'createdAt: ' + when.toISOString();
+                    }
+                }, reduceMotion ? 0 : 220 * i);
+            });
+        }
+
+        function money(n) {
+            const rounded = Math.round(n * 100) / 100;
+            return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2);
+        }
+
+        function renderBal() {
+            $('balOut').textContent = account.owner + ' · $' + money(account.getBalance());
+        }
+
+        function readAmount(id) {
+            const n = Number($(id).value);
+            if (!Number.isFinite(n) || n <= 0) return null;
+            return n;
+        }
+
+        function renderVisits() {
+            $('visitCount').textContent = 'Visits: ' + patient.getVisitCount();
+            $('visitList').textContent = patient.visits.length ? patient.visits.join(' · ') : 'No visits yet';
+        }
+
+        const USES = {
+            createdAt: 'createdAt: new Date() when the row is first stored.',
+            updatedAt: 'updatedAt: a new Date() whenever the record changes.',
+            expiresAt: 'expiresAt: a future Date after which the row is no longer valid.',
+            login: 'lastLoginAt: new Date() when someone signs in.',
+            token: 'Token expiry is a Date (or timestamp) after which the token is rejected.',
+            logs: 'Each log line can store timestamp: new Date().'
+        };
+
+        const ROLES = {
+            User: 'User — name, email, and login().',
+            Patient: 'Patient — visits, addVisit(), getVisitCount(). Try it below.',
+            Doctor: 'Doctor — a schedule and seePatient().',
+            Product: 'Product — price, stock, isAvailable().',
+            Order: 'Order — items and total().',
+            BankAccount: 'BankAccount — balance, deposit(), withdraw().',
+            Message: 'Message — text and send().',
+            GameCharacter: 'GameCharacter — health and attack().'
+        };
+
+        const COLS = {
+            feTime: 'Frontend timers: countdowns, toasts, input delays, small animations, auto-save.',
+            feDate: 'Frontend dates: last seen, posted, and appointment labels.',
+            feObj: 'Frontend objects: a cart, a form, or a character — data and behavior on screen.',
+            beTime: 'Backend timers: polling, cleanup, and periodic checks. Not a production cron.',
+            beDate: 'Backend dates: createdAt, updatedAt, expiresAt, login, token expiry, logs.',
+            beObj: 'Backend objects: User, Order, Patient, and the rules that belong to them.'
+        };
+
+        const EVO = [
+            ['Simple statements', 'One line does one small thing. Enough when the task is small.'],
+            ['Variables', 'Names hold values so you can reuse them.'],
+            ['Functions', 'Reusable behavior. Call it instead of copying lines.'],
+            ['Objects', 'Data plus the behavior that belongs to that data.'],
+            ['Classes', 'A blueprint for many similar objects. A mental model, not magic.'],
+            ['Modules / Architecture', 'When functions and classes need a home, group them into modules.'],
+            ['Larger systems', 'The same ideas, with more boundaries. Complexity is what grows.']
+        ];
+
+        const SUMS = {
+            timers: 'Timers decide when code runs — once, later, or on a repeat.',
+            date: 'Date records when something happened, or when it should expire.',
+            fn: 'Functions are reusable behavior.',
+            obj: 'Objects are data plus related behavior.',
+            class: 'Classes help when you need many similar objects.',
+            abs: 'Abstraction is how you manage complexity — pick the smallest structure that stays clear.'
+        };
+
+        const QUIZ = {
+            q1: {
+                ok: 'A function. One formula, ten calls.',
+                bad: 'A function is the fit: one formula, ten calls. Ten classes are more machinery than ten areas need.'
+            },
+            q2: {
+                ok: 'An object or a class both fit. Do not force a class.',
+                bad: 'An object or a class both fit. Do not force a class.'
+            },
+            q3: {
+                ok: 'A reusable model is useful for 5,000 patients. A class helps here, and it is not always the answer.',
+                bad: 'A reusable model is useful at this scale. A class is not always the answer to every problem.'
+            }
+        };
+
+        const leaveById = {
+            open: function () { openTrack.clear(); },
+            timeout: function () {
+                labRun += 1;
+                labTrack.clear();
+                resetTimeoutVisual();
+            },
+            idea: function () { resetIdea(); },
+            clear: function () {
+                if (savePending) {
+                    savePending = false;
+                    $('saveState').textContent = 'Cleared on leave — Saved! did not run';
+                    $('saveRan').textContent = 'Saved! ran: no';
+                }
+                clearTrack.clear();
+            },
+            interval: function () {
+                tickTrack.clear();
+                tickOn = false;
+            },
+            frontend: function () {
+                offerTrack.clear();
+                saveTrack.clear();
+                offerOn = false;
+                const label = $('saveStatus').textContent;
+                if (label === 'Typing…' || label === 'Saving…') $('saveStatus').textContent = 'Cleared';
+            },
+            backend: function () {
+                if (!backendOn) return;
+                backTrack.clear();
+                backendOn = false;
+                $('jobNote').textContent = 'Stopped on leave.';
+            },
+            clock: function () { clockTrack.clear(); },
+            datesbe: function () {
+                datesTrack.clear();
+                document.querySelectorAll('#pipe .tl-step').forEach(function (step) {
+                    step.classList.remove('on');
+                });
+            },
+            fn: function () { fnTrack.clear(); },
+            class: function () { classTrack.clear(); }
+        };
+
+        const enterById = {
+            open: function () {
+                document.querySelectorAll('#openFlow .chip').forEach(function (chip, i) {
+                    openTrack.later(function () { chip.classList.add('on'); }, reduceMotion ? 0 : 160 * i);
+                });
+            },
+            clock: function () {
+                tickClock();
+                clockTrack.every(tickClock, 1000);
+            }
+        };
+
+        $('runTimeout').addEventListener('click', runTimeoutLab);
+        $('resetTimeout').addEventListener('click', function () {
+            labRun += 1;
+            labTrack.clear();
+            resetTimeoutVisual();
+            $('delayInput').value = '2000';
+            $('delayShown').textContent = '2000';
+        });
+        $('delayInput').addEventListener('input', function () {
+            const n = Number($('delayInput').value);
+            $('delayShown').textContent = Number.isFinite(n) ? String(n) : '2000';
+        });
+
+        $('ideaPlay').addEventListener('click', playIdea);
+        $('ideaReset').addEventListener('click', resetIdea);
+        $('scheduleSave').addEventListener('click', scheduleSave);
+        $('cancelSave').addEventListener('click', cancelSave);
+        $('startTick').addEventListener('click', startTick);
+        $('pauseTick').addEventListener('click', pauseTick);
+        $('resetTick').addEventListener('click', resetTick);
+        $('onceTick').addEventListener('click', onceTick);
+        $('startOffer').addEventListener('click', startOffer);
+        $('resetOffer').addEventListener('click', resetOffer);
+
+        $('draft').addEventListener('input', function () {
+            saveTrack.clear();
+            $('saveStatus').textContent = 'Typing…';
+            saveTrack.later(function () {
+                $('saveStatus').textContent = 'Saving…';
+                saveTrack.later(function () {
+                    $('saveStatus').textContent = 'Saved';
+                }, 600);
+            }, 2000);
+        });
+
+        $('startJobs').addEventListener('click', startBackend);
+        $('stopJobs').addEventListener('click', stopBackend);
+
+        $('addDaysBtn').addEventListener('click', function () {
+            const n = Number($('addDays').value);
+            if (!Number.isFinite(n)) return;
+            working.setDate(working.getDate() + n);
+            renderWorking();
+        });
+        $('addHoursBtn').addEventListener('click', function () {
+            const n = Number($('addHours').value);
+            if (!Number.isFinite(n)) return;
+            working.setHours(working.getHours() + n);
+            renderWorking();
+        });
+        $('resetDate').addEventListener('click', resetWorking);
+        $('dateA').addEventListener('input', renderDiff);
+        $('dateB').addEventListener('input', renderDiff);
+        $('seenRange').addEventListener('input', renderSeen);
+        $('postedRange').addEventListener('input', renderPosted);
+        $('apptTime').addEventListener('input', renderAppt);
+        $('stampBtn').addEventListener('click', stampCreated);
+
+        document.querySelectorAll('#dateUses .chip').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                $('useOut').textContent = USES[btn.dataset.use] || '';
+            });
+        });
+
+        $('yesVars').addEventListener('click', function () {
+            $('messOut').hidden = false;
+            $('messOut').textContent = 'It works for two. At 100 it is a wall of student47Grade variables that do not stay together.';
+        });
+        $('noVars').addEventListener('click', function () {
+            $('messOut').hidden = false;
+            $('messOut').textContent = 'Good. At 100, loose variables like student2Name stop meaning anything, and one student is scattered across the file.';
+        });
+
+        $('procRun').addEventListener('click', function () {
+            $('procOut').textContent = 'Ahmad 20 85';
+        });
+
+        $('fnRun').addEventListener('click', function () {
+            fnTrack.clear();
+            const name = $('fnName').value.trim() || 'Ahmad';
+            const age = $('fnAge').value;
+            const grade = $('fnGrade').value;
+            const chips = [$('fnA'), $('fnB'), $('fnC')];
+            chips.forEach(function (chip) { chip.classList.remove('on'); });
+            chips.forEach(function (chip, i) {
+                fnTrack.later(function () { chip.classList.add('on'); }, reduceMotion ? 0 : 180 * i);
+            });
+            $('fnOut').textContent = 'printStudent → ' + name + ' ' + age + ' ' + grade;
+        });
+
+        $('objName').addEventListener('input', function () {
+            const value = $('objName').value.trim();
+            if (value) studentObj.name = value;
+        });
+        $('objIntro').addEventListener('click', function () {
+            const value = $('objName').value.trim();
+            if (value) studentObj.name = value;
+            $('objOut').textContent = studentObj.introduce();
+        });
+
+        const literals = [
+            { name: 'Ahmad', age: 20, grade: 90, introduce: function () { return "Hi, I'm " + this.name; } },
+            { name: 'Sara', age: 21, grade: 88, introduce: function () { return "Hi, I'm " + this.name; } },
+            { name: 'Omar', age: 19, grade: 76, introduce: function () { return "Hi, I'm " + this.name; } }
+        ];
+        const literalGrid = $('literalGrid');
+        literals.forEach(function (person) {
+            const card = document.createElement('article');
+            card.className = 'card';
+            const title = document.createElement('h3');
+            title.textContent = person.name;
+            const meta = document.createElement('p');
+            meta.className = 'hint';
+            meta.textContent = 'age ' + person.age + ' · grade ' + person.grade;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-ghost';
+            btn.textContent = 'introduce()';
+            btn.addEventListener('click', function () {
+                $('literalOut').textContent = person.introduce();
+            });
+            card.appendChild(title);
+            card.appendChild(meta);
+            card.appendChild(btn);
+            literalGrid.appendChild(card);
+        });
+
+        $('buildInstances').addEventListener('click', function () {
+            classTrack.clear();
+            const cards = document.querySelectorAll('#instances .inst');
+            cards.forEach(function (card) { card.classList.remove('on'); });
+            cards.forEach(function (card, i) {
+                classTrack.later(function () { card.classList.add('on'); }, reduceMotion ? 0 : 250 * i);
+            });
+        });
+
+        $('stuCreate').addEventListener('click', function () {
+            const stuName = $('stuName').value.trim();
+            const age = Number($('stuAge').value);
+            const grade = Number($('stuGrade').value);
+            if (!stuName) {
+                $('stuMsg').textContent = 'Add a name.';
+                return;
+            }
+            if (!Number.isFinite(age) || !Number.isFinite(grade)) {
+                $('stuMsg').textContent = 'Age and grade need numbers.';
+                return;
+            }
+            const student = new Student(stuName, age, grade);
+            const card = document.createElement('article');
+            card.className = 'card';
+            const title = document.createElement('h3');
+            title.textContent = student.name;
+            const meta = document.createElement('p');
+            meta.className = 'hint';
+            meta.textContent = 'Age ' + student.age + ' · Grade ' + student.grade;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-ghost';
+            btn.textContent = 'Introduce';
+            const out = document.createElement('p');
+            out.className = 'out';
+            btn.addEventListener('click', function () {
+                out.textContent = student.introduce();
+            });
+            card.appendChild(title);
+            card.appendChild(meta);
+            card.appendChild(btn);
+            card.appendChild(out);
+            $('stuCards').prepend(card);
+            $('stuMsg').textContent = 'new Student("' + student.name + '", ' + student.age + ', ' + student.grade + ')';
+        });
+
+        document.querySelectorAll('#roles .chip').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                $('roleOut').textContent = ROLES[btn.dataset.role] || '';
+            });
+        });
+        $('addVisit').addEventListener('click', function () {
+            const note = $('visitNote').value.trim();
+            if (!note) return;
+            patient.addVisit(note);
+            $('visitNote').value = '';
+            renderVisits();
+        });
+
+        document.querySelectorAll('[data-col]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('[data-col]').forEach(function (el) { el.classList.remove('on'); });
+                btn.classList.add('on');
+                $('colOut').textContent = COLS[btn.dataset.col] || '';
+            });
+        });
+
+        const evo = $('evo');
+        EVO.forEach(function (pair, i) {
+            if (i > 0) {
+                const arrow = document.createElement('span');
+                arrow.className = 'arrow';
+                arrow.setAttribute('aria-hidden', 'true');
+                arrow.textContent = '→';
+                evo.appendChild(arrow);
+            }
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'chip';
+            btn.textContent = pair[0];
+            btn.addEventListener('click', function () {
+                $('evoOut').textContent = pair[1];
+            });
+            evo.appendChild(btn);
+        });
+
+        Object.keys(QUIZ).forEach(function (id) {
+            const quiz = $(id);
+            const feedback = quiz.querySelector('.feedback');
+            quiz.querySelectorAll('.choice').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    if (quiz.dataset.locked === '1') return;
+                    quiz.dataset.locked = '1';
+                    const ok = btn.dataset.correct === 'true';
+                    quiz.querySelectorAll('.choice').forEach(function (choice) {
+                        choice.disabled = true;
+                        if (choice.dataset.correct === 'true') choice.classList.add('good');
+                    });
+                    if (!ok) btn.classList.add('bad');
+                    feedback.textContent = ok ? QUIZ[id].ok : QUIZ[id].bad;
+                    feedback.classList.add(ok ? 'ok' : 'bad');
+                });
+            });
+        });
+
+        $('hint1').addEventListener('click', function () {
+            $('hintOut').textContent = 'Keep owner and balance together on one instance: this.owner and this.balance.';
+        });
+        $('hint2').addEventListener('click', function () {
+            $('hintOut').textContent = 'deposit adds the amount. withdraw subtracts only when the amount fits in the balance. getBalance returns the balance.';
+        });
+        $('solution').textContent = [
+            'class BankAccount {',
+            '  constructor(owner, balance = 0) { this.owner = owner; this.balance = balance }',
+            '  deposit(amount) { this.balance += amount }',
+            '  withdraw(amount) { if (amount <= this.balance) this.balance -= amount }',
+            '  getBalance() { return this.balance }',
+            '}'
+        ].join('\n');
+        $('showSol').addEventListener('click', function () {
+            $('solution').hidden = false;
+        });
+        $('depBtn').addEventListener('click', function () {
+            const amount = readAmount('depAmt');
+            if (amount === null) {
+                $('balMsg').textContent = 'Enter a number greater than 0.';
+                return;
+            }
+            account.deposit(amount);
+            renderBal();
+            $('balMsg').textContent = 'Deposited $' + money(amount) + '.';
+        });
+        $('wdBtn').addEventListener('click', function () {
+            const amount = readAmount('wdAmt');
+            if (amount === null) {
+                $('balMsg').textContent = 'Enter a number greater than 0.';
+                return;
+            }
+            const before = account.getBalance();
+            account.withdraw(amount);
+            renderBal();
+            if (account.getBalance() === before) $('balMsg').textContent = 'Not enough balance. Nothing changed.';
+            else $('balMsg').textContent = 'Withdrew $' + money(amount) + '.';
+        });
+        $('balReset').addEventListener('click', function () {
+            account = new BankAccount('Ahmad', 100);
+            renderBal();
+            $('balMsg').textContent = 'Back to $100.';
+        });
+
+        document.querySelectorAll('[data-sum]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('[data-sum]').forEach(function (el) { el.classList.remove('on'); });
+                btn.classList.add('on');
+                $('sumOut').textContent = SUMS[btn.dataset.sum] || '';
+            });
+        });
+
+        nextBtn.addEventListener('click', function () { show(index + 1); });
+        prevBtn.addEventListener('click', function () { show(index - 1); });
+        document.querySelectorAll('[data-goto]').forEach(function (btn) {
+            btn.addEventListener('click', function () { show(Number(btn.dataset.goto)); });
+        });
+
+        document.addEventListener('keydown', function (e) {
+            const tag = e.target.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+            if (e.key === ' ' && e.target.closest && e.target.closest('button, [role="button"], .choice')) return;
+            if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                show(index + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                show(index - 1);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                show(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                show(slides.length - 1);
+            }
+        });
+
+        let touchX = null;
+        document.addEventListener('touchstart', function (e) {
+            if (e.target.closest && e.target.closest('input, textarea, button')) {
+                touchX = null;
+                return;
+            }
+            touchX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        document.addEventListener('touchend', function (e) {
+            if (touchX === null) return;
+            const dx = e.changedTouches[0].screenX - touchX;
+            if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+            touchX = null;
+        }, { passive: true });
+
+        renderWorking();
+        renderDiff();
+        renderSeen();
+        renderPosted();
+        renderAppt();
+        renderBal();
+        renderVisits();
+        show(0);
+    </script>
+</body>
+
+</html>

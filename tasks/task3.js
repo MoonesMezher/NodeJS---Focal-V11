@@ -109,7 +109,7 @@ const orders = [
         id: 1001,
         bookId: 1,
         customer: "Maya",
-        quantity: 2,
+        quantity: 3,
         status: "delivered",
         date: "2026-09-10"
     },
@@ -460,7 +460,6 @@ function getBooksSortedByRating() {
 // { title: "...", totalQuantity: 5 }
 //
 // Sorted from highest quantity to lowest.
-// If two books tie, either order is fine.
 //
 // Example:
 // getBestsellers(3)

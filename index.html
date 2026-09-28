@@ -153,37 +153,33 @@
             }, {
                 number: "06",
                 title: "Advanced JavaScript 3",
-                topics: "Timers, Date Object, Error Handling, Operators, Promises, Async/Await, Event Loop, Regex",
-                status: "upcoming",
+                topics: "Timers, OOP, Date Object, Error Handling, Operators",
+                status: "completed",
                 ideas: [
                     "Timers",
                     "Date Object",
                     "Error Handling",
-                    "Operators",
+                    "Operators"
+                ]
+            }, {
+                number: "07",
+                title: "Advanced JavaScript 4",
+                topics: "Regex, Promises, Async/Await, Event Loop",
+                status: "completed",
+                ideas: [
+                    "Regex",
                     "Promises",
                     "Asynchronous (Async/Await)",
                     "Event Loop",
-                    "Regex"
-                ]
-            }, {
-                number: "07*",
-                title: "Solve Task 3",
-                topics: "TrendPulse Social Feed Analyzer",
-                status: "completed",
-                ideas: [
-                    "Solve Task 3 — TrendPulse Social Feed Analyzer"
                 ]
             }, {
                 number: "08",
-                title: "Advanced JavaScript 4",
-                topics: "ES6, Destructuring, OOP",
-                status: "completed",
+                title: "Solve Task 3",
+                topics: "PageFlip Bookstore",
+                status: "upcoming",
+                isTaskLecture: true,
                 ideas: [
-                    "ES6",
-                    "Destructuring",
-                    "OOP",
-                    "Multiple Inheritance",
-                    "Exercise"
+                    "Solve Task 3 — PageFlip Bookstore"
                 ]
             }, {
                 number: "09",
@@ -481,7 +477,8 @@
 
         const interactiveSessions = {
             "01": "featured%20lectures/L1/backend-concepts.html",
-            "05": "featured%20lectures/L5/array-methods.html"
+            "05": "featured%20lectures/L5/array-methods.html",
+            "06": "featured%20lectures/L6/time-dates-oop.html"
         };
 
         const statusLabels = {
@@ -493,9 +490,9 @@
 
         lectures.forEach(lecture => {
             const lectureNumber = Number.parseInt(lecture.number, 10);
-            lecture.status = lectureNumber <= 5
+            lecture.status = lectureNumber <= 7
                 ? "completed"
-                : lectureNumber === 6
+                : lectureNumber === 8
                     ? "upcoming"
                     : "not-started";
         });
@@ -544,16 +541,38 @@
 
             for (let lecture of lecturesArray) {
                 const row = document.createElement('tr');
+                const isTaskLecture = lecture.isTaskLecture === true || lecture.number.includes('*');
+                if (isTaskLecture) {
+                    row.classList.add('lecture-row--task');
+                }
                 row.onclick = () => openIdeasModal(lecture);
 
                 const numberCell = document.createElement('td');
-                numberCell.textContent = lecture.number;
+                numberCell.className = 'lecture-number';
+                if (isTaskLecture) {
+                    numberCell.classList.add('lecture-number--task');
+                    const numberBadge = document.createElement('span');
+                    numberBadge.className = 'lecture-number-badge';
+                    numberBadge.textContent = lecture.number;
+                    numberCell.appendChild(numberBadge);
+                } else {
+                    numberCell.textContent = lecture.number;
+                }
 
                 const titleCell = document.createElement('td');
+                const titleWrap = document.createElement('span');
+                titleWrap.className = 'lecture-title-with-badge';
                 const titleSpan = document.createElement('span');
                 titleSpan.className = 'lecture-link';
                 titleSpan.textContent = lecture.title;
-                titleCell.appendChild(titleSpan);
+                titleWrap.appendChild(titleSpan);
+                if (isTaskLecture) {
+                    const taskBadge = document.createElement('span');
+                    taskBadge.className = 'task-lecture-badge';
+                    taskBadge.textContent = 'Task Lecture';
+                    titleWrap.appendChild(taskBadge);
+                }
+                titleCell.appendChild(titleWrap);
 
                 const topicsCell = document.createElement('td');
                 topicsCell.textContent = lecture.topics;
