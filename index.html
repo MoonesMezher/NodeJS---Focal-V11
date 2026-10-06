@@ -176,66 +176,43 @@
                 number: "08",
                 title: "Solve Task 3",
                 topics: "PageFlip Bookstore",
-                status: "upcoming",
+                status: "completed",
                 isTaskLecture: true,
                 ideas: [
                     "Solve Task 3 — PageFlip Bookstore"
                 ]
             }, {
                 number: "09",
-                title: "TypeScript",
-                topics: "Intro, Types, Interfaces, Type Aliases, Type Guards, Generics",
+                title: "TypeScript 1",
+                topics: "Destructuring, NPM, Intro to TypeScript",
                 status: "completed",
                 ideas: [
-                    "Info",
-                    "Installation",
-                    "Types",
-                    "Config",
-                    "Arrays & Objects",
-                    "Functions",
-                    "Any",
-                    "Tuples",
-                    "Interfaces",
-                    "Type Aliases",
-                    "Union Types",
-                    "Type Guards",
-                    "Tagged Interfaces",
-                    "Generics",
-                    "Advanced Topics"
+                    "Destructuring",
+                    "NPM",
+                    "Intro to TypeScript"
                 ]
             }, {
                 number: "10",
-                title: "Git & Github",
-                topics: "Git & Github, Command Line & Terminal, Setup, Git Workflow, Branching",
+                title: "TypeScript 2",
+                topics: "Types, Type Alias, Interfaces, Intro to Git & GitHub",
                 status: "completed",
                 ideas: [
-                    "Git Basics",
-                    "GitHub",
-                    "Terminal Basics",
-                    "CLI Commands",
-                    "Git Fundamentals",
-                    "Git vs GitHub",
-                    "Core Concepts",
-                    "Setup & Config",
-                    "Basic Commands",
-                    "Branching"
+                    "Types",
+                    "Type Alias",
+                    "Interfaces",
+                    "Intro to Git & GitHub"
                 ]
             }, {
                 number: "11",
-                title: "NodeJS",
-                topics: "Readme & Markdown, Gitignore, Modules, File System, APIs",
-                status: "completed",
+                title: "Git & GitHub",
+                topics: "Git Commands, Branching, README & Markdown, Gitignore, Git Workflow",
+                status: "upcoming",
                 ideas: [
+                    "Git Commands",
+                    "Branching",
                     "README & Markdown",
                     "Gitignore",
-                    "Git Workflow",
-                    "Advanced Git",
-                    "Node.js Introduction",
-                    "Node.js Globals",
-                    "Node.js Modules",
-                    "OS & Path Modules",
-                    "FS Module",
-                    "HTTP Module"
+                    "Git Workflow"
                 ]
             }, {
                 number: "12*",
@@ -490,9 +467,9 @@
 
         lectures.forEach(lecture => {
             const lectureNumber = Number.parseInt(lecture.number, 10);
-            lecture.status = lectureNumber <= 7
+            lecture.status = lectureNumber <= 10
                 ? "completed"
-                : lectureNumber === 8
+                : lectureNumber === 11
                     ? "upcoming"
                     : "not-started";
         });

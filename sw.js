@@ -1,5 +1,5 @@
-const SITE_STATIC_CACHE_NAME = "pwa-cache-11-v2";
-const SITE_DYNAMIC_CACHE_NAME = "pwa-cache-11-dynamic-v2";
+const SITE_STATIC_CACHE_NAME = "pwa-cache-11-v4";
+const SITE_DYNAMIC_CACHE_NAME = "pwa-cache-11-dynamic-v4";
 
 const assets = [
     "/",
@@ -40,20 +40,20 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
     event.respondWith(
         caches.match(event.request)
-        .then(response => {
-            return response || fetch(event.request).then(async res => {
-                return caches.open(SITE_DYNAMIC_CACHE_NAME).then(cache => {
-                    cache.put(event.request.url, res.clone());
+            .then(response => {
+                return response || fetch(event.request).then(async res => {
+                    return caches.open(SITE_DYNAMIC_CACHE_NAME).then(cache => {
+                        cache.put(event.request.url, res.clone());
 
-                    return res;
-                })
-            });
-        })
-        .catch(() => {
-            if (event.request.url.indexOf(".html") > -1) {
-                return caches.match("/fallback.html")
-            }
-        })
+                        return res;
+                    })
+                });
+            })
+            .catch(() => {
+                if (event.request.url.indexOf(".html") > -1) {
+                    return caches.match("/fallback.html")
+                }
+            })
     );
     /* console.log("service worker has been fetched", event); */
 });

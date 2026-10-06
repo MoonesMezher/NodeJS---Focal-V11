@@ -4,253 +4,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task 5: ShelfStack Library (JS + TypeScript)</title>
+    <title>Task 5: ShelfStack — Advanced TypeScript & Objects</title>
     <link rel="manifest" href="../manifest.json" />
     <link rel="apple-touch-icon" href="../logo.jpg">
     <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
     <meta name="theme-color" content="#b21f1f">
     <link rel="shortcut icon" href="../logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/task.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
+        .download-box {
+            background: #e8f4fd;
+            border-left: 5px solid #007acc;
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             align-items: center;
+            gap: 12px;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
         }
-        
-        .container {
-            width: 100%;
-            max-width: 1000px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin: 20px 0;
-        }
-        
-        .coach {
-            background-color: white;
-            width: 80px;
-            border-radius: 0 0 50% 0;
-            color: black;
-            padding: 10px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            z-index: 100;
-        }
-        
-        header {
-            background: #2c3e50;
+
+        .download-box a {
+            background: #007acc;
             color: white;
-            padding: 20px;
-            text-align: center;
-            position: relative;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.2s;
         }
-        
-        h1 {
-            font-size: 2.2rem;
+
+        .download-box a:hover {
+            background: #005999;
+            transform: translateY(-1px);
+        }
+
+        .copy-section {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 16px 0 24px;
+            overflow: hidden;
+        }
+
+        .copy-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 10px;
         }
-        
-        .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
+
+        .copy-header h3 {
+            margin: 0;
+            font-size: 1.05rem;
+            color: #2c3e50;
         }
-        
-        #title {
-            padding-top: 20px;
-        }
-        
-        .language-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #3498db;
+
+        .copy-btn {
+            background: #007acc;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 6px 14px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s;
+            font-size: 0.85rem;
+            transition: background 0.2s;
         }
-        
-        .language-toggle:hover {
-            background: #2980b9;
+
+        .copy-btn:hover {
+            background: #005999;
         }
-        
-        .task-content {
-            padding: 30px;
+
+        .copy-btn.copied {
+            background: #28a745;
         }
-        
-        .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
-        
-        h3 {
-            color: #2980b9;
-            margin: 15px 0;
-        }
-        
-        p {
-            margin-bottom: 15px;
-        }
-        
-        ul,
-        ol {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-        
-        li {
-            margin-bottom: 8px;
-        }
-        
-        .requirements {
-            background: #e8f4fc;
-            border-left: 5px solid #3498db;
-        }
-        
-        .bonus {
-            background: #fff3cd;
-            border-left: 5px solid #ffc107;
-        }
-        
-        .output-example {
-            background: #d4edda;
-            border-left: 5px solid #28a745;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            font-family: monospace;
+
+        .code-block {
+            margin: 0;
             white-space: pre;
-            overflow: auto;
             direction: ltr !important;
             text-align: left !important;
+            font-size: 0.82rem;
+            max-height: 240px;
+            overflow-y: auto;
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            font-family: Consolas, 'Courier New', monospace;
         }
-        
-        .timer-section {
-            text-align: center;
-            padding: 20px;
-            background: #2c3e50;
-            color: white;
-            margin-top: 30px;
-            border-radius: 10px;
-        }
-        
-        .timer {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 10px 0;
+
+        .parts-container {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            flex-direction: column;
+            gap: 24px;
         }
-        
-        .timer-unit {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 5px;
-            min-width: 80px;
+
+        .part-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
-        
-        .timer-value {
-            font-size: 2.5rem;
-            display: block;
+
+        .part-card h3 {
+            margin: 0 0 12px;
+            font-size: 1.15rem;
+            color: #1e293b;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        
-        .timer-label {
+
+        .part-badge {
+            font-size: 0.75rem;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .task-list li:last-child {
+            border-bottom: none;
+        }
+
+        .fn-signature {
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #0366d6;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fn-desc {
             font-size: 0.9rem;
+            color: #334155;
+            line-height: 1.4;
+        }
+
+        .expected {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
             text-transform: uppercase;
-            display: block;
+            letter-spacing: 0.04em;
+            padding: 2px 6px;
+            border-radius: 4px;
         }
-        
-        .finish-date {
-            font-size: 1.2rem;
-            margin-top: 10px;
+
+        .tag-ts {
+            background: #dbeafe;
+            color: #1e40af;
         }
-        
-        .thank-you {
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-            color: #6c757d;
-            border-top: 1px solid #dee2e6;
-            margin-top: 30px;
+
+        .tag-join {
+            background: #fef3c7;
+            color: #92400e;
         }
-        
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background: #2c3e50;
-            color: white;
-            width: 100%;
-            max-width: 1000px;
-            border-radius: 15px;
+
+        .tag-logic {
+            background: #ede9fe;
+            color: #5b21b6;
         }
-        
-        .footer a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        
-        .footer p {
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            .task-content {
-                padding: 15px;
-            }
-            .language-toggle {
-                position: relative;
-                top: 0;
-                right: 0;
-                margin-bottom: 15px;
-                display: block;
-                width: 100%;
-            }
-            .timer {
-                font-size: 1.5rem;
-                flex-wrap: wrap;
-            }
-            .timer-unit {
-                min-width: 70px;
-            }
-            .timer-value {
-                font-size: 2rem;
-            }
+
+        .tag-search {
+            background: #dcfce7;
+            color: #166534;
         }
     </style>
 </head>
@@ -259,12 +210,13 @@
     <div class="container">
         <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
         <header>
-            <h1 id="title">Task 5: ShelfStack Library (JS + TypeScript)</h1>
-            <p class="subtitle" id="subtitle">Easy two-step task: small library in JavaScript (classes + destructuring), then the same idea in TypeScript (types + interfaces).</p>
+            <h1 id="title">Task 5: ShelfStack — Advanced TypeScript &amp; Objects</h1>
+            <p class="subtitle" id="subtitle">30 pure functions solving real-world digital library analytics, joins, search, and business logic</p>
             <button class="language-toggle" id="languageToggle">العربية / English</button>
         </header>
 
         <div class="task-content" id="taskContent">
+            <!-- Dynamic task content will be inserted here -->
         </div>
 
         <div class="timer-section">
@@ -287,7 +239,7 @@
                     <span class="timer-label" id="seconds-label">Seconds</span>
                 </div>
             </div>
-            <p class="finish-date" id="finish-date">Finish by: April 11, 2026</p>
+            <p class="finish-date" id="finish-date">Finish by: October 10, 2026</p>
             <p id="timer-message">Complete the task before the deadline!</p>
         </div>
 
@@ -302,355 +254,271 @@
 
     <script src="../reg.js"></script>
     <script>
+        const taskListEn = [
+            // Part 1
+            { part: 1, partTitle: "Part 1: Catalog Intelligence & Type-Safe Querying", fn: "getAvailableBooks(allBooks)", desc: "Return all books where copiesAvailable > 0.", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "getBooksByCategory(category, allBooks)", desc: "Return all books strictly matching the specified Category union.", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "getTopRatedBooks(minRating, limit, allBooks)", desc: "Filter books with rating >= minRating, sort descending by rating, slice to limit.", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "getBooksByTag(tag, allBooks)", desc: "Case-insensitive tag matching across each book's tags array.", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "calculateCatalogValue(allBooks)", desc: "Compute total inventory valuation (copiesTotal * price) and average price per book (rounded to 2 decimals).", expected: "CatalogValueSummary", tag: "ts" },
+            { part: 1, fn: "findBookById(id, allBooks)", desc: "Safe lookup returning the Book or undefined if not found.", expected: "Book | undefined", tag: "ts" },
+
+            // Part 2
+            { part: 2, partTitle: "Part 2: Member Analytics & Predicate Narrowing", fn: "getActiveMembersByTier(tier, allMembers)", desc: "Return active members belonging to a specific MemberTier.", expected: "Member[]", tag: "ts" },
+            { part: 2, fn: "getVIPMembersTotalBalance(allMembers)", desc: "Sum the balance of all active VIP tier members.", expected: "number", tag: "ts" },
+            { part: 2, fn: "findMemberByEmail(email, allMembers)", desc: "Case-insensitive and trimmed email lookup.", expected: "Member | undefined", tag: "ts" },
+            { part: 2, fn: "getMembersWithInterest(interest, allMembers)", desc: "Find members whose interests array includes the given keyword.", expected: "Member[]", tag: "ts" },
+            { part: 2, fn: "categorizeMembersByBalance(allMembers)", desc: "Group members into low (< 25), mid (25..75), and high (>= 75) balance buckets.", expected: "MemberBalanceGroups", tag: "ts" },
+            { part: 2, fn: "getMemberTenureDays(memberId, relativeToDate, allMembers)", desc: "Calculate integer days registered relative to date string. Return 0 if invalid.", expected: "number", tag: "ts" },
+
+            // Part 3
+            { part: 3, partTitle: "Part 3: Advanced Loan Tracking & Revenue Metrics", fn: "getActiveLoans(allLoans)", desc: "Filter loans with status === 'active'.", expected: "Loan[]", tag: "ts" },
+            { part: 3, fn: "getOverdueLoans(currentDate, allLoans)", desc: "Loans overdue relative to currentDate (status 'overdue' or dueDate < currentDate and not returned).", expected: "Loan[]", tag: "ts" },
+            { part: 3, fn: "getTotalOutstandingLateFees(allLoans)", desc: "Calculate the total sum of late fees accumulated on overdue loans.", expected: "number", tag: "ts" },
+            { part: 3, fn: "getLoansByMember(memberId, allLoans)", desc: "Retrieve full loan history for a specific member ID.", expected: "Loan[]", tag: "ts" },
+            { part: 3, fn: "getMostBorrowedBookIds(limit, allLoans)", desc: "Aggregate borrow frequency count per bookId, sorted descending, sliced to limit.", expected: "BookBorrowStat[]", tag: "ts" },
+            { part: 3, fn: "calculateMemberFine(memberId, allLoans)", desc: "Sum the total unpaid fines (lateFee) currently owed by a given member.", expected: "number", tag: "ts" },
+
+            // Part 4
+            { part: 4, partTitle: "Part 4: Relational Joins & Data Enrichment", fn: "enrichLoanDetails(loanId, allLoans, allBooks, allMembers)", desc: "Join loan record with full Book and Member objects. Returns undefined if not found.", expected: "EnrichedLoan | undefined", tag: "join" },
+            { part: 4, fn: "getMemberActiveBorrowsSummary(memberId, currentDate, allLoans, allBooks)", desc: "Enriched view of active borrows for a member, flagging isOverdue against currentDate.", expected: "MemberBorrowSummary[]", tag: "join" },
+            { part: 4, fn: "getBookReviewsSummary(bookId, allReviews)", desc: "Aggregate review count, averageScore (rounded to 1 decimal), and full reviews array.", expected: "BookReviewsSummary", tag: "join" },
+            { part: 4, fn: "getPersonalizedRecommendations(memberId, allMembers, allBooks, allLoans)", desc: "Match member interests with book tags/category, exclude already borrowed books, sort by rating desc.", expected: "Book[]", tag: "join" },
+            { part: 4, fn: "generateInventoryReport(allBooks)", desc: "Produce comprehensive inventory stats: totalTitles, totalStockValue, outOfStockCount, lowStockBooks, mostPopularCategory.", expected: "InventoryReport", tag: "join" },
+            { part: 4, fn: "paginateBooks(allBooks, page, pageSize)", desc: "Pagination utility calculating totalPages and returning PaginatedBooks.", expected: "PaginatedBooks", tag: "ts" },
+
+            // Part 5
+            { part: 5, partTitle: "Part 5: Advanced Compositions & Business Intelligence", fn: "sortBooksMultiCriteria(allBooks)", desc: "Non-mutating multi-criteria sort: rating desc → price asc → title alphabetical.", expected: "Book[]", tag: "logic" },
+            { part: 5, fn: "groupBooksByFormatAndCategory(allBooks)", desc: "Group books and count titles for each combination of format and category.", expected: "FormatCategoryGroup[]", tag: "logic" },
+            { part: 5, fn: "findTopReviewers(limit, allReviews, allMembers)", desc: "Rank members by total reviews written, along with their average review rating given.", expected: "TopReviewer[]", tag: "logic" },
+            { part: 5, fn: "processBookCheckout(bookId, memberId, daysToReturn, todayDate, allBooks, allMembers)", desc: "Transactional book checkout validation returning CheckoutResult with success, message, and optional newLoan.", expected: "CheckoutResult", tag: "logic" },
+            { part: 5, fn: "calculateCategoryStats(allBooks, allLoans)", desc: "Compile complete financial and demand metrics for every catalog category.", expected: "CategoryStats[]", tag: "logic" },
+            { part: 5, fn: "searchCatalogWeighted(query, allBooks)", desc: "Fuzzy weighted relevance search (title +3, author +2, tags +1). Returns matching books sorted by relevanceScore desc.", expected: "SearchResult[]", tag: "search" }
+        ];
+
+        const taskListAr = [
+            // Part 1
+            { part: 1, partTitle: "الجزء 1: استعلامات الفهرس وضمان الأنواع (Catalog Intelligence)", fn: "getAvailableBooks(allBooks)", desc: "إرجاع كافة الكتب المتوفرة حالياً للإعارة (copiesAvailable > 0).", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "getBooksByCategory(category, allBooks)", desc: "إرجاع الكتب التي تنتمي حصراً للتصنيف المحدد ضمن Category Union.", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "getTopRatedBooks(minRating, limit, allBooks)", desc: "تصفية الكتب بتقييم >= minRating وترتيبها تنازلياً حسب التقييم مع اقتطاع الحد الأقصى limit.", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "getBooksByTag(tag, allBooks)", desc: "بحث غير حساس لحالة الأحرف عن وسم معيّن داخل مصفوفة tags لكل كتاب.", expected: "Book[]", tag: "ts" },
+            { part: 1, fn: "calculateCatalogValue(allBooks)", desc: "حساب القيمة المالية الإجمالية للمخزون (النسخ * السعر) ومتوسط سعر الكتاب مقرباً لرقمين عشريين.", expected: "CatalogValueSummary", tag: "ts" },
+            { part: 1, fn: "findBookById(id, allBooks)", desc: "بحث آمن عن كتاب بالمعرّف مع إرجاع Book أو undefined.", expected: "Book | undefined", tag: "ts" },
+
+            // Part 2
+            { part: 2, partTitle: "الجزء 2: تحليلات الأعضاء وحصر الأنواع (Member Analytics)", fn: "getActiveMembersByTier(tier, allMembers)", desc: "إرجاع الأعضاء النشطين المنتمين لفئة اشتراك محددة.", expected: "Member[]", tag: "ts" },
+            { part: 2, fn: "getVIPMembersTotalBalance(allMembers)", desc: "حساب مجموع أرصدة كافة الأعضاء النشطين من فئة VIP.", expected: "number", tag: "ts" },
+            { part: 2, fn: "findMemberByEmail(email, allMembers)", desc: "بحث عن عضو بالبريد الإلكتروني مع إزالة المسافات وتجاهل حالة الأحرف.", expected: "Member | undefined", tag: "ts" },
+            { part: 2, fn: "getMembersWithInterest(interest, allMembers)", desc: "إرجاع الأعضاء الذين تتضمن قائمة اهتماماتهم الكلمة المفتاحية المحددة.", expected: "Member[]", tag: "ts" },
+            { part: 2, fn: "categorizeMembersByBalance(allMembers)", desc: "تصنيف الأعضاء إلى 3 فئات رصيد: منخفض (< 25)، متوسط (25..75)، ومرتفع (>= 75).", expected: "MemberBalanceGroups", tag: "ts" },
+            { part: 2, fn: "getMemberTenureDays(memberId, relativeToDate, allMembers)", desc: "حساب عدد أيام تسجيل العضو مقارنة بتاريخ محدد. إرجاع 0 في حال عدم وجوده.", expected: "number", tag: "ts" },
+
+            // Part 3
+            { part: 3, partTitle: "الجزء 3: تتبع الإعارات والإيرادات المتأخرة (Loan Tracking)", fn: "getActiveLoans(allLoans)", desc: "تصفية كافة الإعارات الجارية حالياً (status === 'active').", expected: "Loan[]", tag: "ts" },
+            { part: 3, fn: "getOverdueLoans(currentDate, allLoans)", desc: "تحديد الإعارات المتأخرة نسبة لتاريخ اليوم (حالة overdue أو استحقاق سابق دون إرجاع).", expected: "Loan[]", tag: "ts" },
+            { part: 3, fn: "getTotalOutstandingLateFees(allLoans)", desc: "حساب إجمالي غرامات التأخير المتراكمة على الإعارات المتأخرة.", expected: "number", tag: "ts" },
+            { part: 3, fn: "getLoansByMember(memberId, allLoans)", desc: "استرجاع السجل الكامل لإعارات عضو معيّن باستخدام معرّفه.", expected: "Loan[]", tag: "ts" },
+            { part: 3, fn: "getMostBorrowedBookIds(limit, allLoans)", desc: "تجميع تكرار استعارة كل كتاب وترتيب الأكثر طلباً تنازلياً مع اقتطاع limit.", expected: "BookBorrowStat[]", tag: "ts" },
+            { part: 3, fn: "calculateMemberFine(memberId, allLoans)", desc: "حساب إجمالي الغرامات غير المسددة المستحقة على عضو معيّن.", expected: "number", tag: "ts" },
+
+            // Part 4
+            { part: 4, partTitle: "الجزء 4: ربط العلاقات وإثراء البيانات (Relational Joins)", fn: "enrichLoanDetails(loanId, allLoans, allBooks, allMembers)", desc: "دمج سجل الإعارة مع كائن الكتاب الكامل وكائن العضو المقابل له.", expected: "EnrichedLoan | undefined", tag: "join" },
+            { part: 4, fn: "getMemberActiveBorrowsSummary(memberId, currentDate, allLoans, allBooks)", desc: "ملخص مُثرى لإعارات العضو الحالية مع تنبيه فيما إذا كانت متأخرة عن تاريخ اليوم.", expected: "MemberBorrowSummary[]", tag: "join" },
+            { part: 4, fn: "getBookReviewsSummary(bookId, allReviews)", desc: "تجميع مراجعات كتاب محدد: عدد المراجعات، متوسط التقييم، وقائمة المراجعات.", expected: "BookReviewsSummary", tag: "join" },
+            { part: 4, fn: "getPersonalizedRecommendations(memberId, allMembers, allBooks, allLoans)", desc: "توصيات ذكية تطابق اهتمامات العضو مع تصنيفات ووسوم الكتب، باستثناء ما استعاره سابقاً.", expected: "Book[]", tag: "join" },
+            { part: 4, fn: "generateInventoryReport(allBooks)", desc: "تقرير مخزون شامل: إجمالي العناوين، القيمة، العناوين النافذة، الكتب منخفضة المخزون، والتصنيف الأكثر طلباً.", expected: "InventoryReport", tag: "join" },
+            { part: 4, fn: "paginateBooks(allBooks, page, pageSize)", desc: "دالة تقسيم صفحات الكتب تحسب الصفحات وتجتزئ الكتب.", expected: "PaginatedBooks", tag: "ts" },
+
+            // Part 5
+            { part: 5, partTitle: "الجزء 5: المعالجات المتقدمة ومنطق الأعمال (Business Intelligence)", fn: "sortBooksMultiCriteria(allBooks)", desc: "ترتيب الكتب متعدد المعايير دون تعديل الأصل: التقييم تنازلياً ثم السعر تصاعدياً ثم العنوان أبجدياً.", expected: "Book[]", tag: "logic" },
+            { part: 5, fn: "groupBooksByFormatAndCategory(allBooks)", desc: "إحصاء عدد الكتب لكل تركيبة من نوع النسخة والتصنيف.", expected: "FormatCategoryGroup[]", tag: "logic" },
+            { part: 5, fn: "findTopReviewers(limit, allReviews, allMembers)", desc: "ترتيب الأعضاء الأكثر كتابة للمراجعات مع متوسط التقييمات الممنوحة من قبلهم.", expected: "TopReviewer[]", tag: "logic" },
+            { part: 5, fn: "processBookCheckout(bookId, memberId, daysToReturn, todayDate, allBooks, allMembers)", desc: "منطق إتمام إعارة ذكي يتحقق من التوفر ونشاط العضو ورصيده مع إرجاع CheckoutResult.", expected: "CheckoutResult", tag: "logic" },
+            { part: 5, fn: "calculateCategoryStats(allBooks, allLoans)", desc: "توليد إحصائيات مالية وطلب شاملة لكل تصنيف برمجي في المكتبة.", expected: "CategoryStats[]", tag: "logic" },
+            { part: 5, fn: "searchCatalogWeighted(query, allBooks)", desc: "محرك بحث بالأوزان (العنوان +3، المؤلف +2، الوسوم +1) مع إرجاع النتائج مرتبة حسب نقاط الصلة.", expected: "SearchResult[]", tag: "search" }
+        ];
+
+        function tagHtml(tag) {
+            if (tag === "ts") return '<span class="tag tag-ts">TypeScript</span>';
+            if (tag === "join") return '<span class="tag tag-join">Join &amp; Aggregate</span>';
+            if (tag === "logic") return '<span class="tag tag-logic">Advanced Logic</span>';
+            if (tag === "search") return '<span class="tag tag-search">Algorithm</span>';
+            return "";
+        }
+
         const taskData = {
             en: {
-                title: "Task 5: ShelfStack Library (JS + TypeScript)",
-                subtitle: "Easy two-step task: small library in JavaScript (classes + destructuring), then the same idea in TypeScript (types + interfaces).",
-                sections: [{
-                    type: "idea",
-                    title: "Story: ShelfStack Community Library",
-                    content: "You build a very small library app. Part A is plain JavaScript: a few classes and destructuring. Part B is the same books/loans idea written in TypeScript with simple interfaces. Keep your solution short; focus on clarity, not extra features."
-                }, {
-                    type: "requirements",
-                    title: "Rules (simple)",
-                    content: [{
-                        type: "list",
-                        title: "What to use",
-                        items: [
-                            "Lecture 8: classes, `extends`, `super`, one overridden method, at least one `#` private field, one `static` method, object and array destructuring.",
-                            "Lecture 9: install TypeScript, `tsc --init`, one or two `.ts` files, `interface` and `type`, typed functions. Do **not** use `any`."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Skip (not part of this task)",
-                        items: [
-                            "Multiple inheritance / mixins (Lecture 8 tab).",
-                            "TypeScript advanced lessons: generics `<T>`, tagged unions, advanced type-guard homework, \"Advanced Topics\" extras."
-                        ]
-                    }]
-                }, {
-                    type: "requirements",
-                    title: "Part A — JavaScript file `part-a.js`",
-                    content: [{
-                        type: "list",
-                        title: "Classes (only these four)",
-                        items: [
-                            "`LibraryItem`: fields `id`, `title`, `isAvailable`; methods `describe()` and simple `borrow()` / `returnItem()` (or similar names) that flip `isAvailable`.",
-                            "`Book extends LibraryItem`: add `isbn` and `author` (strings). Override `describe()` to mention book details.",
-                            "`Member`: one private number field like `#balance` (or `#creditCents`), plus `deposit(n)` and `getBalance()`.",
-                            "`LibraryCatalog`: stores books in an array; `addItem(book)`; **static** method e.g. `nextId()` or `makeId(prefix)`; `registerLoan({ memberId, itemId })` — the parameter must use **object destructuring** in the function signature; `snapshotStats()` returns `{ total, available }` (counts of books)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Destructuring (three small proofs)",
-                        items: [
-                            "In `registerLoan`, write the parameter as `{ memberId, itemId }`.",
-                            "At the end of the file, call `snapshotStats()` and write: `const { total, available } = catalog.snapshotStats();`",
-                            "Use **array destructuring** once, e.g. `const [a, b] = [\"b1\", \"b2\"];` before adding two books (or another simple line in your demo)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "End of file",
-                        items: [
-                            "A short demo: create a catalog, add 1–2 books, call `registerLoan`, print `describe()` for one book, print `total` and `available`."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "Part A — minimal example",
-                        content: "Your code should look roughly like this (you may rename, but keep the ideas):",
-                        example: `const cat = new LibraryCatalog();
-cat.addItem(new Book({ id: "b1", title: "Clean Code", isbn: "978-0132350884", author: "Martin" }));
-cat.registerLoan({ memberId: "m1", itemId: "b1" });
-
-const { total, available } = cat.snapshotStats();
-// total is number of books; available is how many are not on loan`
-                    }]
-                }, {
-                    type: "requirements",
-                    title: "Part B — TypeScript folder `shelfstack-ts/`",
-                    content: [{
-                        type: "list",
-                        title: "Setup",
-                        items: [
-                            "Create `shelfstack-ts/` with `tsconfig.json` (`npx tsc --init`).",
-                            "Put all TypeScript in `src/` — **one file is enough** (`library.ts`) or two files if you prefer (`types.ts` + `helpers.ts`).",
-                            "Run `npx tsc` and make sure `.js` files appear in `dist/` (or your `outDir`)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Types only (keep it small)",
-                        items: [
-                            "`type BookId = string` (or skip `type` and use `string` in interfaces — both OK).",
-                            "`interface Book { id: string; title: string; isbn: string; author: string; }`",
-                            "`interface Loan { id: string; bookId: string; memberId: string; }`",
-                            "Optional: add `readonly` on one field if you want (e.g. `readonly id: string` on `Book`)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Two typed functions",
-                        items: [
-                            "`function addBook(list: Book[], book: Book): Book[]` — return a **new** array with the book added (do not use `any`).",
-                            "`function findByIsbn(list: Book[], isbn: string): Book | undefined` — return the book or `undefined`."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "Part B — folder example",
-                        content: "Simple layout:",
-                        example: `shelfstack-ts/
-  tsconfig.json
-  src/
-    library.ts   // interfaces + addBook + findByIsbn + small demo comments
-  dist/          // after tsc`
-                    }]
-                }, {
-                    type: "note",
-                    title: "Submission",
-                    content: "Telegram tasks thread: send `part-a.js` and a zip of `shelfstack-ts` (or a link if your class uses Git). First line of your message: `#TASK5 - Your Full Name`."
-                }, {
-                    type: "learning",
-                    title: "Learning recap",
-                    content: [
-                        "Lecture 8: classes, inheritance, private `#`, `static`, destructuring.",
-                        "Lecture 9: interfaces, typed functions, compile with `tsc`.",
-                        "Same mini-domain twice: behavior in JS, then types in TS."
-                    ]
-                }],
-                timer: {
-                    title: "Time Remaining to Complete Task",
-                    message: "Complete the task before the deadline!",
-                    days: "Days",
-                    hours: "Hours",
-                    minutes: "Minutes",
-                    seconds: "Seconds"
-                },
-                thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
-                buttonText: "العربية / English",
-                finishDate: "Finish by: April 11, 2026"
+                title: "Task 5: ShelfStack — Advanced TypeScript & Objects",
+                subtitle: "30 pure functions solving real-world digital library analytics, joins, search, and business logic",
+                storyTitle: "Story: ShelfStack Media & Digital Asset Engine",
+                story: "Welcome to ShelfStack! Our enterprise digital library manages books across programming, architecture, DevOps, and AI. As the senior platform engineer, you are building the core analytical and transactional query layer. You will write 30 robust, strongly-typed TypeScript functions that operate over arrays of objects—handling complex aggregations, relational joins, multi-criteria sorting, inventory metrics, and a weighted search engine. All functions must be pure and preserve source immutability.",
+                rulesTitle: "Rules & Engineering Standards",
+                rules: [
+                    "<strong>Send Without node_modules:</strong> Submit only code files (<code>task5.ts</code>, <code>tsconfig.json</code>). Never include <code>node_modules</code>.",
+                    "<strong>Define Types & Interfaces Yourself:</strong> You must declare all required type aliases (Category, BookFormat, MemberTier, LoanStatus) and interfaces (Book, Member, Loan, Review, and analytical return types) yourself in the starter file.",
+                    "<strong>Type the Function Heads Yourself:</strong> All function headers in the starter file are untyped. You must annotate parameter types and the return type on every function header yourself using your declared types.",
+                    "<strong>Standard TypeScript (Types, Interfaces, Type Aliases):</strong> Use only standard TypeScript features (primitive types, interfaces, type aliases). No generics (&lt;T&gt;), no complex utility types.",
+                    "<strong>Data Immutability:</strong> Do NOT mutate the original <code>books</code>, <code>members</code>, <code>loans</code>, or <code>reviews</code> arrays.",
+                    "<strong>Idiomatic Methods:</strong> Master <code>map</code>, <code>filter</code>, <code>reduce</code>, <code>find</code>, <code>some</code>, <code>every</code>, and safe spread copies <code>[...arr].sort()</code>."
+                ],
+                downloadTitle: "TypeScript Starter File",
+                downloadText: "Download the starter script containing mock datasets, empty function stubs, and instructions to define all interfaces and types yourself.",
+                downloadLabel: "Download task5.ts",
+                taskList: taskListEn,
+                submitTitle: "Submission & Verification",
+                submit: "Submit your single <code>task5.ts</code> (or zipped project <strong>WITHOUT node_modules</strong>) in the Telegram tasks thread. Message format: <code>#TASK5 - Your Full Name</code>.",
+                learningTitle: "What You Will Master",
+                learning: [
+                    "Declaring robust TypeScript type aliases, union types, and entity/analytical interfaces",
+                    "Complex object relational transformations and foreign-key joins in TypeScript",
+                    "Type-safe multi-criteria sorting and nested frequency matrices (Record types)",
+                    "Handling transactional business logic with discriminated unions",
+                    "Designing generic utilities like reusable pagination pipelines",
+                    "Building a custom weighted relevance search algorithm"
+                ]
             },
             ar: {
-                title: "المهمة 5: مكتبة ShelfStack (جافاسكريبت + TypeScript)",
-                subtitle: "مهمة بخطوتين وبسيطة: مكتبة صغيرة بجافاسكريبت (أصناف + تفكيك)، ثم نفس الفكرة بـ TypeScript (أنواع وواجهات).",
-                sections: [{
-                    type: "idea",
-                    title: "القصة: مكتبة ShelfStack المجتمعية",
-                    content: "تبني تطبيق مكتبة بسيط جدًا. الجزء أ بجافاسكريبت العادي: عدّة أصناف وتفكيك. الجزء ب يعيد نفس فكرة الكتب والإعارات بـ TypeScript بواجهات بسيطة. اجعل الحل قصيرًا وركز على الوضوح لا على ميزات إضافية."
-                }, {
-                    type: "requirements",
-                    title: "قواعد (مبسّطة)",
-                    content: [{
-                        type: "list",
-                        title: "ما تستخدمه",
-                        items: [
-                            "المحاضرة 8: أصناف، `extends`، `super`، تجاوز دالة واحدة، حقل خاص `#` واحد على الأقل، دالة `static` واحدة، تفكيك كائن ومصفوفة.",
-                            "المحاضرة 9: تثبيت TypeScript، `tsc --init`، ملف أو ملفان `.ts`، `interface` و`type`، دوال مُعلّمة. **لا** تستخدم `any`."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "تجاهل هذا (ليس من المهمة)",
-                        items: [
-                            "الوراثة المتعددة / mixins (تبويب المحاضرة 8).",
-                            "دروس TypeScript المتقدمة: أنواع عامة `<T>`، اتحاد موسوم، واجبات حراس أنواع متقدمة، مواضيع \"Advanced Topics\"."
-                        ]
-                    }]
-                }, {
-                    type: "requirements",
-                    title: "الجزء أ — ملف JavaScript `part-a.js`",
-                    content: [{
-                        type: "list",
-                        title: "أصناف (هذه الأربعة فقط)",
-                        items: [
-                            "`LibraryItem`: حقول `id`، `title`، `isAvailable`؛ دوال `describe()` و`borrow()` / `returnItem()` (أو أسماء قريبة) تغيّر `isAvailable`.",
-                            "`Book extends LibraryItem`: أضف `isbn` و`author` كنصوص. تجاوز `describe()` لذكر تفاصيل الكتاب.",
-                            "`Member`: حقل رقم خاص واحد مثل `#balance` (أو `#creditCents`) مع `deposit(n)` و`getBalance()`.",
-                            "`LibraryCatalog`: يخزن الكتب في مصفوفة؛ `addItem(book)`؛ دالة **ثابتة** مثل `nextId()` أو `makeId(prefix)`؛ `registerLoan({ memberId, itemId })` — المعامل يُكتب **بتفكيك كائن**؛ `snapshotStats()` تُرجع `{ total, available }` (عدد الكتب)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "التفكيك (ثلاثة إثباتات بسيطة)",
-                        items: [
-                            "في `registerLoan` اكتب المعامل `{ memberId, itemId }`.",
-                            "في نهاية الملف استدعِ `snapshotStats()` واكتب: `const { total, available } = catalog.snapshotStats();`",
-                            "استخدم **تفكيك مصفوفة** مرة مثل `const [a, b] = [\"b1\", \"b2\"];` قبل إضافة كتابين (أو سطر بسيط في العرض)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "نهاية الملف",
-                        items: [
-                            "عرض قصير: أنشئ فهرسًا، أضف كتابًا أو اثنين، نفّذ `registerLoan`، اطبع `describe()` لكتاب واحد، اطبع `total` و`available`."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "الجزء أ — مثال بسيط",
-                        content: "يجب أن يبدو الكود تقريبًا هكذا (يمكن تغيير الأسماء مع بقاء الفكرة):",
-                        example: `const cat = new LibraryCatalog();
-cat.addItem(new Book({ id: "b1", title: "Clean Code", isbn: "978-0132350884", author: "Martin" }));
-cat.registerLoan({ memberId: "m1", itemId: "b1" });
-
-const { total, available } = cat.snapshotStats();
-// total = عدد الكتب؛ available = غير المعارة`
-                    }]
-                }, {
-                    type: "requirements",
-                    title: "الجزء ب — مجلد TypeScript `shelfstack-ts/`",
-                    content: [{
-                        type: "list",
-                        title: "الإعداد",
-                        items: [
-                            "أنشئ `shelfstack-ts/` مع `tsconfig.json` (`npx tsc --init`).",
-                            "ضع كل TypeScript في `src/` — **ملف واحد يكفي** (`library.ts`) أو ملفان إن أحببت.",
-                            "شغّل `npx tsc` وتأكد أن ملفات `.js` تظهر في `dist/` (أو `outDir`)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "أنواع فقط (بسيطة)",
-                        items: [
-                            "`type BookId = string` (أو استخدم `string` مباشرة في الواجهات — الاثنان مقبول).",
-                            "`interface Book { id: string; title: string; isbn: string; author: string; }`",
-                            "`interface Loan { id: string; bookId: string; memberId: string; }`",
-                            "اختياري: أضف `readonly` على حقل واحد (مثل `readonly id: string` على `Book`)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "دالتان فقط",
-                        items: [
-                            "`function addBook(list: Book[], book: Book): Book[]` — أعد **مصفوفة جديدة** مع إضافة الكتاب (دون `any`).",
-                            "`function findByIsbn(list: Book[], isbn: string): Book | undefined` — أعد الكتاب أو `undefined`."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "الجزء ب — مثال للمجلد",
-                        content: "هيكل بسيط:",
-                        example: `shelfstack-ts/
-  tsconfig.json
-  src/
-    library.ts   // الواجهات + addBook + findByIsbn + تعليقات قصيرة
-  dist/          // بعد tsc`
-                    }]
-                }, {
-                    type: "note",
-                    title: "التسليم",
-                    content: "ردّة تاسكات التلغرام: أرسل `part-a.js` وضغط مجلد `shelfstack-ts` (أو رابط إن طلبت الدورة Git). السطر الأول: `#TASK5 - اسمك الكامل`."
-                }, {
-                    type: "learning",
-                    title: "ملخص التعلّم",
-                    content: [
-                        "المحاضرة 8: أصناف، وراثة، `#` خاص، `static`، تفكيك.",
-                        "المحاضرة 9: واجهات، دوال مُعلّمة، تجميع بـ`tsc`.",
-                        "نفس المجال الصغير مرتين: سلوك في JS ثم أنواع في TS."
-                    ]
-                }],
-                timer: {
-                    title: "الوقت المتبقي لإكمال المهمة",
-                    message: "أكمل المهمة قبل الموعد النهائي!",
-                    days: "أيام",
-                    hours: "ساعات",
-                    minutes: "دقائق",
-                    seconds: "ثواني"
-                },
-                thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
-                buttonText: "English / العربية",
-                finishDate: "الانتهاء بحلول: 11 أبريل 2026"
+                title: "المهمة 5: منصة ShelfStack — المستوى المتقدم في TypeScript والكائنات",
+                subtitle: "30 دالة نقية تحل تحديات واقعية في تحليل بيانات المكتبات، الربط العلائقي، والبحث الذكي",
+                storyTitle: "القصة: محرك المكتبة الرقمية ShelfStack",
+                story: "أهلاً بك في منصة ShelfStack! تدير منصتنا آلاف الموارد في البرمجة والذكاء الاصطناعي وهندسة النظم. بصفتك مهندس برمجيات رئيسي، أنت مسؤول عن بناء طبقة الاستعلامات التحليلية ومنطق الأعمال عبر 30 دالة TypeScript عالية الاحترافية. ستتعامل مع مصفوفات الكائنات عبر عمليات الربط العلائقي (Joins)، الترتيب متعدد المعايير، تقارير الجرد، ومحرك بحث ذكي يعتمد على الأوزان. جميع الدوال يجب أن تكون نقية (Pure) دون أي تعديل على المصفوفات الأصلية.",
+                rulesTitle: "القواعد والمعايير الهندسية",
+                rules: [
+                    "<strong>التسليم بدون node_modules:</strong> أرسل ملفات الكود فقط ولا تقم بتضمين مجلد <code>node_modules</code> إطلاقاً.",
+                    "<strong>تعريف الأنواع والواجهات بنفسك:</strong> ملف البداية يطلب منك كتابة كافة الـ Type Aliases والـ Interfaces بنفسك استناداً إلى بنية البيانات ومتطلبات الدوال.",
+                    "<strong>كتابة الأنواع في رأس كل دالة بنفسك:</strong> رؤوس الدوال في ملف البداية تأتي بدون أنواع، وعليك كتابة أنواع المعاملات (Parameter Types) ونوع القيمة المرجعة (Return Type) لكل دالة بنفسك باستخدام الأنواع التي قمت بتعريفها.",
+                    "<strong>استخدام أساسيات TypeScript فقط:</strong> استخدم فقط ما تم شرحه: الأنواع العادية، الواجهات (Interfaces)، والأسماء المستعارة (Type Aliases). بدون كود عام Generics وبدون Utility Types معقدة.",
+                    "<strong>عدم تعديل البيانات الأصلية (Immutability):</strong> لا تعدل على مصفوفات <code>books</code> أو <code>members</code> أو <code>loans</code> أو <code>reviews</code> الأصلية.",
+                    "<strong>دوال المصفوفات الحديثة:</strong> استخدم <code>map</code>, <code>filter</code>, <code>reduce</code>, <code>find</code> والنسخ الآمن <code>[...arr].sort()</code>."
+                ],
+                downloadTitle: "ملف البداية (Starter File)",
+                downloadText: "حمّل ملف البداية المجهز بالبيانات التجريبية وهياكل الدوال، لتكتب بنفسك كافة الواجهات والأنواع وتطبق منطق العمل.",
+                downloadLabel: "تحميل task5.ts",
+                taskList: taskListAr,
+                submitTitle: "طريقة التسليم",
+                submit: "أرسل ملف <code>task5.ts</code> (أو المشروع مضغوطاً <strong>بدون node_modules</strong>) في قناة التيليجرام المخصصة للمهام. تنسيق الرسالة: <code>#TASK5 - اسمك الكامل</code>.",
+                learningTitle: "ما ستكتسبه في هذه المهمة",
+                learning: [
+                    "الربط العلائقي بين مصفوفات الكائنات المختلفة (Relational Joins) بأمان نوعي كامل",
+                    "الفرز متعدد المعايير وبناء مصفوفات التكرار الإحصائية المتقدمة (Record Types)",
+                    "إدارة منطق العمليات الشرطية والمعاملات باستخدام Discriminated Unions",
+                    "بناء أدوات برمجية عامة وقابلة لإعادة الاستخدام مثل دالة التصفح والتجزئة (Pagination)",
+                    "تصميم خوارزمية بحث ذكية تحسب أوزان الصلة (Weighted Fuzzy Search)"
+                ]
             }
         };
 
         function renderContent(lang) {
             const data = taskData[lang];
             const taskContent = document.getElementById('taskContent');
+            const isAr = lang === 'ar';
 
             document.getElementById('title').textContent = data.title;
             document.getElementById('subtitle').textContent = data.subtitle;
+            document.getElementById('timer-title').textContent = isAr ? "الوقت المتبقي لإكمال المهمة" : "Time Remaining to Complete Task";
+            document.getElementById('timer-message').textContent = isAr ? "أكمل المهمة قبل الموعد النهائي!" : "Complete the task before the deadline!";
+            document.getElementById('days-label').textContent = isAr ? "أيام" : "Days";
+            document.getElementById('hours-label').textContent = isAr ? "ساعات" : "Hours";
+            document.getElementById('minutes-label').textContent = isAr ? "دقائق" : "Minutes";
+            document.getElementById('seconds-label').textContent = isAr ? "ثواني" : "Seconds";
+            document.getElementById('finish-date').textContent = isAr ? "الانتهاء بحلول: 10 أكتوبر 2026" : "Finish by: October 10, 2026";
+            document.getElementById('thankYou').textContent = isAr ? "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"" : "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"";
+            document.getElementById('languageToggle').textContent = isAr ? "English / العربية" : "العربية / English";
 
-            document.getElementById('timer-title').textContent = data.timer.title;
-            document.getElementById('timer-message').textContent = data.timer.message;
-            document.getElementById('days-label').textContent = data.timer.days;
-            document.getElementById('hours-label').textContent = data.timer.hours;
-            document.getElementById('minutes-label').textContent = data.timer.minutes;
-            document.getElementById('seconds-label').textContent = data.timer.seconds;
-            document.getElementById('finish-date').textContent = data.finishDate;
-
-            document.getElementById('thankYou').textContent = data.thankYou;
-
-            document.getElementById('languageToggle').textContent = data.buttonText;
-
-            taskContent.innerHTML = '';
-
-            data.sections.forEach(section => {
-                const sectionEl = document.createElement('div');
-                sectionEl.className = 'section';
-
-                if (section.type === 'requirements') {
-                    sectionEl.classList.add('requirements');
-                } else if (section.type === 'bonus') {
-                    sectionEl.classList.add('bonus');
-                }
-
-                const titleEl = document.createElement('h2');
-                titleEl.textContent = section.title;
-                sectionEl.appendChild(titleEl);
-
-                if (section.type === 'idea' || section.type === 'note') {
-                    const contentEl = document.createElement('p');
-                    contentEl.textContent = section.content;
-                    sectionEl.appendChild(contentEl);
-                } else if (section.type === 'requirements') {
-                    section.content.forEach(item => {
-                        const itemTitle = document.createElement('h3');
-                        itemTitle.textContent = item.title;
-                        sectionEl.appendChild(itemTitle);
-
-                        if (item.type === 'list') {
-                            const listEl = document.createElement('ul');
-                            item.items.forEach(listItem => {
-                                const li = document.createElement('li');
-                                li.innerHTML = listItem;
-                                listEl.appendChild(li);
-                            });
-                            sectionEl.appendChild(listEl);
-                        } else if (item.type === 'output') {
-                            itemTitle.setAttribute('dir', 'ltr');
-                            itemTitle.style.textAlign = 'left';
-                            const contentEl = document.createElement('p');
-                            contentEl.textContent = item.content;
-                            contentEl.setAttribute('dir', 'ltr');
-                            contentEl.style.textAlign = 'left';
-                            sectionEl.appendChild(contentEl);
-
-                            const exampleEl = document.createElement('div');
-                            exampleEl.className = 'output-example';
-                            exampleEl.textContent = item.example;
-                            exampleEl.setAttribute('dir', 'ltr');
-                            exampleEl.style.textAlign = 'left';
-                            sectionEl.appendChild(exampleEl);
-                        }
-                    });
-                } else if (section.type === 'learning' || section.type === 'bonus') {
-                    const listEl = document.createElement('ul');
-                    section.content.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        listEl.appendChild(li);
-                    });
-                    sectionEl.appendChild(listEl);
-                }
-
-                taskContent.appendChild(sectionEl);
-            });
-
-            if (lang === 'ar') {
+            if (isAr) {
                 document.body.setAttribute('dir', 'rtl');
-                document.querySelectorAll('.section').forEach(section => {
-                    section.style.textAlign = 'right';
-                });
             } else {
                 document.body.removeAttribute('dir');
-                document.querySelectorAll('.section').forEach(section => {
-                    section.style.textAlign = 'left';
-                });
             }
+
+            // Group tasks by part
+            const parts = [1, 2, 3, 4, 5];
+            let tasksByPartHtml = '';
+
+            parts.forEach(partNum => {
+                const partTasks = data.taskList.filter(t => t.part === partNum);
+                const partTitle = partTasks[0]?.partTitle || `Part ${partNum}`;
+
+                let tasksItemsHtml = '';
+                partTasks.forEach(task => {
+                    tasksItemsHtml += `
+                        <li>
+                            <div class="fn-signature" dir="ltr">
+                                <code>${task.fn}</code>
+                                ${tagHtml(task.tag)}
+                            </div>
+                            <div class="fn-desc">${task.desc}</div>
+                            <div class="expected"><strong>${isAr ? 'النتيجة المتوقعة:' : 'Expected:'}</strong> <code dir="ltr">${task.expected}</code></div>
+                        </li>
+                    `;
+                });
+
+                tasksByPartHtml += `
+                    <div class="part-card">
+                        <h3>
+                            <span>${partTitle}</span>
+                            <span class="part-badge">${partTasks.length} ${isAr ? 'دوال' : 'Functions'}</span>
+                        </h3>
+                        <ul class="task-list">
+                            ${tasksItemsHtml}
+                        </ul>
+                    </div>
+                `;
+            });
+
+            taskContent.innerHTML = `
+                <!-- DOWNLOAD STARTER BOX -->
+                <div class="download-box">
+                    <div>
+                        <h3 style="margin:0 0 6px; color:#005999;">${data.downloadTitle}</h3>
+                        <p style="margin:0; font-size:0.92rem; color:#334155;">${data.downloadText}</p>
+                    </div>
+                    <a href="task5.ts" download="task5.ts">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        ${data.downloadLabel}
+                    </a>
+                </div>
+
+                <!-- STORY -->
+                <div class="section">
+                    <h2>${data.storyTitle}</h2>
+                    <p>${data.story}</p>
+                </div>
+
+                <!-- RULES -->
+                <div class="section">
+                    <h2>${data.rulesTitle}</h2>
+                    <ul>
+                        ${data.rules.map(rule => `<li>${rule}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <!-- ALL 30 FUNCTIONS ACCORDION / CARDS -->
+                <div class="section">
+                    <h2>${isAr ? 'قائمة الدوال الـ 30 المطلوبة' : 'The 30 TypeScript Functions'}</h2>
+                    <div class="parts-container">
+                        ${tasksByPartHtml}
+                    </div>
+                </div>
+
+                <!-- SUBMISSION INSTRUCTIONS -->
+                <div class="section">
+                    <h2>${data.submitTitle}</h2>
+                    <p>${data.submit}</p>
+                </div>
+
+                <!-- LEARNING OUTCOMES -->
+                <div class="section">
+                    <h2>${data.learningTitle}</h2>
+                    <ul>
+                        ${data.learning.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
         }
 
         function startCountdown() {
-            const countDownDate = new Date("Apr 11, 2026 23:59:59").getTime();
+            const countDownDate = new Date("2026-10-10T23:59:59").getTime();
 
             const countdown = setInterval(() => {
                 const now = new Date().getTime();
