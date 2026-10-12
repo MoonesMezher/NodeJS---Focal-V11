@@ -206,7 +206,7 @@
                 number: "11",
                 title: "Git & GitHub",
                 topics: "Git Commands, Branching, README & Markdown, Gitignore, Git Workflow",
-                status: "upcoming",
+                status: "completed",
                 ideas: [
                     "Git Commands",
                     "Branching",
@@ -215,12 +215,17 @@
                     "Git Workflow"
                 ]
             }, {
-                number: "12*",
-                title: "Solve Task 5",
-                topics: "ShelfStack Library",
+                number: "12",
+                title: "NodeJS",
+                topics: "NodeJS, Modules, OS Module, FS Module, HTTP Module, Intro to Express",
                 status: "completed",
                 ideas: [
-                    "Solve Task 5 — ShelfStack Library"
+                    "NodeJS",
+                    "Modules",
+                    "OS Module",
+                    "FS Module",
+                    "HTTP Module",
+                    "Intro to Express"
                 ]
             }, {
                 number: "13",
@@ -467,9 +472,9 @@
 
         lectures.forEach(lecture => {
             const lectureNumber = Number.parseInt(lecture.number, 10);
-            lecture.status = lectureNumber <= 10
+            lecture.status = lectureNumber <= 12
                 ? "completed"
-                : lectureNumber === 11
+                : lectureNumber === 13
                     ? "upcoming"
                     : "not-started";
         });
