@@ -1,0 +1,30 @@
+{
+  "name": "socialsphere-backend-api",
+  "version": "1.0.0",
+  "description": "SocialSphere - Social Media REST API built with Express.js and MVC Architecture",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mvc",
+    "rest-api",
+    "crud",
+    "patch",
+    "social-media",
+    "bootcamp"
+  ],
+  "author": "Moones Mezher / Focal X Node.js Bootcamp V11",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

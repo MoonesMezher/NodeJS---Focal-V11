@@ -229,35 +229,36 @@
                 ]
             }, {
                 number: "13",
-                title: "ExpressJS 1",
-                topics: "Intro to ExpressJS",
+                title: "Solve Task 5",
+                topics: "ShelfStack",
                 status: "completed",
+                isTaskLecture: true,
                 ideas: [
-                    "Introduction to Express.js",
-                    "Express Server Setup",
-                    "Routing & HTTP Methods",
-                    "Request & Response Objects"
+                    "Solve Task 5 — ShelfStack"
                 ]
             }, {
                 number: "14",
                 title: "ExpressJS 2",
-                topics: "CRUDS, Middlewares",
+                topics: "ExpressJS + CRUD + MVC Structure",
                 status: "completed",
                 ideas: [
-                    "Development Tools & Environment",
+                    "ExpressJS",
+                    "CRUD Operations",
+                    "MVC Structure",
                     "Request & Response Objects",
                     "Middleware Concepts"
                 ]
             }, {
                 number: "15",
                 title: "ExpressJS 3",
-                topics: "Folder Structure, Postman, PLop",
+                topics: "Express, Dotenv, Morgan, Project",
                 status: "completed",
                 ideas: [
+                    "Express",
+                    "Dotenv",
+                    "Morgan",
                     "Project Structure & Organization",
-                    "Postman",
-                    "Plop.js",
-                    "Views & MVC Architecture"
+                    "MVC Architecture"
                 ]
             }, {
                 number: "16",
@@ -276,10 +277,10 @@
             }, {
                 number: "17*",
                 title: "Solve Task 7",
-                topics: "HarborStack",
+                topics: "Social Media API (Express & MVC)",
                 status: "completed",
                 ideas: [
-                    "Solve Task 7 — HarborStack"
+                    "Solve Task 7 — Social Media API (Express & MVC)"
                 ]
             }, {
                 number: "18",
@@ -472,9 +473,9 @@
 
         lectures.forEach(lecture => {
             const lectureNumber = Number.parseInt(lecture.number, 10);
-            lecture.status = lectureNumber <= 12
+            lecture.status = lectureNumber <= 15
                 ? "completed"
-                : lectureNumber === 13
+                : lectureNumber === 16
                     ? "upcoming"
                     : "not-started";
         });

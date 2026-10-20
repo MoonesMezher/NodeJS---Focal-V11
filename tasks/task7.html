@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task 7: Express — Twin CRUD APIs (Lectures 13 &amp; 14)</title>
+    <title>Task 7: SocialSphere — Node.js &amp; Express.js (From JavaScript to HTTP Server)</title>
     <link rel="manifest" href="../manifest.json" />
     <link rel="apple-touch-icon" href="../logo.jpg">
     <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
@@ -32,7 +32,7 @@
         .container {
             width: 100%;
             max-width: 1000px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -54,23 +54,23 @@
         header {
             background: #2c3e50;
             color: white;
-            padding: 20px;
+            padding: 24px 20px;
             text-align: center;
             position: relative;
         }
 
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 2.1rem;
+            margin-bottom: 8px;
         }
 
         .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1.05rem;
+            opacity: 0.92;
         }
 
         #title {
-            padding-top: 20px;
+            padding-top: 15px;
         }
 
         .language-toggle {
@@ -96,13 +96,12 @@
         }
 
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             padding: 20px;
             background: #f8f9fa;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
         }
-
         .story-section {
             background: #fff8f0;
             border-left: 5px solid #e67e22;
@@ -121,16 +120,16 @@
 
         h3 {
             color: #2980b9;
-            margin: 15px 0;
+            margin: 15px 0 10px;
         }
 
         p {
-            margin-bottom: 15px;
+            margin-bottom: 14px;
         }
 
         ul,
         ol {
-            margin-left: 20px;
+            margin-left: 22px;
             margin-bottom: 15px;
         }
 
@@ -139,21 +138,85 @@
         }
 
         .output-example {
-            background: #d4edda;
-            border-left: 5px solid #28a745;
+            background: #1e1e2e;
+            color: #a6accd;
+            border-left: 5px solid #6c5ce7;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 6px;
             margin: 15px 0;
-            font-family: monospace;
+            font-family: 'Consolas', 'Fira Code', monospace;
             white-space: pre;
             overflow: auto;
             direction: ltr !important;
             text-align: left !important;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
+
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .method-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #ccc;
+        }
+
+        .method-card.get { border-left-color: #2ecc71; }
+        .method-card.post { border-left-color: #f1c40f; }
+        .method-card.patch { border-left-color: #3498db; }
+        .method-card.delete { border-left-color: #e74c3c; }
+
+        .method-badge {
+            font-weight: bold;
+            font-family: monospace;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .method-badge.get { background: #e8f8f0; color: #27ae60; }
+        .method-badge.post { background: #fef9e7; color: #d4ac0d; }
+        .method-badge.patch { background: #ebf5fb; color: #2980b9; }
+        .method-badge.delete { background: #fdedec; color: #c0392b; }
 
         .requirements {
             background: #e8f4fc;
             border-left: 5px solid #3498db;
+        }
+
+        .download-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            justify-content: space-between;
+        }
+
+        .download-box a {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .download-box a:hover {
+            background: #1e8449;
         }
 
         .timer-section {
@@ -268,8 +331,8 @@
     <div class="container">
         <a target="_blank" href="https://moonesmezher.com" class="coach">Moones Mezher</a>
         <header>
-            <h1 id="title">Task 7: HarborStack — Twin CRUD APIs</h1>
-            <p class="subtitle" id="subtitle">Express.js server with two in-memory resources, request logging middleware, and tooling from Lectures 13 &amp; 14.</p>
+            <h1 id="title">Task 7: SocialSphere — Node.js &amp; Express.js</h1>
+            <p class="subtitle" id="subtitle">From JavaScript to HTTP Server: MVC Structure, 3 Arrays, and HTTP Methods (GET, POST, PATCH, DELETE)</p>
             <button class="language-toggle" id="languageToggle">العربية / English</button>
         </header>
 
@@ -295,7 +358,7 @@
                     <span class="timer-label" id="seconds-label">Seconds</span>
                 </div>
             </div>
-            <p class="finish-date" id="finish-date">Finish by: April 25, 2026</p>
+            <p class="finish-date" id="finish-date">Finish by: October 24, 2026</p>
             <p id="timer-message">Complete the task before the deadline!</p>
         </div>
 
@@ -312,122 +375,101 @@
     <script>
         const taskData = {
             en: {
-                title: "Task 7: HarborStack — Twin CRUD APIs (Express)",
-                subtitle: "Flat project: app.js, data.js (two arrays), .env, .env.example, .gitignore — twin CRUDs, request logger, nodemon — Lectures 13 & 14.",
+                title: "Task 7: Node.js & Express.js — From JavaScript to HTTP Server",
+                subtitle: "MVC Architecture, 3 In-Memory Arrays (Users, Posts, Comments), and REST Operations (GET, POST, PATCH, DELETE).",
+                downloadTitle: "Starter Data & Code (task7.js)",
+                downloadText: "Download the seed dataset with 3 arrays (users, posts, comments) to implement inside your MVC backend.",
+                downloadLabel: "Download task7.js",
                 sections: [{
-                    type: "story",
-                    title: "⚓ The story: your first night on the API desk",
-                    paragraphs: [
-                        "You have just joined HarborStack Marine Ops, a small company that coordinates harbor crews and dock shifts. The old spreadsheet “system” crashes whenever two teams edit the same sheet.",
-                        "Operations asks you for something they can trust before Monday: a tiny backend prototype that exposes real HTTP routes — not slides, not mockups — so their partner app can start integrating.",
-                        "You are not wiring a database yet. You are proving you can shape traffic: clear routes, predictable JSON, and logs that show exactly who hit what and when. That is your job tonight.",
-                        "By dawn they expect two living lists in code — crews and shifts — both seeded in one data.js file, each list with full CRUD. If you can do that calmly, with the same tools you practiced in Lecture 13 (Express, routing, req/res) and Lecture 14 (nodemon, .env, .gitignore, middleware), you have earned the next assignment."
+                    type: "guide-summary",
+                    title: "💡 Core Architecture & Concepts",
+                    items: [
+                        { label: "What is Node.js?", desc: "A runtime that lets JavaScript run OUTSIDE the browser (on your computer/server)." },
+                        { label: "What is Express?", desc: "A fast, minimalist framework for building HTTP servers & APIs in Node.js. Simplifies routing, middleware, & requests." },
+                        { label: "The Request Lifecycle 🔄", desc: "Client (Browser) ──[HTTP Request]──> Express Middleware ──> Route Handler ──[HTTP Response]──> Client" },
+                        { label: "Full Stack Architecture 🌐", desc: "Client (Frontend) ⇄ Server (Express) ⇄ Database (Data / In-Memory Mock)" }
                     ]
                 }, {
-                    type: "idea",
-                    title: "💻 What you build (technical brief)",
-                    content: "One Express application. A single data.js file that exports two in-memory arrays (crews and shifts — starter rows are provided below). Two REST-style resource groups with full CRUD. Logger middleware, PORT from .env, .env.example for others, nodemon, and .gitignore. No extra folders required: keep the flat layout exactly as specified."
+                    type: "http-methods",
+                    title: "🚦 HTTP Methods to Implement",
+                    methods: [
+                        { name: "GET", color: "get", desc: "Read / Get data (e.g. list all items, get item by ID)" },
+                        { name: "POST", color: "post", desc: "Create / Send data (e.g. create user, post, or comment)" },
+                        { name: "PATCH", color: "patch", desc: "Update / Modify data (e.g. update profile, edit post content)" },
+                        { name: "DELETE", color: "delete", desc: "Delete data (e.g. remove user, post, or comment)" }
+                    ]
                 }, {
-                    type: "requirements",
-                    title: "📝 Requirements",
-                    content: [{
-                        type: "list",
-                        title: "Course alignment (read first):",
-                        items: [
-                            "Ground the solution in <a href=\"../lecture13.html\" target=\"_blank\" rel=\"noopener\">Lecture 13 — Express (setup, routing, HTTP methods, request &amp; response)</a> and <a href=\"../lecture14.html\" target=\"_blank\" rel=\"noopener\">Lecture 14 — nodemon, .env / dotenv, .gitignore, middleware &amp; structure</a>."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Tooling & project hygiene:",
-                        items: [
-                            "Use <code>dotenv</code>; load it at startup so <code>process.env.PORT</code> controls the listen port.",
-                            "Provide a <code>.env</code> file containing at least <code>PORT=3000</code> (or another port you document).",
-                            "Provide a <code>.env.example</code> file with the same keys but <strong>no secrets</strong> (at least <code>PORT=3000</code>) — this file is safe to commit; <code>.env</code> stays local.",
-                            "Install <code>nodemon</code> as a <strong>devDependency</strong> and add scripts to <code>package.json</code>: <code>\"start\": \"node app.js\"</code> and <code>\"dev\": \"nodemon app.js\"</code>.",
-                            "Add a <code>.gitignore</code> that excludes <code>node_modules/</code> and <code>.env</code> (and any other sensible Node artifacts).",
-                            "Use <code>express.json()</code> so JSON bodies work for POST/PUT."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Single data.js (two arrays):",
-                        items: [
-                            "All dummy data lives in <strong>one file</strong>: <code>data.js</code> at the project root (same folder as <code>app.js</code>).",
-                            "Export <strong>two arrays of objects</strong> — use the names <code>crews</code> and <code>shifts</code> — and <strong>start from the starter data below</strong> (same ids and shape; you may extend fields later).",
-                            "CRUD must mutate these same in-memory arrays (require the module once and reuse the exported references; no database)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Two CRUD APIs (suggested paths):",
-                        items: [
-                            "<strong>Resource A</strong> — paths must use the version prefix, e.g. <code>/api/v1/crews</code>: <code>GET</code> list, <code>GET /:id</code> one, <code>POST</code> create, <code>PUT /:id</code> update, <code>DELETE /:id</code> remove (no <code>PATCH</code>).",
-                            "<strong>Resource B</strong> — e.g. <code>/api/v1/shifts</code>: the same five operations (GET all, GET one, POST, PUT, DELETE).",
-                            "Return JSON with appropriate HTTP status codes (including 404 when an id does not exist).",
-                            "Generate new ids deterministically (increment, UUID string, etc.) and document the rule in README."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "Request logger middleware:",
-                        items: [
-                            "Implement <strong>custom</strong> application-level middleware (your own function, not only morgan) that logs <strong>request details</strong> for every incoming request.",
-                            "Each log line must include at least: <strong>timestamp</strong>, <strong>HTTP method</strong>, <strong>URL path</strong> (use <code>req.originalUrl</code> or <code>req.path</code>), and <strong>client IP</strong> (e.g. <code>req.ip</code> or a safe fallback).",
-                            "Register it with <code>app.use(...)</code> before your routes so every route is covered."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "Required project layout (root only):",
-                        content: "No subfolders for this task. You still need package.json for npm (express, dotenv, nodemon). Everything else lives next to app.js.",
-                        example: `harborstack-api/
-├── app.js
-├── data.js
-├── .env
-├── .env.example
+                    type: "code",
+                    title: "💻 Basic Server Code (Core Blueprint)",
+                    code: `const express = require('express');
+const app = express();
+
+app.use(express.json()); // parses JSON
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+app.listen(3000, () => console.log('Server running!'));`
+                }, {
+                    type: "structure",
+                    title: "📁 Typical Project Structure (Must Follow)",
+                    content: "Organize your codebase into the standard MVC directory hierarchy with specific file naming conventions:",
+                    example: `my-app/
+├── src/
+│   ├── app.js                  (entry point)
+│   ├── routes/                 (endpoints)
+│   │   ├── users.routes.js
+│   │   ├── posts.routes.js
+│   │   └── comments.routes.js
+│   ├── controllers/            (logic)
+│   │   ├── users.controller.js
+│   │   ├── posts.controller.js
+│   │   └── comments.controller.js
+│   └── models/                 (database schemas / arrays)
+│       ├── users.js
+│       ├── posts.js
+│       └── comments.js
+├── .env / .env.example
 ├── .gitignore
 └── package.json`
-                    }, {
-                        type: "output",
-                        title: "Starter data.js (use this as your seed — copy into your repo):",
-                        content: "Export two arrays. CRUD in app.js (or small inline handlers) reads and mutates these arrays.",
-                        example: `// data.js — HarborStack seed data (do not split into other files for this task)
-
-const crews = [
-  { id: 1, name: "Amina Rahal", role: "Dock Supervisor", active: true },
-  { id: 2, name: "Jonas Vik", role: "Crane Operator", active: true },
-  { id: 3, name: "Mei Chen", role: "Safety Officer", active: false }
-];
-
-const shifts = [
-  { id: 1, crewId: 2, berth: "B-12", startsAt: "2026-06-05T06:00:00.000Z", endsAt: "2026-06-05T14:00:00.000Z" },
-  { id: 2, crewId: 1, berth: "A-04", startsAt: "2026-06-05T14:00:00.000Z", endsAt: "2026-06-05T22:00:00.000Z" },
-  { id: 3, crewId: 3, berth: "C-01", startsAt: "2026-06-06T06:00:00.000Z", endsAt: "2026-06-06T14:00:00.000Z" }
-];
-
-module.exports = { crews, shifts };`
-                    }, {
+                }, {
+                    type: "requirements",
+                    title: "📝 Task 7 Implementation Requirements",
+                    content: [{
                         type: "list",
-                        title: "Where routes and logger live:",
+                        title: "1. Three In-Memory JavaScript Arrays (Each Array in its Own File):",
                         items: [
-                            "Put all Express routes and your custom <strong>request logger</strong> middleware in <code>app.js</code> (no separate routes/ or middlewares/ folders for this task).",
-                            "At the top of app.js: <code>require('dotenv').config()</code>, then <code>require('./data.js')</code> to get <code>crews</code> and <code>shifts</code>."
+                            "<strong>users.js</strong>: <code>[{ id, username, fullName, email, bio, avatar, role, createdAt }]</code>",
+                            "<strong>posts.js</strong>: <code>[{ id, userId, title, content, tags, likes, createdAt, updatedAt }]</code> (linked to users via <code>userId</code>).",
+                            "<strong>comments.js</strong>: <code>[{ id, postId, userId, text, createdAt }]</code> (linked to posts via <code>postId</code> and users via <code>userId</code>).",
+                            "Each array must be defined in its own dedicated file (e.g. <code>src/data/users.js</code>, <code>src/data/posts.js</code>, <code>src/data/comments.js</code> or corresponding model files). Mutations directly alter these arrays in memory."
                         ]
                     }, {
                         type: "list",
-                        title: "README (optional but useful):",
+                        title: "2. REST Endpoints under /api/v1 (Using GET, POST, PATCH, DELETE):",
                         items: [
-                            "One short note: <code>npm install</code>, copy <code>.env.example</code> to <code>.env</code>, <code>npm run dev</code>, port, and two example URLs (e.g. <code>GET /api/v1/crews</code> and <code>GET /api/v1/shifts</code>)."
+                            "<strong>Users (/api/v1/users)</strong>: <code>GET /</code>, <code>GET /:id</code>, <code>POST /</code>, <code>PATCH /:id</code>, <code>DELETE /:id</code>, <code>GET /:id/posts</code>.",
+                            "<strong>Posts (/api/v1/posts)</strong>: <code>GET /</code> (?tag=), <code>GET /:id</code>, <code>POST /</code>, <code>PATCH /:id</code>, <code>DELETE /:id</code>, <code>POST /:id/like</code>, <code>GET /:id/comments</code>.",
+                            "<strong>Comments (/api/v1/comments)</strong>: <code>GET /</code> (?postId=), <code>GET /:id</code>, <code>POST /</code>, <code>PATCH /:id</code>, <code>DELETE /:id</code>."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "3. Required Tools & Middlewares (No server.js — Only src/app.js):",
+                        items: [
+                            "<strong>Sole Entry Point</strong>: Use <code>src/app.js</code> only (<strong>without server.js</strong>). Start the server directly in <code>src/app.js</code> using <code>app.listen()</code>.",
+                            "<strong>Must Use</strong>: <code>express</code>, <code>morgan</code>, <code>nodemon</code>, and <code>dotenv</code>.",
+                            "<strong>Logging Middleware</strong>: Integrate <code>morgan('dev')</code> for HTTP request logging.",
+                            "<strong>Body Parser</strong>: <code>app.use(express.json())</code> to parse incoming JSON payloads.",
+                            "<strong>Environment Variables</strong>: Use <code>dotenv</code> to load <code>PORT=3000</code> from <code>.env</code> (and provide <code>.env.example</code>).",
+                            "<strong>Nodemon & NPM Scripts</strong>: In <code>package.json</code> configure <code>\"start\": \"node src/app.js\"</code> and <code>\"dev\": \"nodemon src/app.js\"</code>.",
+                            "<strong>Git Hygiene</strong>: Exclude <code>node_modules/</code> and <code>.env</code> in <code>.gitignore</code>."
                         ]
                     }]
-                }, {
-                    type: "learning",
-                    title: "📚 Lecture reminders",
-                    content: [
-                        "Lecture 13: express(), app.get/post/put/delete, req.params / req.body, res.json(), listen(PORT).",
-                        "Lecture 14: dotenv.config(), nodemon, .gitignore, app.use(middleware), middleware signature (req, res, next).",
-                        "All CRUD routes live under <code>/api/v1/</code> (e.g. <code>/api/v1/crews</code>); use GET, POST, PUT, DELETE only — no PATCH."
-                    ]
                 }],
                 timer: {
                     title: "Time Remaining to Complete Task",
-                    message: "Complete the task before the deadline. Official submissions are accepted only in the final six hours before the window closes.",
+                    message: "Complete the task before the deadline. Submissions close on October 24, 2026.",
                     days: "Days",
                     hours: "Hours",
                     minutes: "Minutes",
@@ -435,125 +477,104 @@ module.exports = { crews, shifts };`
                 },
                 thankYou: "\"Thank you for your hard work and dedication. Your efforts are appreciated!\"",
                 buttonText: "العربية / English",
-                finishDate: "Finish by: April 25, 2026 (submissions: last 6 hours)"
+                finishDate: "Finish by: October 24, 2026 (20/10 -> 24/10)"
             },
             ar: {
-                title: "المهمة 7: HarborStack — واجهتان CRUD مع Express",
-                subtitle: "مشروع مسطح: app.js و data.js (مصفوفتان) و .env و .env.example و .gitignore — CRUD مزدوج، مسجّل طلبات، nodemon — المحاضرتان 13 و 14.",
+                title: "المهمة 7: Node.js & Express.js — من JavaScript إلى خادم HTTP",
+                subtitle: "معمارية MVC، 3 مصفوفات في الذاكرة (مستخدمون، منشورات، تعليقات)، وعمليات REST الأساسية (GET, POST, PATCH, DELETE).",
+                downloadTitle: "بيانات البداية والكود (task7.js)",
+                downloadText: "حمّل ملف البيانات التجريبية للمصفوفات الثلاث (users, posts, comments) لتطبيقها داخل خادم MVC.",
+                downloadLabel: "تحميل task7.js",
                 sections: [{
-                    type: "story",
-                    title: "⚓ القصة: أول ليلة لك على مكتب الـ API",
-                    paragraphs: [
-                        "انضممت للتو إلى شركة HarborStack Marine Ops الصغيرة، التي تنسّق طواقم الميناء وورديات الرصيف. يتعطل «النظام» القديم المبني على جداول كلما حرّر فريقان نفس الورقة.",
-                        "قسم العمليات يطلب منك نموذجاً خلفياً يمكن الاعتماد عليه قبل يوم الاثنين: مسارات HTTP حقيقية — ليس شرائح ولا صوراً — حتى يبدأ تطبيق الشريك بالربط.",
-                        "لن تربط قاعدة بيانات بعد. المطلوب أن تثبت أنك تضبط حركة الطلبات: مسارات واضحة، JSON متوقع، وسجلات تبيّن من نادى ماذا ومتى. هذه مهمتك الليلة.",
-                        "بحلول الصباح يتوقعون قائمتين حيّتين في الكود — طواقم وورديات — كلاهما في ملف data.js واحد، ولكل قائمة CRUD كامل. إن أنجزت ذلك بهدوء بنفس أدوات المحاضرة 13 (Express، التوجيه، req/res) والمحاضرة 14 (nodemon، .env، .gitignore، middleware)، تستحق المهمة التالية."
+                    type: "guide-summary",
+                    title: "💡 المعمارية والمفاهيم الأساسية",
+                    items: [
+                        { label: "ما هو Node.js؟", desc: "بيئة تشغيل تمكّن JavaScript من العمل خارج المتصفح (على حاسوبك الشخصي أو الخادم)." },
+                        { label: "ما هو Express؟", desc: "إطار عمل سريع وبسيط لبناء خوادم HTTP وواجهات البرمجة (APIs) في Node.js، يسهّل التوجيه والـ middlewares ومعالجة الطلبات." },
+                        { label: "دورة حياة الطلب (Request Lifecycle) 🔄", desc: "العميل (المتصفح) ──[طلب HTTP]──> الـ Middleware في Express ──> معالج المسار (Route Handler) ──[استجابة HTTP]──> العميل" },
+                        { label: "معمارية الـ Full Stack الكاملة 🌐", desc: "العميل (Frontend) ⇄ الخادم (Express) ⇄ قاعدة البيانات (البيانات / المصفوفات في الذاكرة)" }
                     ]
                 }, {
-                    type: "idea",
-                    title: "💻 ما الذي تبنيه (ملخص تقني)",
-                    content: "تطبيق Express واحد. ملف data.js واحد يصدّر مصفوفتين في الذاكرة (crews و shifts — البيانات الأولية أدناه). مجموعتا مسارات REST كاملتا CRUD. middleware للتسجيل، PORT من .env، وملف .env.example، وnodemon و.gitignore. بدون مجلدات إضافية: التخطيط المسطح كما هو محدد."
+                    type: "http-methods",
+                    title: "🚦 طرق HTTP المطلوب تطبيقها",
+                    methods: [
+                        { name: "GET", color: "get", desc: "قراءة / جلب البيانات (مثل جلب كل العناصر أو عنصر محدد)" },
+                        { name: "POST", color: "post", desc: "إنشاء / إرسال بيانات جديدة (مثل إنشاء مستخدم أو منشور أو تعليق)" },
+                        { name: "PATCH", color: "patch", desc: "تعديل / تحديث جزئي للبيانات (مثل تعديل الملف الشخصي أو نص المنشور)" },
+                        { name: "DELETE", color: "delete", desc: "حذف البيانات (مثل حذف مستخدم أو منشور أو تعليق)" }
+                    ]
                 }, {
-                    type: "requirements",
-                    title: "📝 المتطلبات",
-                    content: [{
-                        type: "list",
-                        title: "الربط بالمحاضرات (اقرأ أولاً):",
-                        items: [
-                            "الربط بالمحتوى في <a href=\"../lecture13.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 13 — Express (الإعداد، التوجيه، الطرق، الطلب والاستجابة)</a> و<a href=\"../lecture14.html\" target=\"_blank\" rel=\"noopener\">المحاضرة 14 — nodemon و .env / dotenv و .gitignore والـ middleware والهيكل</a>."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "الأدوات وتنظيم المشروع:",
-                        items: [
-                            "استخدم <code>dotenv</code>؛ حمّله عند الإقلاع ليعمل <code>process.env.PORT</code> على منفذ الاستماع.",
-                            "ملف <code>.env</code> يحتوي على الأقل <code>PORT=3000</code> (أو منفذ آخر توثّقه).",
-                            "ملف <code>.env.example</code> بنفس المفاتيح دون أسرار (على الأقل <code>PORT=3000</code>) — آمن للرفع على Git؛ <code>.env</code> يبقى محلياً.",
-                            "ثبّت <code>nodemon</code> كـ <strong>devDependency</strong> وأضف في <code>package.json</code>: <code>\"start\": \"node app.js\"</code> و <code>\"dev\": \"nodemon app.js\"</code>.",
-                            "أضف <code>.gitignore</code> يستبعد <code>node_modules/</code> و <code>.env</code> (وغيرها المناسب لـ Node).",
-                            "استخدم <code>express.json()</code> لدعم أجسام JSON في POST/PUT."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "ملف data.js واحد (مصفوفتان):",
-                        items: [
-                            "كل البيانات الوهمية في <strong>ملف واحد</strong>: <code>data.js</code> في جذر المشروع (بجانب <code>app.js</code>).",
-                            "صدّر <strong>مصفوفتين من الكائنات</strong> باسمي <code>crews</code> و <code>shifts</code> و<strong>ابدأ من البيانات الأولية أدناه</strong> (نفس المعرفات والشكل؛ يمكنك لاحقاً إضافة حقول).",
-                            "يجب أن تعمل CRUD على نفس المصفوفات في الذاكرة (<code>require('./data.js')</code> مرة واحدة وإعادة استخدام المراجع؛ لا قاعدة بيانات)."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "واجهتان CRUD (مسارات مقترحة):",
-                        items: [
-                            "<strong>المورد أ</strong> — يجب أن تبدأ المسارات ببادئة الإصدار، مثلاً <code>/api/v1/crews</code>: <code>GET</code> القائمة، <code>GET /:id</code> واحد، <code>POST</code> إنشاء، <code>PUT /:id</code> تحديث، <code>DELETE /:id</code> حذف (بدون <code>PATCH</code>).",
-                            "<strong>المورد ب</strong> — مثلاً <code>/api/v1/shifts</code>: نفس العمليات الخمس (GET للكل، GET لواحد، POST، PUT، DELETE).",
-                            "أرجع JSON مع رموز حالة HTTP مناسبة (بما فيها 404 عند عدم وجود المعرف).",
-                            "ولّد معرفات جديدة بطريقة واضحة (زيادة، UUID نصي، إلخ) واذكر القاعدة في README."
-                        ]
-                    }, {
-                        type: "list",
-                        title: "middleware مسجّل للطلبات:",
-                        items: [
-                            "نفّذ middleware مخصص على مستوى التطبيق (دالتك، ليس الاعتماد على morgan فقط) يسجّل <strong>تفاصيل الطلب</strong> لكل وصول.",
-                            "كل سطر سجل يجب أن يشمل على الأقل: <strong>الطابع الزمني</strong>، <strong>طريقة HTTP</strong>، <strong>مسار الرابط</strong> (مثل <code>req.originalUrl</code> أو <code>req.path</code>)، و<strong>IP العميل</strong> (مثل <code>req.ip</code> أو بديل آمن).",
-                            "سجّله بـ <code>app.use(...)</code> قبل المسارات لتغطية كل المسارات."
-                        ]
-                    }, {
-                        type: "output",
-                        title: "هيكل المشروع المطلوب (جذر فقط):",
-                        content: "لا مجلدات فرعية لهذه المهمة. ما زال package.json مطلوباً لـ npm (express و dotenv و nodemon). الباقي بجانب app.js.",
-                        example: `harborstack-api/
-├── app.js
-├── data.js
-├── .env
-├── .env.example
+                    type: "code",
+                    title: "💻 كود الخادم الأساسي (من الدليل)",
+                    code: `const express = require('express');
+const app = express();
+
+app.use(express.json()); // parses JSON
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+app.listen(3000, () => console.log('Server running!'));`
+                }, {
+                    type: "structure",
+                    title: "📁 هيكل المشروع النموذجي (إلزامي)",
+                    content: "نظّم مشروعك وفق التسلسل الهرمي القياسي لمعمارية MVC مع تسمية الملفات بدقة:",
+                    example: `my-app/
+├── src/
+│   ├── app.js                  (نقطة الدخول entry point)
+│   ├── routes/                 (نقاط الوصول endpoints)
+│   │   ├── users.routes.js
+│   │   ├── posts.routes.js
+│   │   └── comments.routes.js
+│   ├── controllers/            (المنطق البرمجي logic)
+│   │   ├── users.controller.js
+│   │   ├── posts.controller.js
+│   │   └── comments.controller.js
+│   └── models/                 (مخططات البيانات models / arrays)
+│       ├── users.js
+│       ├── posts.js
+│       └── comments.js
+├── .env / .env.example
 ├── .gitignore
 └── package.json`
-                    }, {
-                        type: "output",
-                        title: "data.js الأولي (انسخه إلى مشروعك):",
-                        content: "صدّر مصفوفتين. عمليات CRUD في app.js تقرأ وتعدّل هذه المصفوفات.",
-                        example: `// data.js — HarborStack seed data (do not split into other files for this task)
-
-const crews = [
-  { id: 1, name: "Amina Rahal", role: "Dock Supervisor", active: true },
-  { id: 2, name: "Jonas Vik", role: "Crane Operator", active: true },
-  { id: 3, name: "Mei Chen", role: "Safety Officer", active: false }
-];
-
-const shifts = [
-  { id: 1, crewId: 2, berth: "B-12", startsAt: "2026-06-05T06:00:00.000Z", endsAt: "2026-06-05T14:00:00.000Z" },
-  { id: 2, crewId: 1, berth: "A-04", startsAt: "2026-06-05T14:00:00.000Z", endsAt: "2026-06-05T22:00:00.000Z" },
-  { id: 3, crewId: 3, berth: "C-01", startsAt: "2026-06-06T06:00:00.000Z", endsAt: "2026-06-06T14:00:00.000Z" }
-];
-
-module.exports = { crews, shifts };`
-                    }, {
+                }, {
+                    type: "requirements",
+                    title: "📝 متطلبات تنفيذ المهمة 7",
+                    content: [{
                         type: "list",
-                        title: "أين المسارات وmiddleware:",
+                        title: "1. ثلاث مصفوفات في JavaScript (كل مصفوفة في ملف منفصل):",
                         items: [
-                            "ضع كل مسارات Express وmiddleware التسجيل المخصص داخل <code>app.js</code> (بدون مجلدات routes/ أو middlewares/ لهذه المهمة).",
-                            "في أعلى app.js: <code>require('dotenv').config()</code> ثم <code>require('./data.js')</code> للحصول على <code>crews</code> و <code>shifts</code>."
+                            "<strong>users.js</strong>: <code>[{ id, username, fullName, email, bio, avatar, role, createdAt }]</code>",
+                            "<strong>posts.js</strong>: <code>[{ id, userId, title, content, tags, likes, createdAt, updatedAt }]</code> (مرتبطة بالمستخدم عبر <code>userId</code>).",
+                            "<strong>comments.js</strong>: <code>[{ id, postId, userId, text, createdAt }]</code> (مرتبطة بالمنشور عبر <code>postId</code> وبالمستخدم عبر <code>userId</code>).",
+                            "يجب وضع كل مصفوفة في ملف مستقل مخصص لها (مثل <code>src/data/users.js</code> و <code>src/data/posts.js</code> و <code>src/data/comments.js</code> أو في نماذج الـ models المقابلة)، وتتم العمليات مباشرة على هذه المصفوفات في الذاكرة."
                         ]
                     }, {
                         type: "list",
-                        title: "README (اختياري لكن مفيد):",
+                        title: "2. مسارات REST تحت البادئة /api/v1 (باستخدام GET, POST, PATCH, DELETE):",
                         items: [
-                            "سطر قصير: <code>npm install</code>، انسخ <code>.env.example</code> إلى <code>.env</code>، <code>npm run dev</code>، المنفذ، ومثالان لـ URL (مثل <code>GET /api/v1/crews</code> و <code>GET /api/v1/shifts</code>)."
+                            "<strong>المستخدمون (/api/v1/users)</strong>: <code>GET /</code>, <code>GET /:id</code>, <code>POST /</code>, <code>PATCH /:id</code>, <code>DELETE /:id</code>, <code>GET /:id/posts</code>.",
+                            "<strong>المنشورات (/api/v1/posts)</strong>: <code>GET /</code> (?tag=), <code>GET /:id</code>, <code>POST /</code>, <code>PATCH /:id</code>, <code>DELETE /:id</code>, <code>POST /:id/like</code>, <code>GET /:id/comments</code>.",
+                            "<strong>التعليقات (/api/v1/comments)</strong>: <code>GET /</code> (?postId=), <code>GET /:id</code>, <code>POST /</code>, <code>PATCH /:id</code>, <code>DELETE /:id</code>."
+                        ]
+                    }, {
+                        type: "list",
+                        title: "3. الأدوات والـ Middlewares المطلوبة (بدون server.js — فقط src/app.js):",
+                        items: [
+                            "<strong>نقطة دخول وحيدة</strong>: الاعتماد على <code>src/app.js</code> فقط (<strong>بدون ملف server.js</strong>). يبدأ الخادم بالاستماع مباشرة داخل <code>src/app.js</code> عبر <code>app.listen()</code>.",
+                            "<strong>الأدوات الإلزامية</strong>: يجب استخدام الحزم التالية: <code>express</code> و <code>morgan</code> و <code>nodemon</code> و <code>dotenv</code>.",
+                            "<strong>مسجل طلبات HTTP</strong>: استخدام الـ middleware <code>morgan('dev')</code> لتسجيل الطلبات.",
+                            "<strong>محلل الأجسام</strong>: تفعيل <code>app.use(express.json())</code> لقراءة أجسام JSON الواردة.",
+                            "<strong>المتغيرات البيئية</strong>: استخدام <code>dotenv</code> مع ملف <code>.env</code> (الافتراضي PORT=3000) وتوفير <code>.env.example</code>.",
+                            "<strong>أداة Nodemon والسكربتات</strong>: داخل <code>package.json</code> إضافة <code>\"start\": \"node src/app.js\"</code> و <code>\"dev\": \"nodemon src/app.js\"</code>.",
+                            "<strong>تنظيم Git</strong>: استبعاد <code>node_modules/</code> و <code>.env</code> في <code>.gitignore</code>."
                         ]
                     }]
-                }, {
-                    type: "learning",
-                    title: "📚 تذكير من المحاضرات",
-                    content: [
-                        "المحاضرة 13: express()، app.get/post/put/delete، req.params و req.body، res.json()، listen(PORT).",
-                        "المحاضرة 14: dotenv.config()، nodemon، .gitignore، app.use(middleware)، توقيع الـ middleware (req, res, next).",
-                        "كل مسارات CRUD تحت <code>/api/v1/</code> (مثل <code>/api/v1/crews</code>)؛ استخدم GET و POST و PUT و DELETE فقط — بدون PATCH."
-                    ]
                 }],
                 timer: {
                     title: "الوقت المتبقي لإكمال المهمة",
-                    message: "أكمل المهمة قبل الموعد النهائي. يُقبل التسليم الرسمي فقط في الساعات الست الأخيرة قبل إغلاق النافذة.",
+                    message: "أكمل المهمة قبل الموعد النهائي. ينتهي التسليم في 24 أكتوبر 2026.",
                     days: "أيام",
                     hours: "ساعات",
                     minutes: "دقائق",
@@ -561,7 +582,7 @@ module.exports = { crews, shifts };`
                 },
                 thankYou: "\"شكرًا لجهودك الجادة وتفانيك. نقدر جهودك!\"",
                 buttonText: "English / العربية",
-                finishDate: "الانتهاء بحلول: 25 أبريل 2026 (التسليم: آخر 6 ساعات)"
+                finishDate: "الانتهاء بحلول: 24 أكتوبر 2026 (20/10 -> 24/10)"
             }
         };
 
@@ -585,6 +606,19 @@ module.exports = { crews, shifts };`
 
             taskContent.innerHTML = '';
 
+            // Download Starter Box
+            const downloadBox = document.createElement('div');
+            downloadBox.className = 'section download-box';
+            downloadBox.innerHTML = `
+                <div>
+                    <h2 style="border:none;padding:0;margin:0 0 6px;color:#1e7e34;">${data.downloadTitle}</h2>
+                    <p style="margin:0;color:#155724;">${data.downloadText}</p>
+                </div>
+                <a href="task7.js" download="task7.js">${data.downloadLabel}</a>
+            `;
+            taskContent.appendChild(downloadBox);
+
+            // 3. Sections Rendering
             data.sections.forEach(section => {
                 const sectionEl = document.createElement('div');
                 sectionEl.className = 'section';
@@ -599,17 +633,48 @@ module.exports = { crews, shifts };`
                 titleEl.textContent = section.title;
                 sectionEl.appendChild(titleEl);
 
-                if (section.type === 'story') {
-                    (section.paragraphs || []).forEach(text => {
-                        const p = document.createElement('p');
-                        p.textContent = text;
-                        p.style.marginBottom = '14px';
-                        sectionEl.appendChild(p);
+                if (section.type === 'guide-summary') {
+                    const ul = document.createElement('ul');
+                    ul.style.listStyleType = 'none';
+                    ul.style.marginLeft = '0';
+                    section.items.forEach(item => {
+                        const li = document.createElement('li');
+                        li.style.marginBottom = '12px';
+                        li.style.padding = '10px 14px';
+                        li.style.background = 'white';
+                        li.style.borderRadius = '6px';
+                        li.style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)';
+                        li.innerHTML = `<strong>${item.label}:</strong> <span style="color:#475569;">${item.desc}</span>`;
+                        ul.appendChild(li);
                     });
-                } else if (section.type === 'idea' || section.type === 'note') {
-                    const contentEl = document.createElement('p');
-                    contentEl.textContent = section.content;
-                    sectionEl.appendChild(contentEl);
+                    sectionEl.appendChild(ul);
+                } else if (section.type === 'http-methods') {
+                    const grid = document.createElement('div');
+                    grid.className = 'methods-grid';
+                    section.methods.forEach(m => {
+                        const card = document.createElement('div');
+                        card.className = `method-card ${m.color}`;
+                        card.innerHTML = `
+                            <span class="method-badge ${m.color}">${m.name}</span>
+                            <span style="font-size:0.92rem;color:#334155;">${m.desc}</span>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    sectionEl.appendChild(grid);
+                } else if (section.type === 'code') {
+                    const exampleEl = document.createElement('div');
+                    exampleEl.className = 'output-example';
+                    exampleEl.textContent = section.code;
+                    sectionEl.appendChild(exampleEl);
+                } else if (section.type === 'structure') {
+                    const p = document.createElement('p');
+                    p.textContent = section.content;
+                    sectionEl.appendChild(p);
+
+                    const exampleEl = document.createElement('div');
+                    exampleEl.className = 'output-example';
+                    exampleEl.textContent = section.example;
+                    sectionEl.appendChild(exampleEl);
                 } else if (section.type === 'requirements') {
                     section.content.forEach(item => {
                         const itemTitle = document.createElement('h3');
@@ -624,25 +689,8 @@ module.exports = { crews, shifts };`
                                 listEl.appendChild(li);
                             });
                             sectionEl.appendChild(listEl);
-                        } else if (item.type === 'output') {
-                            const contentEl = document.createElement('p');
-                            contentEl.textContent = item.content;
-                            sectionEl.appendChild(contentEl);
-
-                            const exampleEl = document.createElement('div');
-                            exampleEl.className = 'output-example';
-                            exampleEl.textContent = item.example;
-                            sectionEl.appendChild(exampleEl);
                         }
                     });
-                } else if (section.type === 'learning' || section.type === 'bonus') {
-                    const listEl = document.createElement('ul');
-                    section.content.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        listEl.appendChild(li);
-                    });
-                    sectionEl.appendChild(listEl);
                 }
 
                 taskContent.appendChild(sectionEl);
@@ -662,7 +710,7 @@ module.exports = { crews, shifts };`
         }
 
         function startCountdown() {
-            const countDownDate = new Date("Apr 25, 2026 23:59:59").getTime();
+            const countDownDate = new Date("Oct 24, 2026 23:59:59").getTime();
 
             const countdown = setInterval(() => {
                 const now = new Date().getTime();
